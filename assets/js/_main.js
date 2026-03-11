@@ -142,4 +142,12 @@ $(document).ready(function () {
     preventDefault: false,
   });
 
+  // Fix for dropdown menu when parent has 'selected' class - override pointer-events blocking clicks
+  $(document).on('mouseenter', '.masthead__menu-item.selected.simple-dropdown', function() {
+    $('.simple-dropdown-menu a', this).css({
+      'pointer-events': 'auto',
+      'cursor': 'pointer'
+    });
+  });
+
 });
