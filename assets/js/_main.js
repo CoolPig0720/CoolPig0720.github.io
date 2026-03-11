@@ -135,7 +135,9 @@ $(document).ready(function () {
   });
 
   // Init smooth scroll, this needs to be slightly more than then fixed masthead height
-  $("a").smoothScroll({
+  // Exclude navigation links in sidebar to prevent interference with category filtering
+  // Also exclude links with specific classes that should not have smooth scrolling
+  $("a:not(.nav__list a):not([data-no-smooth-scroll])").smoothScroll({
     offset: -scssMastheadHeight,
     preventDefault: false,
   });
