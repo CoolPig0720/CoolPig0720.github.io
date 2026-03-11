@@ -1,6 +1,6 @@
 ---
 permalink: /markdown/
-title: "Markdown"
+title: "网站使用指南"
 author_profile: true
 redirect_from: 
   - /md/
@@ -9,44 +9,44 @@ redirect_from:
 
 {% include toc %}
 
-## Locations of key files/directories
+## 重要文件/目录位置说明
 
-* Basic config options: _config.yml
-* Top navigation bar config: _data/navigation.yml
-* Single pages: _pages/
-* Collections of pages are .md or .html files in:
-  * _publications/
-  * _portfolio/
-  * _posts/
-  * _teaching/
-  * _talks/
-* Footer: _includes/footer.html
-* Static files (like PDFs): /files/
-* Profile image (can set in _config.yml): images/profile.png
+* 基础配置文件：`_config.yml`
+* 顶部导航栏配置：`_data/navigation.yml`
+* 单页面文件：`_pages/`
+* 各类内容集合文件（.md 或 .html）存放在以下目录：
+  * `_publications/` - 论文
+  * `_portfolio/` - 作品集
+  * `_posts/` - 博客文章
+  * `_teaching/` - 教学内容
+  * `_talks/` - 报告/演讲
+* 页脚：`_includes/footer.html`
+* 静态文件（如 PDF）：`/files/`
+* 头像（可在 `_config.yml` 中设置）：`images/profile.png`
 
-## Tips and hints
+## 使用技巧和提示
 
-* Name a file ".md" to have it render in markdown, name it ".html" to render in HTML.
-* Go to the [commit list](https://github.com/academicpages/academicpages.github.io/commits/master) (on your repo) to find the last version GitHub built with Jekyll. 
-  * Green check: successful build
-  * Orange circle: building
-  * Red X: error
-  * No icon: not built
+* 文件后缀为 `.md` 时会以 Markdown 格式渲染，为 `.html` 时会以 HTML 格式渲染。
+* 查看仓库的 [提交记录](https://github.com/academicpages/academicpages.github.io/commits/master)，可以找到 GitHub 用 Jekyll 成功构建的最新版本。
+  * 绿色对勾：构建成功
+  * 橙色圆圈：正在构建
+  * 红色叉号：构建错误
+  * 无图标：未构建
 
-* Academic Pages uses [Jekyll Kramdown](https://jekyllrb.com/docs/configuration/markdown/), GitHub Flavored Markdown (GFM) parser, which is similar to the version of Markdown used on GitHub, but may have some minor differences. 
-  * Some of emoji supported on GitHub should be supposed via the [Jemoji](https://github.com/jekyll/jemoji) plugin :computer:.
-  * The best list of the supported emoji can be found in the [Emojis for Jekyll via Jemoji](https://www.fabriziomusacchio.com/blog/2021-08-16-emojis_for_Jekyll/#computer) blog post.
+* Academic Pages 使用 [Jekyll Kramdown](https://jekyllrb.com/docs/configuration/markdown/) 解析器，这是 GitHub 风格的 Markdown（GFM）解析器，与 GitHub 上使用的 Markdown 版本类似，但可能有一些细微差别。
+  * GitHub 支持的部分表情符号可以通过 [Jemoji](https://github.com/jekyll/jemoji) 插件使用 💻。
+  * 支持的表情符号完整列表可以在 [Emojis for Jekyll via Jemoji](https://www.fabriziomusacchio.com/blog/2021-08-16-emojis_for_Jekyll/#computer) 博客文章中找到。
 
-* While GitHub Pages prevents server side code from running, client-side scripts are supported.
-  * This means that Google Analytics is supported, and [the wiki](https://github.com/academicpages/academicpages.github.io/wiki/Adding-Google-Analytics) should contain the most up-to-date information on getting it working.
+* 虽然 GitHub Pages 不允许运行服务器端代码，但支持客户端脚本。
+  * 这意味着支持 Google Analytics，[wiki](https://github.com/academicpages/academicpages.github.io/wiki/Adding-Google-Analytics) 应该包含最新的配置信息。
 
-* Your CV can be written using either Markdown ([preview](https://academicpages.github.io/cv/)) or generated via JSON ([preview](https://academicpages.github.io/cv-json/)) and the layouts are slightly different. You can update the path to the one being used in `_data/navigation.yml` with the JSON formatted CV being hidden by default.
+* 你的简历可以使用 Markdown 编写（[预览](https://academicpages.github.io/cv/)）或通过 JSON 生成（[预览](https://academicpages.github.io/cv-json/)），两种布局略有不同。你可以在 `_data/navigation.yml` 中更新正在使用的路径，JSON 格式的简历默认是隐藏的。
 
- * The [Liquid syntax guide](https://shopify.github.io/liquid/tags/control-flow/) is a useful guide for those that want to add functionality to the template or to become contributors to the [template on GitHub](https://github.com/academicpages/academicpages.github.io).
+ * [Liquid 语法指南](https://shopify.github.io/liquid/tags/control-flow/) 对于想要为模板添加功能或成为 [GitHub 模板贡献者](https://github.com/academicpages/academicpages.github.io) 的人来说很有用。
 
-## MathJax 
+## MathJax 数学公式
 
-Support for MathJax (version 3.* via [jsDelivr](https://www.jsdelivr.com/), [documentation](https://docs.mathjax.org/en/latest/)) is included in the template:
+模板中包含了对 MathJax（版本 3.* 通过 [jsDelivr](https://www.jsdelivr.com/)，[文档](https://docs.mathjax.org/en/latest/)）的支持：
 
 $$
 \displaylines{
@@ -57,12 +57,13 @@ $$
 }
 $$
 
-The default delimiters of `$$...$$` and `\\[...\\]` are supported for displayed mathematics, while `\\(...\\)` should be used for in-line mathematics (ex., \\(a^2 + b^2 = c^2\\))
+支持 `$$...$$` 和 `\\[...\\]` 作为显示数学的默认分隔符，而行内数学应使用 `\\(...\\)`（例如，\\(a^2 + b^2 = c^2\\)）
 
-**Note** that since Academic Pages uses Markdown which cases some interference with MathJax and LaTeX for escaping characters and new lines, although [some workarounds exist](https://math.codidact.com/posts/278763/278772#answer-278772). In some cases, such as when you are including MathJax in a `citation` field for publications, it may be necessary to use `\(...\)` for inline delineation.
+**注意**：由于 Academic Pages 使用 Markdown，这会与 MathJax 和 LaTeX 在转义字符和换行方面产生一些干扰，不过存在一些[解决方法](https://math.codidact.com/posts/278763/278772#answer-278772)。在某些情况下，例如在出版物的 `citation` 字段中包含 MathJax 时，可能需要使用 `\(...\)` 进行行内分隔。
 
-## Mermaid diagrams
-Academic Pages includes support for [Mermaid diagrams](https://mermaid.js.org/) (version 11.* via [jsDelivr](https://www.jsdelivr.com/)) and in addition to their [tutorials](https://mermaid.js.org/ecosystem/tutorials.html) and [GitHub documentation](https://github.com/mermaid-js/mermaid) the basic syntax is as follows:
+## Mermaid 图表
+
+Academic Pages 包含对 [Mermaid 图表](https://mermaid.js.org/)（版本 11.* 通过 [jsDelivr](https://www.jsdelivr.com/)）的支持，除了他们的[教程](https://mermaid.js.org/ecosystem/tutorials.html)和 [GitHub 文档](https://github.com/mermaid-js/mermaid)之外，基本语法如下：
 
 ```markdown
     ```mermaid
@@ -71,14 +72,14 @@ Academic Pages includes support for [Mermaid diagrams](https://mermaid.js.org/) 
     ```
 ```
 
-Which produces the following plot with the [default theme](https://mermaid.js.org/config/theming.html) applied:
+应用[默认主题](https://mermaid.js.org/config/theming.html)后会生成以下图表：
 
 ```mermaid
 graph LR
 A-->B
 ```
 
-While a more advanced plot with the `forest` theme applied looks like the following:
+而使用 `forest` 主题的更高级图表如下所示：
 
 ```mermaid
 ---
@@ -92,10 +93,11 @@ graph TD;
     C-->D;
 ```
 
-## Plotly
-Academic Pages includes support for Plotly diagrams via a hook in the Markdown code elements, although those that are comfortable with HTML and JavaScript can also access it [via those routes](https://plotly.com/javascript/getting-started/). Plotly is included via an `npm` [package](https://www.npmjs.com/package/plotly.js?activeTab=readme) and is distributed as part of the minimized JavaScript that is part of the template.
+## Plotly 数据可视化
 
-In order to render a Plotly plot via Markdown the relevant plot data need to be added as follows:
+Academic Pages 包含通过 Markdown 代码元素中的钩子对 Plotly 图表的支持，不过那些熟悉 HTML 和 JavaScript 的人也可以通过[这些路径](https://plotly.com/javascript/getting-started/)访问它。Plotly 通过 `npm` [包](https://www.npmjs.com/package/plotly.js?activeTab=readme) 包含，并作为模板最小化 JavaScript 的一部分分发。
+
+为了通过 Markdown 渲染 Plotly 图表，需要按如下方式添加相关的图表数据：
 
 ```markdown
     ```plotly
@@ -116,10 +118,11 @@ In order to render a Plotly plot via Markdown the relevant plot data need to be 
     ```
 ```
 
-**Important!** Since the data is parsed as JSON *all* of the keys will need to be quoted for the plot to render. The use of a tool like [JSONLint](https://jsonlint.com/) to check syntax is highly recommended.
+**重要！** 由于数据被解析为 JSON，*所有*键都需要加引号才能使图表渲染。强烈建议使用像 [JSONLint](https://jsonlint.com/) 这样的工具来检查语法。
 {: .notice}
 
-Which produces the following:
+这会生成以下内容：
+
 ```plotly
 {
   "data": [
@@ -137,7 +140,7 @@ Which produces the following:
 }
 ```
 
-Essentially what is taking place is that the [Plotly attributes](https://plotly.com/javascript/reference/index/) are being taken from the code block as JSON data, parsed, and passed to Plotly along with a theme that matches the current site theme (i.e., a light theme, or a dark theme). This allows all plots that can be described via the `data` attribute to rendered with some limitations for the theme of the plot.
+本质上正在发生的是，[Plotly 属性](https://plotly.com/javascript/reference/index/) 从代码块中作为 JSON 数据获取，解析后与匹配当前网站主题（即浅色主题或深色主题）的主题一起传递给 Plotly。这允许所有可以通过 `data` 属性描述的图表在图表主题有一些限制的情况下进行渲染。
 
 ```plotly
 {
@@ -168,7 +171,7 @@ Essentially what is taking place is that the [Plotly attributes](https://plotly.
     "yaxis": {
       "range": [0, 8]
     },
-    "title": {"text": "Data Labels Hover"}
+    "title": {"text": "数据标签悬停"}
   }
 }
 ```
@@ -194,7 +197,7 @@ Essentially what is taking place is that the [Plotly attributes](https://plotly.
       "pattern": "independent"
     },
     "title": {
-      "text": "Simple Subplot"
+      "text": "简单子图"
     }    
   }
 }
@@ -212,208 +215,207 @@ Essentially what is taking place is that the [Plotly attributes](https://plotly.
 	}],
   "layout": {
     "title": {
-      "text": "Basic Contour Plot"
+      "text": "基本等高线图"
     }
   }
 }
 ```
 
-## Markdown guide
+## Markdown 指南
 
-Academic Pages uses [kramdown](https://kramdown.gettalong.org/index.html) for Markdown rendering, which has some differences from other Markdown implementations such as GitHub's. In addition to this guide, please see the [kramdown Syntax page](https://kramdown.gettalong.org/syntax.html) for full documentation.  
+Academic Pages 使用 [kramdown](https://kramdown.gettalong.org/index.html) 进行 Markdown 渲染，这与其他 Markdown 实现（如 GitHub 的）有一些差异。除了本指南外，请参阅 [kramdown 语法页面](https://kramdown.gettalong.org/syntax.html) 获取完整文档。
 
-### Header three
+### 三级标题
 
-#### Header four
+#### 四级标题
 
-##### Header five
+##### 五级标题
 
-###### Header six
+###### 六级标题
 
-## Blockquotes
+## 引用块
 
-Single line blockquote:
+单行引用：
 
-> Quotes are cool.
+> 引用很酷。
 
-## Tables
+## 表格
 
-### Table 1
+### 表格 1
 
-| Entry            | Item   |                                                              |
-| --------         | ------ | ------------------------------------------------------------ |
-| [John Doe](#)    | 2016   | Description of the item in the list                          |
-| [Jane Doe](#)    | 2019   | Description of the item in the list                          |
-| [Doe Doe](#)     | 2022   | Description of the item in the list                          |
+| 条目 | 项目 | |
+| -------- | ------ | ------------------------------------------------------------ |
+| [张三](#) | 2016 | 列表中项目的描述 |
+| [李四](#) | 2019 | 列表中项目的描述 |
+| [王五](#) | 2022 | 列表中项目的描述 |
 
-### Table 2
+### 表格 2
 
-| Header1 | Header2 | Header3 |
+| 标题1 | 标题2 | 标题3 |
 |:--------|:-------:|--------:|
-| cell1   | cell2   | cell3   |
-| cell4   | ce
-ll5   | cell6   |
+| 单元格1 | 单元格2 | 单元格3 |
+| 单元格4 | 单元格5 | 单元格6 |
 |-----------------------------|
-| cell1   | cell2   | cell3   |
-| cell4   | cell5   | cell6   |
+| 单元格1 | 单元格2 | 单元格3 |
+| 单元格4 | 单元格5 | 单元格6 |
 |=============================|
-| Foot1   | Foot2   | Foot3   |
+| 页脚1 | 页脚2 | 页脚3 |
 
-## Definition Lists
+## 定义列表
 
-Definition List Title
-:   Definition list division.
+定义列表标题
+:   定义列表分区。
 
-Startup
-:   A startup company or startup is a company or temporary organization designed to search for a repeatable and scalable business model.
+初创公司
+:   初创公司是指旨在寻找可重复和可扩展商业模式的公司或临时组织。
 
-#dowork
-:   Coined by Rob Dyrdek and his personal body guard Christopher "Big Black" Boykins, "Do Work" works as a self motivator, to motivating your friends.
+#开始工作
+:   由 Rob Dyrdek 和他的私人保镖 Christopher "Big Black" Boykins 创造，"开始工作"可以作为自我激励，激励你的朋友。
 
-Do It Live
-:   I'll let Bill O'Reilly [explain](https://www.youtube.com/watch?v=O_HyZ5aW76c "We'll Do It Live") this one.
+现场直播
+:   我让 Bill O'Reilly [解释](https://www.youtube.com/watch?v=O_HyZ5aW76c "我们现场直播") 这个。
 
-## Unordered Lists (Nested)
+## 无序列表（嵌套）
 
-  * List item one 
-      * List item one 
-          * List item one
-          * List item two
-          * List item three
-          * List item four
-      * List item two
-      * List item three
-      * List item four
-  * List item two
-  * List item three
-  * List item four
+  * 列表项一
+      * 列表项一
+          * 列表项一
+          * 列表项二
+          * 列表项三
+          * 列表项四
+      * 列表项二
+      * 列表项三
+      * 列表项四
+  * 列表项二
+  * 列表项三
+  * 列表项四
 
-## Ordered List (Nested)
+## 有序列表（嵌套）
 
-  1. List item one 
-      1. List item one 
-          1. List item one
-          2. List item two
-          3. List item three
-          4. List item four
-      2. List item two
-      3. List item three
-      4. List item four
-  2. List item two
-  3. List item three
-  4. List item four
+  1. 列表项一
+      1. 列表项一
+          1. 列表项一
+          2. 列表项二
+          3. 列表项三
+          4. 列表项四
+      2. 列表项二
+      3. 列表项三
+      4. 列表项四
+  2. 列表项二
+  3. 列表项三
+  4. 列表项四
 
-## Buttons
+## 按钮
 
-Make any link standout more when applying the `.btn` class.
+应用 `.btn` 类可以让任何链接更突出。
 
-## Notices
+## 提示框
 
-Basic notices or call-outs are supported using the following syntax:
+使用以下语法支持基本提示框或标注：
 
 ```markdown
-**Watch out!** You can also add notices by appending `{: .notice}` to the line following paragraph.
+**小心！** 你也可以通过在段落后面的行追加 `{: .notice}` 来添加提示框。
 {: .notice}
 ```
 
-which wil render as:
+这会渲染为：
 
-**Watch out!** You can also add notices by appending `{: .notice}` to the line following paragraph.
+**小心！** 你也可以通过在段落后面的行追加 `{: .notice}` 来添加提示框。
 {: .notice}
 
-### Footnotes
+### 脚注
 
-Footnotes can be useful for clarifying points in the text, or citing information.[^1] Markdown support numeric footnotes, as well as text as long as the values are unique.[^note]
+脚注对于澄清文中的观点或引用信息很有用。[^1] Markdown 支持数字脚注，只要值唯一也支持文本脚注。[^note]
 
 ```markdown
-This is the regular text.[^1] This is more regular text.[^note]
+这是常规文本。[^1] 这是更多常规文本。[^note]
 
-[^1]: This is the footnote itself.
-[^note]: This is another footnote.
+[^1]: 这是脚注本身。
+[^note]: 这是另一个脚注。
 ```
 
-[^1]: Such as this footnote.
-[^note]: When using text for footnotes markers, no spaces are permitted in the name.
+[^1]: 比如这个脚注。
+[^note]: 使用文本作为脚注标记时，名称中不允许有空格。
 
-## HTML Tags
+## HTML 标签
 
-### Address Tag
+### 地址标签
 
 <address>
   1 Infinite Loop<br /> Cupertino, CA 95014<br /> United States
 </address>
 
-### Anchor Tag (aka. Link)
+### 锚点标签（即链接）
 
-This is an example of a [link](https://github.com "GitHub").
+这是一个 [链接](https://github.com "GitHub") 的示例。
 
-### Abbreviation Tag
+### 缩写标签
 
-The abbreviation CSS stands for "Cascading Style Sheets".
+缩写 CSS 代表 "层叠样式表"。
 
-*[CSS]: Cascading Style Sheets
+*[CSS]: 层叠样式表
 
-### Cite Tag
+### 引用标签
 
-"Code is poetry." ---<cite>Automattic</cite>
+"代码是诗。" ---<cite>Automattic</cite>
 
-### Code Tag
+### 代码标签
 
-You will learn later on in these tests that `word-wrap: break-word;` will be your best friend.
+你将在后面的测试中了解到 `word-wrap: break-word;` 将是你最好的朋友。
 
-You can also write larger blocks of code with syntax highlighting supported for some languages, such as Python:
+你也可以编写更大的代码块，并支持某些语言的语法高亮，例如 Python：
 
 ```python
 print('Hello World!')
 ```
 
-or R:
+或 R：
 
 ```R
 print("Hello World!", quote = FALSE)
 ```
 
-### Details Tag (collapsible sections)
+### 详情标签（可折叠部分）
 
-The HTML `<details>` tag works well with Markdown and allows you to include collapsible sections, see [W3Schools](https://www.w3schools.com/tags/tag_details.asp) for more information on how to use the tag.
+HTML `<details>` 标签与 Markdown 配合得很好，允许你包含可折叠部分，有关如何使用该标签的更多信息请参阅 [W3Schools](https://www.w3schools.com/tags/tag_details.asp)。
 
 <details>
-  <summary>Collapsed by default</summary>
-  This section was collapsed by default!
+  <summary>默认折叠</summary>
+  这部分默认是折叠的！
 </details>
 
-The source code:
+源代码：
 
 ```HTML
 <details>
-  <summary>Collapsed by default</summary>
-  This section was collapsed by default!
+  <summary>默认折叠</summary>
+  这部分默认是折叠的！
 </details>
 ```
 
-Or, you can leave a section open by default by including the `open` attribute in the tag:
+或者，你可以通过在标签中包含 `open` 属性来使部分默认打开：
 
 <details open>
-  <summary>Open by default</summary>
-  This section is open by default thanks to open in the &lt;details open&gt; tag!
+  <summary>默认打开</summary>
+  这部分默认是打开的，这要归功于 &lt;details open&gt; 标签！
 </details>
 
 
-### Emphasize Tag
+### 强调标签
 
-The emphasize tag should _italicize_ text.
+强调标签应该 _斜体_ 文本。
 
-### Insert Tag
+### 插入标签
 
-This tag should denote <ins>inserted</ins> text.
+此标签应表示<ins>插入的</ins>文本。
 
-### Keyboard Tag
+### 键盘标签
 
-This scarcely known tag emulates <kbd>keyboard text</kbd>, which is usually styled like the `<code>` tag.
+这个鲜为人知的标签模拟<kbd>键盘文本</kbd>，通常样式类似于 `<code>` 标签。
 
-### Preformatted Tag
+### 预格式化标签
 
-This tag styles large blocks of code.
+此标签用于设置大代码块的样式。
 
 <pre>
 .post-title {
@@ -425,32 +427,31 @@ This tag styles large blocks of code.
 }
 </pre>
 
-### Quote Tag
+### 引用标签
 
-<q>Developers, developers, developers&#8230;</q> &#8211;Steve Ballmer
+<q>开发者，开发者，开发者&#8230;</q> &#8211;Steve Ballmer
 
-### Strike Tag
+### 删除线标签
 
-This tag will let you <strike>strikeout text</strike>.
+此标签将允许你<strike>删除文本</strike>。
 
-### Strong Tag
+### 加粗标签
 
-This tag shows **bold text**.
+此标签显示**粗体文本**。
 
-### Subscript Tag
+### 下标标签
 
-Getting our science styling on with H<sub>2</sub>O, which should push the "2" down.
+让我们的科学样式与 H<sub>2</sub>O 一起，它应该把 "2" 向下推。
 
-### Superscript Tag
+### 上标标签
 
-Still sticking with science and Isaac Newton's E = MC<sup>2</sup>, which should lift the 2 up.
+仍然坚持科学和艾萨克·牛顿的 E = MC<sup>2</sup>，它应该把 2 向上提。
 
-### Variable Tag
+### 变量标签
 
-This allows you to denote <var>variables</var>.
+这允许你表示<var>变量</var>。
 
 ***
-**Footnotes**
+**脚注**
 
-The footnotes in the page will be returned following this line, return to the section on <a href="#footnotes">Markdown Footnotes</a>.
-
+页面中的脚注将在此行之后返回，返回<a href="#footnotes">Markdown 脚注</a>部分。

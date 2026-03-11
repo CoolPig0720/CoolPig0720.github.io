@@ -20,12 +20,12 @@ function updateNav() {
   // The visible list is overflowing the nav
   if ($vlinks.width() > availableSpace) {
 
-    while ($vlinks.width() > availableSpace && $vlinks.children("*:not(.persist)").length > 0) {
+    while ($vlinks.width() > availableSpace && $vlinks.children("*:not(.persist):not(.dropdown-wrapper)").length > 0) {
       // Record the width of the list
       breaks.push($vlinks.width());
 
       // Move item to the hidden list
-      $vlinks.children("*:not(.persist)").last().prependTo($hlinks);
+      $vlinks.children("*:not(.persist):not(.dropdown-wrapper)").last().prependTo($hlinks);
 
       availableSpace = $btn.hasClass("hidden") ? $nav.width() : $nav.width() - $btn.width() - 30;
 
