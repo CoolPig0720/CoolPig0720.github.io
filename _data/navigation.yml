@@ -22,12 +22,18 @@ main:
         
   - title: "博客文章"
     url: /year-archive/
+    children:
+      - title: "全部文章"
+        url: /year-archive/
+      - title: "技术教程"
+        url: /posts/tech/
+      - title: "碎碎念"
+        url: /posts/life/
+      - title: "随笔"
+        url: /posts/essay/
     
   - title: "简历"
     url: /cv/
-    
-  # - title: "CV"
-  #   url: /cv-json/
     
   - title: "导航"
     url: /markdown/
