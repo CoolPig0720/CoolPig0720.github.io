@@ -9,22 +9,14 @@
             <a href="{{ base_path }}/">{{ site.title }}</a>
           </li>
           {% for link in site.data.navigation.main %}
-            {% if link.url contains 'http' %}
-              {% assign domain = '' %}
-            {% else %}
-              {% assign domain = base_path %}
-            {% endif %}
+            {% assign domain = link.url contains 'http' ? '' : base_path %}
             {% if link.children %}
-              <li class="masthead__menu-item dropdown-wrapper {% if page.url contains link.url and link.url != '/' %}selected{% endif %}">
-                <a href="{{ domain }}{{ link.url }}" class="dropdown-toggle">{{ link.title }} <i class="fa fa-caret-down" aria-hidden="true"></i></a>
-                <ul class="dropdown-list">
+              <li class="masthead__menu-item simple-dropdown {% if page.url contains link.url and link.url != '/' %}selected{% endif %}">
+                <a href="javascript:void(0)" class="dropdown-trigger">{{ link.title }} <i class="fa fa-caret-down" aria-hidden="true"></i></a>
+                <ul class="simple-dropdown-menu">
                   {% for child in link.children %}
-                    {% if child.url contains 'http' %}
-                      {% assign child_domain = '' %}
-                    {% else %}
-                      {% assign child_domain = base_path %}
-                    {% endif %}
-                    <li class="dropdown-item {% if page.url == child.url %}active{% endif %}">
+                    {% assign child_domain = child.url contains 'http' ? '' : base_path %}
+                    <li class="simple-dropdown-item {% if page.url == child.url %}active{% endif %}">
                       <a href="{{ child_domain }}{{ child.url }}">{{ child.title }}</a>
                     </li>
                   {% endfor %}

@@ -9,7 +9,7 @@ comments: true     # 如果你开了评论功能
 share: true
 related: true
 categories:
-  - 生活       # 可选，自定义分类
+  - 碎碎念       # 可选，自定义分类
 tags:
   - 第一篇
   - 个人
