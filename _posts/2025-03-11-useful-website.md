@@ -73,6 +73,7 @@ tags:
 	* [免费在线图像合并工具 - 合并图像、照片、图片](https://products.aspose.app/imaging/zh-hans/image-merge)
 	* [消除或者替换图像背景，无需上传图像 - BgSub](https://zh.bgsub.com/)
 	* [在线去水印｜免费在线去除图片水印](https://www.jpgall.cn/zh)
+	* [Dpdf帮您轻松搞定 PDF，免费，无限制，功能强大](https://www.dpdf.com/zh)
 * 有趣的网站
 	* [食用手册](https://cook.yunyoujun.cn/)
 	* [影视飓风](https://www.ysjf.com/material)
