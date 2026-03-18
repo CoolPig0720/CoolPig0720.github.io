@@ -1,0 +1,458 @@
+# --------------------------------------
+# Hexo Butterfly Theme Configuration
+# CoolPig's Academic Website
+# --------------------------------------
+
+# ========================================
+# 导航栏配置（经常修改）
+# ========================================
+
+# 网站导航栏设置
+nav:
+  # 【修改】网站 Logo 图片路径
+  logo: /images/profile.png
+  # 是否显示网站标题
+  display_title: true
+  # 是否显示文章标题
+  display_post_title: true
+  # 导航栏是否固定在顶部
+  fixed: true
+
+# 【修改】导航菜单配置
+# 格式：菜单名: /路径/ || 图标类名
+# 图标参考：https://fontawesome.com/icons
+#
+# 【提示】注释或删除不需要的菜单项即可隐藏
+menu:
+  首页: / || fas fa-home
+  博客: /archives/ || fas fa-archive
+  简历: /cv/ || fas fa-file-alt
+  # 关于: /about/ || fas fa-user
+  # 论文: /publications/ || fas fa-book
+  # 报告: /talks/ || fas fa-chalkboard-teacher
+  # 教学: /teaching/ || fas fa-user-graduate
+  # 作品集: /portfolio/ || fas fa-images
+
+# 【修改】社交媒体链接
+# 格式：图标类名: 链接 || 显示名称 || 颜色
+social:
+  fab fa-github: Github || '#24292e'\r
+  fas fa-envelope: mailto:coolpig0720@gmail.com || Email || '#4a7dbe'
+
+# --------------------------------------
+# Image Settings
+# --------------------------------------
+
+# 【修改】网站图标
+favicon: /images/favicon.png
+
+# 【修改】头像配置
+# img: 头像图片路径（放在 source/images/ 目录下）
+# effect: 是否启用转动效果（true=转动，false=不转动）
+avatar:
+  img: /images/avatar.png
+  effect: false
+
+disable_top_img: true
+default_top_img:
+index_img:
+archive_img:
+tag_img:
+tag_per_img:
+category_img:
+category_per_img:
+footer_img: false
+
+# Website Background (light color instead of blue)
+background: "#f5f7fa"
+
+cover:
+  index_enable: true
+  archive_enable: true
+  tag_enable: true
+  category_enable: true
+  post_cover_policy: cover
+  post_cover:
+
+# --------------------------------------
+# Site Settings
+# --------------------------------------
+
+start_time: 2025-01-01
+timezone: Asia/Shanghai
+
+# --------------------------------------
+# Aside (Sidebar) Settings
+# --------------------------------------
+
+# ========================================
+# 侧边栏配置（经常修改）
+# ========================================
+
+aside:
+  # 是否启用侧边栏
+  enable: true
+  # 是否隐藏侧边栏
+  hide: false
+  # 是否显示侧边栏切换按钮
+  button: true
+  # 移动端是否显示侧边栏
+  mobile: true
+  # 侧边栏位置：left 或 right
+  position: left
+
+  # 【修改】作者信息卡片
+  card_author:
+    enable: true
+    # 【修改】个人简介文字（直接写字符串，不要用对象格式）
+    description: 路虽远行则将至，事虽难做则必成。
+    # 【禁用】Follow Me 按钮（因为下面已有社交图标）
+    button:
+      enable: false
+
+  # 【修改】公告卡片
+  card_announcement:
+    enable: true
+    # 【修改】公告内容
+    content: 欢迎来到我的个人网站！
+
+  # 最新文章卡片
+  card_recent_post:
+    enable: true
+    # 显示文章数量
+    limit: 5
+    # 排序方式：date 或 updated
+    sort: date
+
+  # 分类卡片
+  card_categories:
+    enable: true
+    limit: 0
+    expand: none
+
+  # 标签卡片（已禁用）
+  card_tags:
+    enable: false
+
+  # 归档卡片（已禁用）
+  card_archives:
+    enable: false
+
+  # 网站信息卡片（已禁用）
+  card_webinfo:
+    enable: false
+
+# --------------------------------------
+# Index Page Settings
+# --------------------------------------
+
+index_post_content:
+  method: 3
+  length: 500
+
+# --------------------------------------
+# Code Blocks Settings
+# --------------------------------------
+
+code_blocks:
+  theme: light
+  macStyle: false
+  height_limit: false
+  word_wrap: false
+  copy: true
+  language: true
+  shrink: false
+  fullpage: false
+
+# --------------------------------------
+# Pagination Settings
+# --------------------------------------
+
+pagination:
+  enable: true
+  total: 10
+  type: auto
+  prev_text: '<i class="fas fa-angle-left"></i>'
+  next_text: '<i class="fas fa-angle-right"></i>'
+  offset: 0
+
+# --------------------------------------
+# Comments Settings
+# --------------------------------------
+
+comments:
+  use:
+  text: true
+  lazyload: false
+  count: false
+  card_post_count: false
+
+# --------------------------------------
+# Donation/Sponsor Settings
+# --------------------------------------
+
+donate:
+  enable: false
+  title:
+  QR_code:
+
+# --------------------------------------
+# MathJax Support
+# --------------------------------------
+
+math:
+  use: mathjax
+  per_page: true
+
+# --------------------------------------
+# Mermaid Support (Client-side rendering)
+# --------------------------------------
+
+mermaid:
+  enable: true
+  version: "10"
+  theme: "default"
+
+# --------------------------------------
+# Search Settings
+# --------------------------------------
+
+search:
+  placeholder:
+
+# Algolia search
+algolia_search:
+  enable: false
+  hits:
+    per_page: 6
+  labels:
+    input_placeholder: Search for Posts
+    hits_empty: "We didn't find any results for the search you were looking for:{query}"
+    hits_stats: "{hits} results found in {time} ms"
+
+# Local search
+local_search:
+  enable: false
+  preload: false
+  CDN:
+
+# --------------------------------------
+# Share Settings
+# --------------------------------------
+
+# 【禁用】文章分享功能
+share:
+  use: ""
+  sharejs:
+    sites: ""
+  addthis:
+    enable: false
+    pubid:
+
+# --------------------------------------
+# Post Copyright Settings
+# --------------------------------------
+
+# 【禁用】文章版权声明区域
+post_copyright:
+  enable: false
+
+# 【禁用】文章编辑按钮
+post_edit:
+  enable: false
+
+# --------------------------------------
+# Dark Mode Settings
+# --------------------------------------
+
+darkmode:
+  enable: true
+  button: true
+
+# --------------------------------------
+# Translate Settings (Traditional/Simplified Chinese)
+# --------------------------------------
+
+translate:
+  enable: true
+  default: 繁
+  defaultEncoding: 2
+  translateDelay: 0
+  msgToTraditionalChinese: "繁"
+  msgToSimplifiedChinese: "简"
+
+# --------------------------------------
+# Right Side Buttons
+# --------------------------------------
+
+rightside_item_order:
+  enable: true
+  hide: readmode,translate,darkmode,hideAside
+  show: toc
+
+# --------------------------------------
+# Read Mode
+# --------------------------------------
+
+readmode: true
+
+# --------------------------------------
+# TOC (Table of Contents) Settings
+# --------------------------------------
+
+toc:
+  enable: true
+  list_number: true
+  depth: 3
+  expand_percent: 0
+  scrollspy: false
+  update_url: false
+
+# --------------------------------------
+# Analytics
+# --------------------------------------
+
+analytics:
+  baidu:
+  google:
+  cnzz:
+  tencent:
+    enable: false
+    sid:
+    cid:
+
+# --------------------------------------
+# Verification
+# --------------------------------------
+
+verification:
+  google:
+  baidu:
+  yandex:
+  so:
+  sogou:
+
+# --------------------------------------
+# Other Settings
+# --------------------------------------
+
+busuanzi:
+  enable: false
+
+copy:
+  enable: true
+  copyright:
+    enable: false
+    limit_count: 50
+
+wordcount:
+  enable: true
+  count_on_home: false
+  post_wordcount: true
+  min2read: true
+  wordcount: true
+  separation: true
+
+lazyload:
+  enable: false
+  field: post
+  placeholder:
+  blur: false
+  progress: false
+  error_img: false
+  stream: false
+
+pjax:
+  enable: false
+
+# --------------------------------------
+# Inject Custom Code
+# --------------------------------------
+
+inject:
+  enable: true
+  head: []
+  bottom:
+    - |-
+      <style>
+      /* ====== 放大网站标题 ====== */
+      #blog-info .site-name {
+        font-size: 1.4em !important;
+        font-weight: 600 !important;
+      }
+
+      #blog-info .site-icon {
+        width: 32px !important;
+        height: 32px !important;
+        margin-right: 8px !important;
+      }
+
+      /* ====== 减小导航栏与内容之间的距离 ====== */
+      #page-header {
+        margin-bottom: 0 !important;
+      }
+
+      #content-inner {
+        margin-top: 10px !important;
+        padding-top: 0 !important;
+      }
+
+      .layout {
+        margin-top: 10px !important;
+      }
+
+      /* ====== 放大导航标签 ====== */
+      #menus .menus_item {
+        margin: 0 8px !important;
+      }
+
+      #menus .site-page {
+        font-size: 1.15em !important;
+        padding: 12px 18px !important;
+        border-radius: 8px !important;
+        transition: all 0.3s ease !important;
+      }
+
+      #menus .site-page:hover {
+        background: rgba(102, 126, 234, 0.1) !important;
+        transform: translateY(-2px) !important;
+      }
+
+      #menus .site-page i {
+        font-size: 1.1em !important;
+        margin-right: 6px !important;
+      }
+
+      /* ====== 侧边栏作者卡片 - 隐藏标签统计 ====== */
+      .site-data a:nth-child(2) {
+        display: none !important;
+      }
+
+      /* ====== 放大文章和分类统计 ====== */
+      .site-data a {
+        padding: 12px 18px !important;
+        margin: 6px !important;
+      }
+
+      .site-data .headline {
+        font-size: 1.15em !important;
+        font-weight: 600 !important;
+      }
+
+      .site-data .length-num {
+        font-size: 1.5em !important;
+        font-weight: bold !important;
+      }
+      </style>
+
+cdn:
+  enable: false
+
+# --------------------------------------
+# Live2D Settings - Disabled
+# --------------------------------------
+
+live2d:
+  enable: false
+  modelUrl:
+  scriptUrl:
