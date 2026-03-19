@@ -9,95 +9,133 @@ comments: false
 
 <!--
   ========================================
-  简历页面
+  简历页面 - 陈嘉豪
   ========================================
   
   【经常修改的内容】：
-  1. 教育背景
-  2. 工作经历
-  3. 技能列表
-  4. 论文和报告列表
+  1. 工作经历
+  2. 技能列表
+  3. 游戏经历
 -->
+## 📋 基本信息
 
-# 个人简历
+| 姓名 | 陈嘉豪 |
+|------|--------|
+| 性别 | 男 |
+| 电话 | 15750957739 |
+| 邮箱 | 1933617419@qq.com |
+| 微信 | CHENHAOZHU0720 |
+| 个人网站 | [https://coolpig0720.github.io](https://coolpig0720.github.io) |
 
-<!-- 【修改】教育背景 -->
-## 🎓 Education
+## 🎓 教育经历
 
-- **Ph.D in Version Control Theory**, GitHub University, 2018 (expected)
-- **M.S. in Jekyll**, GitHub University, 2014
-- **B.S. in GitHub**, GitHub University, 2012
+**广东技术师范大学** | 计算机科学与技术 / 本科 | 2021.09 - 2025.06
 
-<!-- 【修改】工作经历 -->
-## 💼 Work Experience
+- GPA：3.62/5（专业前25%）
+- 主修课程：C/Python/Java编程、数据结构、计算机网络、人工智能等
 
-### Spring 2024: Academic Pages Collaborator
-**GitHub University**  
-- Duties includes: Updates and improvements to template
-- Supervisor: The Users
+### 🏆 核心奖项
 
-### Fall 2015: Research Assistant
-**GitHub University**  
-- Duties included: Merging pull requests
-- Supervisor: Professor Hub
+- 亚太数学建模竞赛二等奖（2022）
+- 全国数学建模竞赛三等奖（2023）
+- 五一数学建模竞赛一等奖（2023）
+- 连续两年院三好学生（2022-2024）
 
-### Summer 2015: Research Assistant
-**GitHub University**  
-- Duties included: Tagging issues
-- Supervisor: Professor Git
+### 📌 校园经历
 
-<!-- 【修改】技能列表 -->
-## 🛠 Skills
+2022.05 ~ 2023.05 在学院学生会公关实践部担任负责人一职，多次组织校级、院级活动。
 
-- Skill 1
-- Skill 2
-  - Sub-skill 2.1
-  - Sub-skill 2.2
-  - Sub-skill 2.3
-- Skill 3
+## 💼 工作经历
 
-## 📚 Publications
+### Unity3D工程师（性能测试向）
+**厦门真有趣信息科技有限公司** | 2025.04 - 2026.03
 
-<ul class="cv-publication-list">
-<li>Your Name, You. (2024). "Paper Title Number 4." <i>GitHub Journal of Bugs</i>. 1(3).</li>
-<li>Your Name, You. (2024). "Paper Title Number 3." <i>GitHub Journal of Bugs</i>. 1(3).</li>
-</ul>
+任职于《香肠派对》项目组，负责经典派对、摸金派对等核心玩法的全周期客户端性能专项测试，定位性能瓶颈并推动优化落地，保障游戏全版本性能稳定性。
 
-## 🎤 Talks
+#### 资源性能专项测试与风险管控
 
-<ul class="cv-talk-list">
-<li>Conference Proceeding Talk 3 on Relevant Topic in Your Field, Testing Institute of America 2014 Annual Conference, Los Angeles, CA, USA, 2014-03-01.</li>
-<li>Tutorial 1 on Relevant Topic in Your Field, GitHub University, San Francisco, California, 2013-03-01.</li>
-</ul>
+- 负责游戏新活动全品类资源的性能测试，累计完成 **200+套角色套装**、**150+款武器皮肤**、**200+个其他游戏资源** 的全流程性能测试
+- 覆盖内存占用、帧率波动等指标
+- 使用 RenderDoc、Unity Profiler 等工具进行基础的截帧分析，定位性能问题
+- 对接策划、TA、性能优化团队推动问题解决，保障上线资源性能异常发生率 **<0.5%**
+
+#### SDK 迭代性能专项测试
+
+- 搭建 SDK 性能专项测试用例体系，覆盖 CPU占用、内存峰值、帧率损耗等核心维度
+- 累计完成 **10+次** SDK新增/迭代版本的性能测试
+- 将 SDK 迭代带来的平均帧率损耗控制在 **2帧以内**，内存增量控制在 **5MB以内**
+
+#### 赛季版本全周期性能保障
+
+- 负责《香肠派对》全赛季版本的客户端性能保障工作
+- 通过 PerfDog 等工具实现全场景性能数据采集、趋势分析与线上监控
+- 保障赛季大版本上线后核心玩法平均帧率波动 **≤5%**，性能稳定性达标率 **99.8%**
+
+## 🎮 游戏经历
+
+| 类型 | 游戏 |
+|------|------|
+| 射击竞技类 | 和平精英（800+h）、香肠派对（800+h）、穿越火线（300+h）、CS:GO（100+h） |
+| MOBA类 | 王者荣耀（1500+h）、英雄联盟（300+h） |
+| 策略竞技类 | 金铲铲之战（1000+h）、云顶之弈（500+h）、明日方舟（100+h） |
+| 生存模拟类 | 荒野日记：孤岛（300+h）、无尽冬日（300+h） |
+
+## 🛠 技术能力
+
+### 性能测试工具
+
+熟练使用 PerfDog、RenderDoc、Unity Profiler、Snapdragon Profiler、UWA Gears 等行业主流性能测试工具，具备基础截帧分析、定位性能瓶颈的能力。
+
+### 核心专业能力
+
+精通游戏客户端性能专项测试全流程，可独立完成测试方案设计、性能数据采集分析、完整报告输出等过程，了解 Unity 引擎原理与计算机图形学基础。
+
+### 其他能力
+
+- Git 版本控制工具使用
+- Cursor/Qoder/Codex 等 AI 工具使用
+- 已通过英语 CET-6
+
+---
 
 <style>
 .cv-section {
     margin-bottom: 30px;
 }
-.cv-section-title {
-    font-size: 1.5em;
-    font-weight: bold;
-    margin-bottom: 15px;
-    color: #2c3e50;
-    border-bottom: 2px solid #3498db;
-    padding-bottom: 5px;
-}
 .cv-item {
     margin-bottom: 20px;
+    padding: 15px;
+    background: var(--card-bg, #f8f9fa);
+    border-radius: 8px;
 }
 .cv-item-title {
     font-weight: bold;
     font-size: 1.1em;
 }
-.cv-item-subtitle {
-    font-style: italic;
-    color: #666;
+.cv-highlight {
+    color: #3498db;
+    font-weight: 600;
 }
-.cv-publication-list, .cv-talk-list {
-    list-style-type: disc;
-    padding-left: 20px;
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
 }
-.cv-publication-list li, .cv-talk-list li {
-    margin-bottom: 10px;
+table th, table td {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+table th {
+    background: #f5f5f5;
+    font-weight: 600;
+}
+@media (prefers-color-scheme: dark) {
+    table th {
+        background: #2d2d2d;
+    }
+    .cv-item {
+        background: var(--card-bg, #1a1a1a);
+    }
 }
 </style>

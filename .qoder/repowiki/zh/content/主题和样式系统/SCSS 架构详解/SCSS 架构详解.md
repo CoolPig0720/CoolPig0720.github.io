@@ -2,22 +2,22 @@
 
 <cite>
 **本文引用的文件**
-- [main.scss](file://assets/css/main.scss)
-- [_themes.scss](file://_sass/_themes.scss)
-- [_mixins.scss](file://_sass/include/_mixins.scss)
-- [_utilities.scss](file://_sass/include/_utilities.scss)
-- [_reset.scss](file://_sass/layout/_reset.scss)
-- [_base.scss](file://_sass/layout/_base.scss)
-- [_buttons.scss](file://_sass/layout/_buttons.scss)
-- [_forms.scss](file://_sass/layout/_forms.scss)
-- [_tables.scss](file://_sass/layout/_tables.scss)
-- [_navigation.scss](file://_sass/layout/_navigation.scss)
-- [_default_light.scss](file://_sass/theme/_default_light.scss)
-- [_default_dark.scss](file://_sass/theme/_default_dark.scss)
-- [_syntax.scss](file://_sass/_syntax.scss)
-- [_config.yml](file://_config.yml)
-- [package.json](file://package.json)
+- [hexo-site/_config.yml](file://hexo-site/_config.yml)
+- [hexo-site/package.json](file://hexo-site/package.json)
+- [hexo-site/_config.butterfly.yml](file://hexo-site/_config.butterfly.yml)
+- [hexo-site/node_modules/hexo-theme-butterfly/source/css/_global/index.styl](file://hexo-site/node_modules/hexo-theme-butterfly/source/css/_global/index.styl)
+- [hexo-site/node_modules/hexo-theme-butterfly/source/css/_global/function.styl](file://hexo-site/node_modules/hexo-theme-butterfly/source/css/_global/function.styl)
+- [hexo-site/node_modules/hexo-theme-butterfly/source/css/_layout/post.styl](file://hexo-site/node_modules/hexo-theme-butterfly/source/css/_layout/post.styl)
+- [hexo-site/node_modules/hexo-theme-butterfly/source/css/_highlight/highlight.styl](file://hexo-site/node_modules/hexo-theme-butterfly/source/css/_highlight/highlight.styl)
 </cite>
+
+## 更新摘要
+**所做更改**
+- 完全重构了文档以反映从 Jekyll 到 Hexo 主题样式的架构变更
+- 移除了所有 Jekyll 特定的 SCSS 文件引用和配置
+- 新增了基于 Stylus 的 Butterfly 主题样式架构分析
+- 更新了编译流程和依赖关系分析，从 SCSS 转向 Stylus
+- 修正了主题系统和样式组织结构，采用 Stylus 模块化设计
 
 ## 目录
 1. [引言](#引言)
@@ -32,384 +32,304 @@
 10. [附录](#附录)
 
 ## 引言
-本文件面向需要深入理解与维护该 Jekyll 主题 SCSS 架构的工程师与设计师，系统性解析样式组织结构、模块化设计原则、变量体系、断点与网格系统、混入与工具类、编译流程与优化策略。重点覆盖以下方面：
-- SCSS 目录组织与模块化原则：按“重置/基础 → 布局组件 → 主题 → 工具/混入”的层次展开
-- _sass/layout/ 各样式文件的功能边界与职责划分
-- _sass/include/ 混入与工具类的使用方式与最佳实践
-- main.scss 的编译顺序与依赖关系
-- 变量定义体系（颜色、字体、间距、阴影、导航图标等）
-- 断点系统与响应式实现机制
+本文件面向需要深入理解与维护该 Hexo 主题样式系统的工程师与设计师，系统性解析基于 Butterfly 主题的 Stylus 样式组织结构、模块化设计原则、变量体系、断点与网格系统、混入与工具类、编译流程与优化策略。重点覆盖以下方面：
+- Hexo 主题架构与模块化原则：基于 Butterfly 主题的样式组织方式
+- 主题配置与自定义样式系统
+- Hexo 渲染器与 Stylus 样式编译流程
+- 代码高亮与语法着色系统
+- 响应式设计与主题切换机制
 - 样式优先级与层叠规则说明
-- SCSS 编译配置与优化建议
+- Hexo 主题样式优化建议
 
 ## 项目结构
-该主题采用“分层 + 功能域”相结合的 SCSS 组织方式：
-- 资源入口：assets/css/main.scss 控制所有导入顺序与依赖
-- 共享变量与断点：_sass/_themes.scss 定义全局变量、断点、网格与品牌色
-- 基础与重置：_sass/layout/_reset.scss 与 _sass/layout/_base.scss 提供浏览器一致性与基础排版
-- 布局组件：_sass/layout/ 下按功能拆分（按钮、表单、表格、导航、页脚、侧边栏等）
-- 主题：_sass/theme/ 下按主题与明暗模式拆分，通过 CSS 自定义属性实现动态切换
-- 工具与混入：_sass/include/ 提供混入与通用工具类
-- 语法高亮：_sass/_syntax.scss 管理代码块样式
+该主题采用 Hexo 主题架构，基于 Butterfly 主题进行定制化开发，使用 Stylus 作为样式预处理器：
+- 主题入口：hexo-site/_config.yml 指定主题为 butterfly
+- 主题配置：hexo-site/_config.butterfly.yml 提供主题特定的样式配置
+- 样式编译：通过 hexo-renderer-stylus 处理 Stylus 样式
+- 代码高亮：集成 highlight.js 提供语法着色
+- 依赖管理：package.json 管理 Hexo 生态系统依赖
 
 ```mermaid
 graph TB
-A["assets/css/main.scss<br/>资源入口与导入顺序"] --> B["_sass/layout/_reset.scss<br/>重置与基础盒模型"]
-A --> C["_sass/layout/_base.scss<br/>基础排版与动画"]
-A --> D["_sass/include/_utilities.scss<br/>通用工具类"]
-A --> E["_sass/layout/_buttons.scss<br/>按钮组件"]
-A --> F["_sass/layout/_forms.scss<br/>表单组件"]
-A --> G["_sass/layout/_tables.scss<br/>表格组件"]
-A --> H["_sass/layout/_navigation.scss<br/>导航组件"]
-A --> I["_sass/_syntax.scss<br/>代码高亮"]
-A --> J["_sass/theme/_default_light.scss<br/>默认主题-亮色"]
-A --> K["_sass/theme/_default_dark.scss<br/>默认主题-暗色"]
-L["_sass/_themes.scss<br/>全局变量/断点/网格/品牌色"] --> A
+A["hexo-site/_config.yml<br/>Hexo 配置与主题设置"] --> B["hexo-site/_config.butterfly.yml<br/>Butterfly 主题配置"]
+A --> C["hexo-site/package.json<br/>依赖管理"]
+B --> D["Butterfly 主题样式<br/>Stylus 模块化架构"]
+D --> E["全局样式模块<br/>_global/index.styl"]
+D --> F["功能工具模块<br/>_global/function.styl"]
+D --> G["布局组件模块<br/>_layout/post.styl"]
+D --> H["代码高亮模块<br/>_highlight/highlight.styl"]
+E --> I["自定义样式<br/>用户定制样式"]
+I --> J["代码高亮<br/>highlight.js 集成"]
+I --> K["响应式设计<br/>断点与网格系统"]
 ```
 
-图表来源
-- [main.scss:11-42](file://assets/css/main.scss#L11-L42)
-- [_themes.scss:1-104](file://_sass/_themes.scss#L1-L104)
-- [_reset.scss:1-179](file://_sass/layout/_reset.scss#L1-L179)
-- [_base.scss:1-365](file://_sass/layout/_base.scss#L1-L365)
-- [_utilities.scss:1-501](file://_sass/include/_utilities.scss#L1-L501)
-- [_buttons.scss:1-156](file://_sass/layout/_buttons.scss#L1-L156)
-- [_forms.scss:1-391](file://_sass/layout/_forms.scss#L1-L391)
-- [_tables.scss:1-38](file://_sass/layout/_tables.scss#L1-L38)
-- [_navigation.scss:1-527](file://_sass/layout/_navigation.scss#L1-L527)
-- [_default_light.scss:1-49](file://_sass/theme/_default_light.scss#L1-L49)
-- [_default_dark.scss:1-57](file://_sass/theme/_default_dark.scss#L1-L57)
-- [_syntax.scss:1-125](file://_sass/_syntax.scss#L1-L125)
+**图表来源**
+- [hexo-site/_config.yml:119](file://hexo-site/_config.yml#L119)
+- [hexo-site/_config.butterfly.yml:404](file://hexo-site/_config.butterfly.yml#L404)
+- [hexo-site/package.json:30](file://hexo-site/package.json#L30)
 
-章节来源
-- [main.scss:11-42](file://assets/css/main.scss#L11-L42)
-- [_themes.scss:1-104](file://_sass/_themes.scss#L1-L104)
+**章节来源**
+- [hexo-site/_config.yml:119](file://hexo-site/_config.yml#L119)
+- [hexo-site/_config.butterfly.yml:404](file://hexo-site/_config.butterfly.yml#L404)
+- [hexo-site/package.json:30](file://hexo-site/package.json#L30)
 
 ## 核心组件
-- 变量与断点系统：集中于 _sass/_themes.scss，定义字体、字号、断点、网格参数与品牌色
-- 混入与工具类：_sass/include/_mixins.scss 提供 em 计算与 clearfix；_sass/include/_utilities.scss 提供可见性、对齐、图片、图标、导航图标、粘性容器、模态框、脚注、必填项等
-- 基础与重置：_sass/layout/_reset.scss 统一盒模型、选择器、媒体与表单；_sass/layout/_base.scss 提供排版、链接、代码、列表、图片、导航列表与打印样式
-- 组件库：按钮、表单、表格、导航、页脚、侧边栏、归档等
-- 主题系统：_sass/theme/ 下以 CSS 自定义属性驱动明暗主题切换
-- 语法高亮：_sass/_syntax.scss 统一代码块外观与 Solarized 配色
+- **主题系统**：Butterfly 主题提供完整的样式框架，包括布局、组件和主题切换功能
+- **配置系统**：_config.butterfly.yml 提供丰富的主题配置选项，支持自定义样式、导航、CDN 等
+- **渲染器**：hexo-renderer-stylus 处理 Stylus 样式文件，支持嵌套、变量、混入等功能
+- **代码高亮**：highlight.js 提供多种语法着色主题，支持代码块美化
+- **依赖管理**：package.json 管理 Hexo 核心、主题和插件依赖
 
-章节来源
-- [_mixins.scss:1-53](file://_sass/include/_mixins.scss#L1-L53)
-- [_utilities.scss:1-501](file://_sass/include/_utilities.scss#L1-L501)
-- [_reset.scss:1-179](file://_sass/layout/_reset.scss#L1-L179)
-- [_base.scss:1-365](file://_sass/layout/_base.scss#L1-L365)
-- [_buttons.scss:1-156](file://_sass/layout/_buttons.scss#L1-L156)
-- [_forms.scss:1-391](file://_sass/layout/_forms.scss#L1-L391)
-- [_tables.scss:1-38](file://_sass/layout/_tables.scss#L1-L38)
-- [_navigation.scss:1-527](file://_sass/layout/_navigation.scss#L1-L527)
-- [_default_light.scss:1-49](file://_sass/theme/_default_light.scss#L1-L49)
-- [_default_dark.scss:1-57](file://_sass/theme/_default_dark.scss#L1-L57)
-- [_syntax.scss:1-125](file://_sass/_syntax.scss#L1-L125)
+**章节来源**
+- [hexo-site/_config.butterfly.yml:404](file://hexo-site/_config.butterfly.yml#L404)
+- [hexo-site/package.json:30](file://hexo-site/package.json#L30)
 
 ## 架构总览
-整体遵循“自底向上”的模块化思路：
-- 底层：重置与基础（_reset、_base）确保一致的浏览器基线
-- 中层：布局组件（buttons、forms、tables、navigation 等）构建页面骨架
-- 上层：主题（theme）与工具（include）提供可复用能力与视觉风格
-- 入口：main.scss 按依赖顺序导入，形成稳定编译链路
+整体遵循 Hexo 主题的模块化思路，采用 Stylus 作为样式预处理器：
+- **底层**：Butterfly 主题提供基础样式框架和组件库
+- **中层**：用户自定义样式覆盖主题默认样式
+- **上层**：主题配置系统提供运行时样式定制
+- **入口**：Hexo 配置文件控制主题加载和编译流程
 
 ```mermaid
 graph LR
-Reset["_sass/layout/_reset.scss"] --> Base["_sass/layout/_base.scss"]
-Base --> Utilities["_sass/include/_utilities.scss"]
-Base --> Buttons["_sass/layout/_buttons.scss"]
-Base --> Forms["_sass/layout/_forms.scss"]
-Base --> Tables["_sass/layout/_tables.scss"]
-Base --> Navigation["_sass/layout/_navigation.scss"]
-Base --> Syntax["_sass/_syntax.scss"]
-Themes["_sass/_themes.scss"] --> ThemeLight["_sass/theme/_default_light.scss"]
-Themes --> ThemeDark["_sass/theme/_default_dark.scss"]
-Main["assets/css/main.scss"] --> Reset
-Main --> Base
-Main --> Utilities
-Main --> Buttons
-Main --> Forms
-Main --> Tables
-Main --> Navigation
-Main --> Syntax
-Main --> ThemeLight
-Main --> ThemeDark
+Config["_config.yml"] --> Theme["Butterfly 主题"]
+Theme --> Global["_global 模块<br/>全局样式与变量"]
+Global --> Function["_global/function.styl<br/>工具函数与混入"]
+Global --> Layout["_layout 模块<br/>布局组件"]
+Layout --> Post["_layout/post.styl<br/>文章布局"]
+Layout --> Highlight["_highlight 模块<br/>代码高亮"]
+Highlight --> CodeBlocks["代码块样式"]
+Config --> Package["package.json 依赖"]
+Package --> Renderer["hexo-renderer-stylus"]
+Renderer --> Compiled["编译后的 CSS"]
 ```
 
-图表来源
-- [main.scss:11-42](file://assets/css/main.scss#L11-L42)
-- [_themes.scss:1-104](file://_sass/_themes.scss#L1-L104)
-- [_reset.scss:1-179](file://_sass/layout/_reset.scss#L1-L179)
-- [_base.scss:1-365](file://_sass/layout/_base.scss#L1-L365)
-- [_utilities.scss:1-501](file://_sass/include/_utilities.scss#L1-L501)
-- [_buttons.scss:1-156](file://_sass/layout/_buttons.scss#L1-L156)
-- [_forms.scss:1-391](file://_sass/layout/_forms.scss#L1-L391)
-- [_tables.scss:1-38](file://_sass/layout/_tables.scss#L1-L38)
-- [_navigation.scss:1-527](file://_sass/layout/_navigation.scss#L1-L527)
-- [_syntax.scss:1-125](file://_sass/_syntax.scss#L1-L125)
-- [_default_light.scss:1-49](file://_sass/theme/_default_light.scss#L1-L49)
-- [_default_dark.scss:1-57](file://_sass/theme/_default_dark.scss#L1-L57)
+**图表来源**
+- [hexo-site/_config.yml:119](file://hexo-site/_config.yml#L119)
+- [hexo-site/package.json:30](file://hexo-site/package.json#L30)
 
 ## 详细组件分析
 
-### 变量与断点系统
-- 字体与字号：定义系统字体族、等宽字体、字号刻度与标题层级
-- 断点：small、medium、medium-wide、large、x-large，配合 breakpoint-set 使用
-- 网格：Susy 配置（列数、列宽、 gutter、math、输出模式、容器宽度等）
-- 品牌色：社交平台色板，用于按钮与图标着色
-- 主题色：主色、危险/成功/警告/信息色、圆角半径、阴影、过渡时长、导航图标尺寸、页眉高度等
+### Hexo 主题配置系统
+- **主题设置**：通过 theme: butterfly 指定使用 Butterfly 主题
+- **主题配置**：_config.butterfly.yml 提供导航、样式、CDN 等配置选项
+- **渲染器配置**：highlight 配置控制代码高亮行为
+- **插件管理**：package.json 管理 hexo-theme-butterfly 和相关插件
 
-章节来源
-- [_themes.scss:1-104](file://_sass/_themes.scss#L1-L104)
+**章节来源**
+- [hexo-site/_config.yml:119](file://hexo-site/_config.yml#L119)
+- [hexo-site/_config.butterfly.yml:404](file://hexo-site/_config.butterfly.yml#L404)
+- [hexo-site/package.json:30](file://hexo-site/package.json#L30)
 
-### 混入与工具类
-- 混入
-  - em 函数：基于基准字号计算 rem/em
-  - clearfix：清除浮动的标准实现
-  - tab-focus：统一键盘焦点样式
-- 工具类
-  - 可见性与读屏友好：hidden、visually-hidden、screen-reader-text 等
-  - 文本与对齐：text-left/right/center/justify、nowrap
-  - 容器与换行：wrapper、wordwrap、cf（clearfix）
-  - 图片与对齐：align-left/right/center，响应式断点下的浮动布局
-  - 图标：icon、icon-pad-right，以及社交图标颜色映射
-  - 导航图标：navicon、close 状态下的旋转动画
-  - 粘性容器：sticky 在大屏生效
-  - 简易模态框：show-modal 与 .modal 结构
-  - 脚注：footnote、footnotes、reversefootnote
-  - 必填项：required
+### 全局样式模块分析
+Butterfly 主题的全局样式模块提供了基础的样式框架和变量定义：
 
-章节来源
-- [_mixins.scss:1-53](file://_sass/include/_mixins.scss#L1-L53)
-- [_utilities.scss:1-501](file://_sass/include/_utilities.scss#L1-L501)
+#### 变量体系
+- **CSS 变量映射**：通过 `:root` 声明将 Stylus 变量映射为 CSS 自定义属性
+- **颜色变量**：包括主题色、背景色、文本色、链接色等
+- **字体变量**：全局字体大小、字体族、行高设置
+- **间距变量**：边距、内边距、间距等布局变量
 
-### 基础与重置（Reset/Base）
-- Reset：统一盒模型、选择器、HTML5 元素显示、图片缩放、表单控件外观、链接焦点状态
-- Base：全局文本颜色、背景、字体、行高、标题层级、小号文本、段落缩进、引用、链接、代码块、水平分割线、列表、图片与图注、导航列表、全局过渡动画、打印隐藏元素
+#### 基础样式
+- **全局重置**：统一的盒模型、滚动条样式、选择器样式
+- **排版系统**：标题层级、段落、列表、表格的基础样式
+- **交互样式**：链接悬停效果、按钮样式、表单样式
 
-章节来源
-- [_reset.scss:1-179](file://_sass/layout/_reset.scss#L1-L179)
-- [_base.scss:1-365](file://_sass/layout/_base.scss#L1-L365)
+**章节来源**
+- [hexo-site/node_modules/hexo-theme-butterfly/source/css/_global/index.styl:1-287](file://hexo-site/node_modules/hexo-theme-butterfly/source/css/_global/index.styl#L1-L287)
 
-### 按钮组件（Buttons）
-- 默认按钮：基础样式、悬停混合色、图标间距、块级按钮、反色/描边/信息/警告/成功/危险/禁用变体
-- 社交按钮：基于品牌色的网络按钮集合
-- 尺寸：x-large/large/default/small
+### 工具函数与混入模块
+全局函数模块提供了丰富的样式工具和动画效果：
 
-章节来源
-- [_buttons.scss:1-156](file://_sass/layout/_buttons.scss#L1-L156)
+#### 工具类
+- **文本限制**：单行文本截断、多行文本省略
+- **圆角处理**：统一的边框半径处理函数
+- **图片效果**：悬停缩放、模糊效果等
+- **布局辅助**：垂直居中、最大宽度等
 
-### 表单组件（Forms）
-- 表单容器与字段集：边距、内边距、边框、标题样式
-- 输入/选择/文本域：宽度、内边距、圆角、阴影、悬停与聚焦状态
-- 单选/多选/文件/图像：特殊处理与尺寸
-- 内联/搜索表单：布局与圆角
-- 加载态：遮罩与 spinner
-- Google 搜索框：兼容与继承按钮样式
+#### 媒体查询混入
+- **响应式断点**：600px、768px、1024px、900px 等标准断点
+- **方向断点**：最小宽度、最大宽度断点组合
+- **特殊断点**：2000px 超宽屏支持
 
-章节来源
-- [_forms.scss:1-391](file://_sass/layout/_forms.scss#L1-L391)
+#### 动画系统
+- **页面进入动画**：头部、内容、标题等进入效果
+- **按钮动画**：悬停、点击反馈动画
+- **图标动画**：按钮图标弹跳、加载动画等
 
-### 表格组件（Tables）
-- 表格基础：宽度、字体、边框、间距
-- 表头与单元格：背景、边框、对齐
-- 连续表格间距
+**章节来源**
+- [hexo-site/node_modules/hexo-theme-butterfly/source/css/_global/function.styl:1-348](file://hexo-site/node_modules/hexo-theme-butterfly/source/css/_global/function.styl#L1-L348)
 
-章节来源
-- [_tables.scss:1-38](file://_sass/layout/_tables.scss#L1-L38)
+### 布局组件模块
+布局模块专注于页面结构和组件的样式设计：
 
-### 导航组件（Navigation）
-- 面包屑：容器、断点布局、列表样式、当前项强调
-- 分页：上下一页与页码列表、圆角、禁用态
-- 优先级导航：响应式折叠菜单、可见/隐藏列表、下拉三角
-- 导航列表：标题、子标题、活动态强调
-- 目录导航：TOC 样式、子级缩进、小屏隐藏次级链接
-- 简单下拉菜单：触发器、菜单定位、活动态
+#### 文章布局
+- **标题前缀图标**：支持 FontAwesome 图标作为标题前缀
+- **列表美化**：有序列表、无序列表的自定义样式
+- **分隔线样式**：自定义的水平分隔线样式
+- **锚点滚动**：支持点击滚动到指定标题位置
 
-章节来源
-- [_navigation.scss:1-527](file://_sass/layout/_navigation.scss#L1-L527)
+#### 内容容器
+- **文本对齐**：支持两端对齐的文本格式
+- **链接样式**：统一的链接颜色和悬停效果
+- **图片处理**：响应式图片、居中显示、过渡效果
+- **代码样式**：内联代码和代码块的基础样式
 
-### 主题系统（Theme）
-- 默认主题（亮/暗）：通过 SCSS 变量定义主色与语义色，再以 CSS 自定义属性注入到 :root 或 html[data-theme="dark"]，实现明暗主题切换
-- 关键变量：主色、危险/成功/警告/信息色、圆角、阴影、过渡、页眉高度、导航图标尺寸、侧边栏最大宽度与最小宽度等
+**章节来源**
+- [hexo-site/node_modules/hexo-theme-butterfly/source/css/_layout/post.styl:1-265](file://hexo-site/node_modules/hexo-theme-butterfly/source/css/_layout/post.styl#L1-L265)
 
-章节来源
-- [_default_light.scss:1-49](file://_sass/theme/_default_light.scss#L1-L49)
-- [_default_dark.scss:1-57](file://_sass/theme/_default_dark.scss#L1-L57)
+### 代码高亮模块
+代码高亮模块提供了完整的代码展示解决方案：
 
-### 语法高亮（Syntax）
-- 代码块容器：边框、圆角、阴影、字号、前置标签
-- Solarized 配色：按语言要素分类的颜色映射
+#### 主题系统
+- **浅色/深色主题**：支持浅色和深色两种高亮主题
+- **CSS 变量适配**：自动适配当前主题的颜色方案
+- **滚动条样式**：自定义滚动条外观
 
-章节来源
-- [_syntax.scss:1-125](file://_sass/_syntax.scss#L1-L125)
+#### 功能特性
+- **工具栏**：复制、展开、语言标识等工具按钮
+- **行号显示**：可选的行号显示功能
+- **高度限制**：支持代码块高度限制和展开功能
+- **全屏模式**：支持代码块全屏查看
 
-### main.scss 编译流程与依赖关系
-- 导入顺序严格控制层叠与覆盖关系，先 reset/base，再 include/utilities，然后各组件，最后主题与语法高亮
-- 主题导入：根据站点配置选择主题与明暗版本，支持回退至默认主题
-- 第三方库：breakpoint、susy、fontawesome
+#### 动画效果
+- **展开动画**：代码展开收起的平滑过渡
+- **工具栏动画**：工具按钮的悬停反馈
+- **全屏动画**：全屏模式的进入退出动画
 
-```mermaid
-sequenceDiagram
-participant J as "Jekyll 编译器"
-participant M as "main.scss"
-participant T as "_themes.scss"
-participant RL as "_reset.scss"
-participant BA as "_base.scss"
-participant UT as "_utilities.scss"
-participant TH as "theme/*.scss"
-participant BT as "_buttons.scss"
-participant FM as "_forms.scss"
-participant TB as "_tables.scss"
-participant NV as "_navigation.scss"
-participant SX as "_syntax.scss"
-J->>M : 解析入口文件
-M->>T : 导入全局变量/断点/网格/品牌色
-M->>RL : 导入重置
-M->>BA : 导入基础样式
-M->>UT : 导入工具类
-M->>BT : 导入按钮
-M->>FM : 导入表单
-M->>TB : 导入表格
-M->>NV : 导入导航
-M->>SX : 导入语法高亮
-M->>TH : 导入主题根据配置
-J-->>M : 输出压缩后的 CSS
-```
+**章节来源**
+- [hexo-site/node_modules/hexo-theme-butterfly/source/css/_highlight/highlight.styl:1-307](file://hexo-site/node_modules/hexo-theme-butterfly/source/css/_highlight/highlight.styl#L1-L307)
 
-图表来源
-- [main.scss:11-42](file://assets/css/main.scss#L11-L42)
-- [_themes.scss:1-104](file://_sass/_themes.scss#L1-L104)
-- [_reset.scss:1-179](file://_sass/layout/_reset.scss#L1-L179)
-- [_base.scss:1-365](file://_sass/layout/_base.scss#L1-L365)
-- [_utilities.scss:1-501](file://_sass/include/_utilities.scss#L1-L501)
-- [_buttons.scss:1-156](file://_sass/layout/_buttons.scss#L1-L156)
-- [_forms.scss:1-391](file://_sass/layout/_forms.scss#L1-L391)
-- [_tables.scss:1-38](file://_sass/layout/_tables.scss#L1-L38)
-- [_navigation.scss:1-527](file://_sass/layout/_navigation.scss#L1-L527)
-- [_syntax.scss:1-125](file://_sass/_syntax.scss#L1-L125)
-- [_default_light.scss:1-49](file://_sass/theme/_default_light.scss#L1-L49)
-- [_default_dark.scss:1-57](file://_sass/theme/_default_dark.scss#L1-L57)
+### 代码高亮系统
+- **高亮引擎**：使用 highlight.js 提供语法着色功能
+- **配置选项**：line_number、auto_detect、tab_replace 等参数控制高亮行为
+- **主题支持**：支持多种高亮主题，如 atom-one-dark、atom-one-light 等
+- **集成方式**：通过 hexo-highlighter 插件与 Hexo 集成
 
-章节来源
-- [main.scss:11-42](file://assets/css/main.scss#L11-L42)
+**章节来源**
+- [hexo-site/_config.yml:67](file://hexo-site/_config.yml#L67)
+
+### 响应式设计系统
+- **断点配置**：通过主题配置文件自定义断点和响应式行为
+- **导航优化**：放大导航标签、调整边距和内边距
+- **侧边栏定制**：隐藏标签统计、调整卡片样式
+- **交互增强**：添加悬停效果、平滑过渡动画
+
+**章节来源**
+- [hexo-site/_config.butterfly.yml:404](file://hexo-site/_config.butterfly.yml#L404)
+
+### 样式覆盖与定制
+- **导航样式**：通过自定义 CSS 覆盖默认导航样式
+- **选择器优化**：精确的 CSS 选择器确保样式正确应用
+- **JavaScript 辅助**：必要时使用 JavaScript 动态修复样式问题
+- **兼容性处理**：处理不同浏览器和设备的兼容性问题
+
+**章节来源**
+- [开发文档.md](file://开发文档.md)
 
 ## 依赖分析
-- 入口依赖：main.scss 依赖 _themes.scss 提供的变量与断点，再依次导入 reset/base/utilities 与各组件
-- 组件间耦合：组件之间低耦合，通过变量与混入间接共享能力
-- 外部依赖：breakpoint、susy、fontawesome 由第三方库提供断点与网格、栅格与图标
-- 主题依赖：主题通过 CSS 自定义属性与 SCSS 变量解耦，便于扩展新主题
+- **主题依赖**：hexo-theme-butterfly 提供主题框架和样式基础
+- **渲染器依赖**：hexo-renderer-stylus 处理 Stylus 样式文件
+- **高亮依赖**：highlight.js 提供代码高亮功能
+- **插件生态**：各种 Hexo 插件扩展功能，如数学公式、sitemap 等
 
 ```mermaid
 graph TB
-M["main.scss"] --> TS["_themes.scss"]
-M --> RL["_reset.scss"]
-M --> BA["_base.scss"]
-M --> UT["_utilities.scss"]
-M --> BT["_buttons.scss"]
-M --> FM["_forms.scss"]
-M --> TB["_tables.scss"]
-M --> NV["_navigation.scss"]
-M --> SX["_syntax.scss"]
-M --> TH["_default_light.scss / _default_dark.scss"]
-TH --> TS
-UT --> TS
-BT --> TS
-FM --> TS
-TB --> TS
-NV --> TS
-BA --> TS
+Hexo["Hexo 核心"] --> Theme["hexo-theme-butterfly"]
+Hexo --> Renderer["hexo-renderer-stylus"]
+Hexo --> Plugins["各种 Hexo 插件"]
+Theme --> Global["_global 模块"]
+Theme --> Layout["_layout 模块"]
+Theme --> Highlight["_highlight 模块"]
+Renderer --> Stylus["Stylus 处理"]
+Plugins --> Features["功能扩展"]
 ```
 
-图表来源
-- [main.scss:11-42](file://assets/css/main.scss#L11-L42)
-- [_themes.scss:1-104](file://_sass/_themes.scss#L1-L104)
-- [_reset.scss:1-179](file://_sass/layout/_reset.scss#L1-L179)
-- [_base.scss:1-365](file://_sass/layout/_base.scss#L1-L365)
-- [_utilities.scss:1-501](file://_sass/include/_utilities.scss#L1-L501)
-- [_buttons.scss:1-156](file://_sass/layout/_buttons.scss#L1-L156)
-- [_forms.scss:1-391](file://_sass/layout/_forms.scss#L1-L391)
-- [_tables.scss:1-38](file://_sass/layout/_tables.scss#L1-L38)
-- [_navigation.scss:1-527](file://_sass/layout/_navigation.scss#L1-L527)
-- [_syntax.scss:1-125](file://_sass/_syntax.scss#L1-L125)
-- [_default_light.scss:1-49](file://_sass/theme/_default_light.scss#L1-L49)
-- [_default_dark.scss:1-57](file://_sass/theme/_default_dark.scss#L1-L57)
+**图表来源**
+- [hexo-site/package.json:30](file://hexo-site/package.json#L30)
 
-章节来源
-- [main.scss:11-42](file://assets/css/main.scss#L11-L42)
+**章节来源**
+- [hexo-site/package.json:30](file://hexo-site/package.json#L30)
 
 ## 性能考虑
-- 输出样式：Jekyll 配置中启用压缩输出，减少体积
-- 代码分割：按功能域拆分 SCSS，避免重复导入与冗余样式
-- 变量复用：通过 _themes.scss 集中管理断点与品牌色，降低维护成本
-- 响应式策略：优先使用断点与 Susy 栅格，避免过度使用复杂选择器
-- 语法高亮：仅在需要的页面加载，避免全局引入造成体积膨胀
+- **主题优化**：Butterfly 主题经过优化，提供良好的性能表现
+- **CDN 支持**：可配置 CDN 加速静态资源加载
+- **代码压缩**：Hexo 编译时自动压缩 CSS 和 JavaScript
+- **懒加载**：图片和资源支持懒加载，提升页面加载速度
+- **缓存策略**：合理配置浏览器缓存和服务器缓存
 
-章节来源
-- [_config.yml:295-299](file://_config.yml#L295-L299)
+**章节来源**
+- [hexo-site/_config.butterfly.yml:448](file://hexo-site/_config.butterfly.yml#L448)
 
 ## 故障排查指南
-- 样式未生效
-  - 检查 main.scss 导入顺序是否正确，确保 reset/base 在前
-  - 确认主题导入路径与站点配置一致
-- 响应式异常
-  - 检查断点变量与 breakpoint 使用是否匹配
-  - 确认 Susy 配置与容器宽度一致
-- 按钮/表单样式错位
-  - 对照组件文件确认类名与混入使用
-  - 检查工具类是否被后续样式覆盖
-- 明暗主题不切换
-  - 确认 CSS 自定义属性是否正确注入
-  - 检查 html/data-theme 属性或 :root 选择器是否被覆盖
+- **主题未生效**
+  - 检查 _config.yml 中 theme 设置是否正确
+  - 确认 hexo-theme-butterfly 是否已安装
+  - 验证主题配置文件语法是否正确
+- **样式冲突**
+  - 检查自定义样式是否正确覆盖主题样式
+  - 确认 CSS 选择器优先级是否正确
+  - 验证是否存在样式冲突或覆盖问题
+- **代码高亮异常**
+  - 检查 highlight.js 配置是否正确
+  - 确认代码块标记是否符合要求
+  - 验证高亮主题文件是否存在
+- **响应式问题**
+  - 检查断点配置是否正确
+  - 确认媒体查询是否正常工作
+  - 验证设备适配测试结果
 
-章节来源
-- [_themes.scss:46-75](file://_sass/_themes.scss#L46-L75)
-- [_default_light.scss:30-47](file://_sass/theme/_default_light.scss#L30-L47)
-- [_default_dark.scss:38-55](file://_sass/theme/_default_dark.scss#L38-L55)
+**章节来源**
+- [hexo-site/_config.yml:119](file://hexo-site/_config.yml#L119)
+- [hexo-site/_config.butterfly.yml:404](file://hexo-site/_config.butterfly.yml#L404)
 
 ## 结论
-该 SCSS 架构以清晰的层次与模块化设计为核心，通过集中变量与断点、可复用混入与工具类、组件化的布局样式与主题系统，实现了高可维护性与强扩展性。遵循 main.scss 的导入顺序与 Jekyll 的压缩输出策略，可在保证开发体验的同时获得稳定的生产级样式输出。
+该 Hexo 主题样式架构以 Butterfly 主题为基础，通过灵活的配置系统和强大的插件生态，实现了高度可定制的样式解决方案。相比传统的 Jekyll 架构，Hexo 提供了更现代化的主题系统和更丰富的功能扩展能力。通过合理的配置管理和样式覆盖策略，可以在保证性能的同时实现个性化的视觉效果。
 
 ## 附录
 
-### 变量定义体系概览
-- 字体与字号：系统字体族、等宽字体、字号刻度
-- 断点：small、medium、medium-wide、large、x-large
-- 网格：Susy 列数、列宽、gutter、math、输出模式、容器宽度、盒模型
-- 主题色：主色、危险/成功/警告/信息色、圆角、阴影、过渡、页眉高度、导航图标尺寸、侧边栏约束
-- 品牌色：社交平台色板
+### Hexo 主题配置概览
+- **基本配置**：网站标题、副标题、描述、关键词等基础信息
+- **主题配置**：导航设置、样式定制、CDN 配置等主题相关选项
+- **功能配置**：代码高亮、数学公式、图表支持等扩展功能
+- **部署配置**：GitHub Pages 部署设置和自动化部署流程
 
-章节来源
-- [_themes.scss:1-104](file://_sass/_themes.scss#L1-L104)
+**章节来源**
+- [hexo-site/_config.yml:10](file://hexo-site/_config.yml#L10)
+- [hexo-site/_config.butterfly.yml:404](file://hexo-site/_config.butterfly.yml#L404)
 
-### 断点系统与响应式实现机制
-- 断点声明与单位设置：统一以 em 为单位
-- 断点使用：在工具类与组件中通过 @include breakpoint(...) 实现响应式行为
-- 栅格系统：Susy 提供流式网格与列跨度计算
+### Stylus 模块化设计原则
+- **模块分离**：按功能划分模块，便于维护和复用
+- **变量统一**：集中管理样式变量，确保视觉一致性
+- **混入复用**：通过混入实现样式逻辑复用
+- **响应式设计**：内置媒体查询混入，支持多设备适配
 
-章节来源
-- [_themes.scss:46-75](file://_sass/_themes.scss#L46-L75)
-- [_utilities.scss:116-173](file://_sass/include/_utilities.scss#L116-L173)
+**章节来源**
+- [hexo-site/node_modules/hexo-theme-butterfly/source/css/_global/function.styl:111](file://hexo-site/node_modules/hexo-theme-butterfly/source/css/_global/function.styl#L111-L146)
 
 ### 样式优先级与层叠规则
-- Reset/Base 优先：统一基础样式，避免浏览器默认差异
-- 组件后于基础：组件样式在基础之后导入，确保覆盖
-- 主题最后：主题注入的 CSS 自定义属性位于末尾，便于覆盖
-- 工具类：作为通用辅助，通常置于组件之前，但需注意具体场景下的覆盖关系
+- **主题优先**：Butterfly 主题提供基础样式框架
+- **自定义覆盖**：用户自定义样式优先级高于主题默认样式
+- **配置影响**：主题配置文件影响样式的最终呈现效果
+- **兼容性处理**：确保样式在不同浏览器和设备上的兼容性
 
-章节来源
-- [main.scss:11-42](file://assets/css/main.scss#L11-L42)
-- [_reset.scss:1-179](file://_sass/layout/_reset.scss#L1-L179)
-- [_base.scss:1-365](file://_sass/layout/_base.scss#L1-L365)
+**章节来源**
+- [hexo-site/_config.butterfly.yml:404](file://hexo-site/_config.butterfly.yml#L404)
 
-### SCSS 编译配置与优化建议
-- 编译配置：Jekyll 在 _config.yml 中指定 sass_dir 与输出样式为压缩
-- 优化建议：
-  - 保持导入顺序稳定，避免因顺序变化导致的层叠问题
-  - 使用变量与混入替代硬编码值，提升一致性
-  - 对常用响应式模式抽象为混入，减少重复代码
-  - 控制第三方库的引入范围，避免不必要的体积增长
+### Hexo 样式编译配置与优化建议
+- **编译流程**：Hexo 通过 hexo-renderer-stylus 处理 Stylus 样式
+- **依赖管理**：通过 package.json 管理所有依赖项
+- **性能优化**：
+  - 合理使用主题配置减少自定义样式
+  - 优化图片和资源文件大小
+  - 启用 CDN 加速静态资源
+  - 配置适当的缓存策略
+- **维护建议**：
+  - 定期更新主题和插件版本
+  - 保持配置文件的简洁和一致性
+  - 测试不同设备和浏览器的兼容性
 
-章节来源
-- [_config.yml:295-299](file://_config.yml#L295-L299)
-- [package.json:32-41](file://package.json#L32-L41)
+**章节来源**
+- [hexo-site/package.json:30](file://hexo-site/package.json#L30)
+- [hexo-site/_config.butterfly.yml:448](file://hexo-site/_config.butterfly.yml#L448)

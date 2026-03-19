@@ -2,15 +2,17 @@
 
 <cite>
 **本文引用的文件**
-- [Dockerfile](file://Dockerfile)
-- [docker-compose.yaml](file://docker-compose.yaml)
-- [.devcontainer/devcontainer.json](file://.devcontainer/devcontainer.json)
+- [README.md](file://README.md)
 - [_config.yml](file://_config.yml)
 - [_config_docker.yml](file://_config_docker.yml)
 - [Gemfile](file://Gemfile)
 - [package.json](file://package.json)
-- [README.md](file://README.md)
 - [scripts/update_cv_json.sh](file://scripts/update_cv_json.sh)
+- [hexo-site/_config.yml](file://hexo-site/_config.yml)
+- [hexo-site/package.json](file://hexo-site/package.json)
+- [hexo-site/_config.butterfly.yml](file://hexo-site/_config.butterfly.yml)
+- [hexo-site/source/index.md](file://hexo-site/source/index.md)
+- [hexo-site/source/about/index.md](file://hexo-site/source/about/index.md)
 </cite>
 
 ## 目录
@@ -26,411 +28,348 @@
 10. [附录](#附录)
 
 ## 简介
-本指南面向希望将基于 Jekyll 的学术主题网站进行容器化部署的用户，系统讲解如何使用 Docker 和 docker-compose 构建与运行容器，如何通过 VS Code DevContainer 实现一致且可复现的开发环境，以及如何在容器中实现网络访问、数据持久化、日志与监控、安全加固与性能优化等工程实践。本文所有技术细节均来自仓库中的实际配置文件。
+**重要更新**：Docker 容器化系统已完全移除，不再支持 Docker 部署方式。本指南现面向基于 Hexo 的学术主题网站，提供本地开发与部署的完整流程，包括 Node.js 环境配置、Hexo 构建系统、GitHub Pages 自动化部署等。本文所有技术细节均来自仓库中的实际配置文件。
 
 ## 项目结构
-该项目为一个 Jekyll 主题网站，采用 Ruby 生态（Ruby、Bundler、Jekyll）进行本地构建与预览。容器化相关的关键文件如下：
-- Dockerfile：定义容器镜像构建步骤，含基础镜像、依赖安装、非 root 用户、工作目录与权限、Ruby Gem 与 Bundler 安装、Jekyll 启动命令。
-- docker-compose.yaml：定义服务、镜像来源、卷挂载、端口映射、用户与环境变量、启动命令。
-- .devcontainer/devcontainer.json：VS Code DevContainer 配置，关联 docker-compose 服务，设置远程用户、工作区路径、端口转发等。
-- _config.yml 与 _config_docker.yml：站点配置，其中 _config_docker.yml 在容器环境下覆盖部分配置项。
-- Gemfile：声明 Jekyll 插件与依赖版本。
-- package.json：前端资源与构建脚本（与 Jekyll 构建流程解耦）。
-- scripts/update_cv_json.sh：辅助脚本，用于将 Markdown CV 转换为 JSON 并可选触发本地 Jekyll 预览。
+该项目现已完全迁移到 Hexo（基于 Node.js）静态网站生成器，采用 JavaScript 生态进行本地构建与部署。主要文件结构如下：
+- hexo-site/_config.yml：Hexo 主配置文件，包含站点信息、主题配置、部署设置等
+- hexo-site/package.json：前端资源与构建脚本，声明 Hexo 及相关插件依赖
+- hexo-site/_config.butterfly.yml：Butterfly 主题配置文件，控制界面样式与功能
+- hexo-site/source/：源内容目录，包含 Markdown 文章、页面和媒体资源
+- README.md：项目说明文档，包含本地运行和部署指南
 
 ```mermaid
 graph TB
-subgraph "宿主机"
-Host["开发者机器"]
-VSCode["VS Code"]
-Compose["docker-compose.yaml"]
+subgraph "本地开发环境"
+NodeJS["Node.js 运行时"]
+NPM["npm 包管理器"]
+Hexo["Hexo 静态网站生成器"]
+Theme["Butterfly 主题"]
 end
-subgraph "容器"
-Image["Jekyll 容器镜像<br/>Ruby 基础镜像 + 依赖 + 非 root 用户"]
-Workdir["/usr/src/app"]
-Volume["卷挂载: 本地目录 -> /usr/src/app"]
-Port["端口映射: 4000:4000"]
-Env["环境变量: JEKYLL_ENV=docker"]
+subgraph "内容管理"
+Source["source/ 源内容"]
+Posts["_posts/ 文章内容"]
+Pages["页面内容"]
 end
-Host --> VSCode
-VSCode --> Compose
-Compose --> Image
-Image --> Workdir
-Host --> Volume
-Image --> Port
-Image --> Env
+subgraph "部署"
+GitHub["GitHub 仓库"]
+Pages["GitHub Pages"]
+Actions["GitHub Actions"]
+end
+NodeJS --> NPM
+NPM --> Hexo
+Hexo --> Theme
+Source --> Hexo
+Posts --> Hexo
+Pages --> Hexo
+Hexo --> GitHub
+GitHub --> Actions
+Actions --> Pages
 ```
 
-图表来源
-- [Dockerfile:1-36](file://Dockerfile#L1-L36)
-- [docker-compose.yaml:1-10](file://docker-compose.yaml#L1-L10)
-- [.devcontainer/devcontainer.json:1-16](file://.devcontainer/devcontainer.json#L1-L16)
-
-章节来源
-- [Dockerfile:1-36](file://Dockerfile#L1-L36)
-- [docker-compose.yaml:1-10](file://docker-compose.yaml#L1-L10)
-- [.devcontainer/devcontainer.json:1-16](file://.devcontainer/devcontainer.json#L1-L16)
-- [_config.yml:1-362](file://_config.yml#L1-L362)
-- [_config_docker.yml:1-1](file://_config_docker.yml#L1-L1)
-- [Gemfile:1-14](file://Gemfile#L1-L14)
-- [package.json:1-42](file://package.json#L1-L42)
-- [README.md:57-72](file://README.md#L57-L72)
+**章节来源**
+- [hexo-site/_config.yml:1-142](file://hexo-site/_config.yml#L1-L142)
+- [hexo-site/package.json:1-35](file://hexo-site/package.json#L1-L35)
+- [hexo-site/_config.butterfly.yml:1-459](file://hexo-site/_config.butterfly.yml#L1-L459)
 
 ## 核心组件
-- 容器镜像构建（Dockerfile）
-  - 基础镜像：使用 Ruby 官方镜像，满足 Jekyll 运行时需求。
-  - 依赖安装：安装构建工具链与 Node.js，便于后续构建与预览。
-  - 非 root 用户：创建并切换到非 root 用户，提升安全性。
-  - 工作目录与权限：设置工作目录并赋予对应权限。
-  - Ruby 依赖：安装指定版本的 Bundler 与连接池，执行 bundle install。
-  - 启动命令：以 Jekyll 服务方式监听 0.0.0.0，启用热重载，并合并容器专用配置文件。
-- 服务编排（docker-compose.yaml）
-  - 服务名：jekyll-site。
-  - 镜像来源：本地构建（build: .），或直接使用已存在的镜像（image: jekyll-site）。
-  - 卷挂载：将宿主机当前目录挂载到容器工作目录，实现源码热更新。
-  - 端口映射：将容器 4000 端口映射到宿主机 4000 端口。
-  - 用户与环境：以 UID/GID 1000 的用户运行，设置环境变量 JEKYLL_ENV=docker。
-  - 启动命令：与镜像默认命令一致，确保行为一致。
-- VS Code DevContainer（.devcontainer/devcontainer.json）
-  - 关联 docker-compose：指向 docker-compose.yaml 中的服务。
-  - 远程用户与工作区：设置远程用户为 vscode，工作区路径为 /usr/src/app。
-  - 端口转发：将容器 4000 端口转发到本地，便于在容器内打开浏览器预览。
-  - 运行参数：以 1000:1000 用户身份启动，与镜像保持一致。
-- 配置文件（_config.yml 与 _config_docker.yml）
-  - 主配置：控制站点标题、作者信息、插件、集合、输出样式等。
-  - 容器配置：在容器环境下覆盖 url 字段为空，避免相对路径问题。
-- Ruby 依赖（Gemfile）
-  - 指定 Jekyll 及常用插件版本，确保构建一致性。
-- 前端依赖（package.json）
-  - 包含 jQuery、FitVids、Smooth Scroll、Plotly 等前端库及压缩脚本。
-- 辅助脚本（scripts/update_cv_json.sh）
-  - 将 Markdown CV 转换为 JSON，支持可选触发本地 Jekyll 预览。
+**重要更新**：Docker 相关组件已完全移除，现提供 Hexo 本地开发与部署方案：
 
-章节来源
-- [Dockerfile:1-36](file://Dockerfile#L1-L36)
-- [docker-compose.yaml:1-10](file://docker-compose.yaml#L1-L10)
-- [.devcontainer/devcontainer.json:1-16](file://.devcontainer/devcontainer.json#L1-L16)
-- [_config.yml:1-362](file://_config.yml#L1-L362)
-- [_config_docker.yml:1-1](file://_config_docker.yml#L1-L1)
-- [Gemfile:1-14](file://Gemfile#L1-L14)
-- [package.json:1-42](file://package.json#L1-L42)
-- [scripts/update_cv_json.sh:1-48](file://scripts/update_cv_json.sh#L1-L48)
+### Hexo 配置组件
+- 主配置文件（hexo-site/_config.yml）
+  - 站点基本信息：标题、副标题、描述、关键词、作者等
+  - URL 设置：部署到 https://CoolPig0720.github.io
+  - 主题配置：使用 butterfly 主题
+  - 部署设置：配置 GitHub 仓库和分支
+- 主题配置（hexo-site/_config.butterfly.yml）
+  - 导航栏配置：Logo、菜单项、社交媒体链接
+  - 界面设置：深色模式、代码块样式、分页设置
+  - 功能配置：MathJax 数学公式、Mermaid 图表支持
+- 源内容管理
+  - source/ 目录：包含首页、关于页面、CV、作品集等
+  - _posts/ 目录：Markdown 格式的博客文章
+  - scaffolds/ 目录：文章模板
+
+### 本地开发组件
+- Node.js 环境要求：确保安装 Node.js 和 npm
+- 依赖安装：运行 `npm install` 安装 Hexo 及插件
+- 本地预览：运行 `npm run server` 启动本地服务器
+- 构建生成：运行 `npm run build` 生成静态文件
+
+### GitHub Pages 部署组件
+- 自动化部署：通过 GitHub Actions 实现代码提交后的自动构建部署
+- 仓库配置：配置正确的 GitHub 仓库 URL 和分支
+- 部署流程：提交代码后自动触发构建和部署
+
+**章节来源**
+- [hexo-site/_config.yml:1-142](file://hexo-site/_config.yml#L1-L142)
+- [hexo-site/_config.butterfly.yml:1-459](file://hexo-site/_config.butterfly.yml#L1-L459)
+- [hexo-site/package.json:1-35](file://hexo-site/package.json#L1-L35)
+- [README.md:18-56](file://README.md#L18-L56)
 
 ## 架构总览
-下图展示从本地开发到容器运行的整体流程，以及 VS Code DevContainer 如何与 docker-compose 协同工作。
+下图展示从本地开发到 GitHub Pages 部署的完整流程：
 
 ```mermaid
 sequenceDiagram
 participant Dev as "开发者"
-participant VSCode as "VS Code"
-participant DC as ".devcontainer/devcontainer.json"
-participant Compose as "docker-compose.yaml"
-participant Img as "Dockerfile 构建镜像"
-participant Ctn as "Jekyll 容器"
-participant Browser as "浏览器"
-Dev->>VSCode : 打开项目
-VSCode->>DC : 读取 DevContainer 配置
-DC->>Compose : 关联服务 jekyll-site
-Dev->>VSCode : 执行“在容器中重新打开”
-VSCode->>Compose : 启动服务
-Compose->>Img : 构建镜像如需
-Img-->>Compose : 镜像就绪
-Compose->>Ctn : 创建并启动容器
-Ctn->>Ctn : 设置非 root 用户与权限
-Ctn->>Ctn : 启动 Jekyll 服务监听 0.0.0.0
-Browser->>Ctn : 访问 http : //localhost : 4000
-Ctn-->>Browser : 返回页面内容
+participant Local as "本地开发环境"
+participant Hexo as "Hexo 构建系统"
+participant Repo as "GitHub 仓库"
+participant Actions as "GitHub Actions"
+participant Pages as "GitHub Pages"
+Dev->>Local : 安装 Node.js 和依赖
+Local->>Hexo : 运行本地服务器
+Hexo-->>Local : 本地预览
+Dev->>Repo : 提交代码
+Repo->>Actions : 触发自动化流程
+Actions->>Hexo : 构建静态网站
+Hexo->>Repo : 生成静态文件
+Repo->>Pages : 部署到 GitHub Pages
+Pages-->>Dev : 网站上线
 ```
 
-图表来源
-- [.devcontainer/devcontainer.json:1-16](file://.devcontainer/devcontainer.json#L1-L16)
-- [docker-compose.yaml:1-10](file://docker-compose.yaml#L1-L10)
-- [Dockerfile:1-36](file://Dockerfile#L1-L36)
+**图表来源**
+- [README.md:18-56](file://README.md#L18-L56)
+- [hexo-site/_config.yml:126-142](file://hexo-site/_config.yml#L126-L142)
 
 ## 详细组件分析
 
-### Dockerfile 组件分析
-- 基础镜像与依赖
-  - 使用 Ruby 官方镜像作为基础，满足 Jekyll 运行时。
-  - 安装构建工具链与 Node.js，保证静态资源与预览能力。
-- 非 root 用户与权限
-  - 创建组与用户，设置工作目录权限，降低容器攻击面。
-- Ruby 依赖安装
-  - 固定 Bundler 版本与连接池版本，执行 bundle install，确保依赖一致性。
-- 启动命令
-  - 以 Jekyll 服务方式监听 0.0.0.0，启用热重载，并加载主配置与容器配置文件。
-
-```mermaid
-flowchart TD
-Start(["开始"]) --> Base["选择 Ruby 基础镜像"]
-Base --> Deps["安装构建工具与 Node.js"]
-Deps --> User["创建非 root 用户与组"]
-User --> Workdir["设置工作目录并赋权"]
-Workdir --> Bundle["安装 Bundler 与连接池"]
-Bundle --> Install["执行 bundle install"]
-Install --> Cmd["设置 Jekyll 启动命令"]
-Cmd --> End(["完成"])
-```
-
-图表来源
-- [Dockerfile:1-36](file://Dockerfile#L1-L36)
-
-章节来源
-- [Dockerfile:1-36](file://Dockerfile#L1-L36)
-
-### docker-compose.yaml 组件分析
-- 服务定义
-  - 服务名为 jekyll-site，镜像来源可为本地构建或已有镜像。
-- 卷挂载
-  - 将宿主机当前目录挂载到容器工作目录，实现源码热更新。
-- 端口映射
-  - 将容器 4000 端口映射到宿主机 4000 端口，便于本地预览。
-- 用户与环境
-  - 以 UID/GID 1000 的用户运行，设置 JEKYLL_ENV=docker，便于区分环境。
-- 启动命令
-  - 与镜像默认命令一致，确保行为一致。
-
-```mermaid
-flowchart TD
-S(["服务: jekyll-site"]) --> Img["镜像来源: 本地构建 或 已有镜像"]
-S --> Vol["卷挂载: 本地目录 -> /usr/src/app"]
-S --> Port["端口映射: 4000:4000"]
-S --> User["用户: 1000:1000"]
-S --> Env["环境变量: JEKYLL_ENV=docker"]
-S --> Cmd["启动命令: jekyll serve ..."]
-```
-
-图表来源
-- [docker-compose.yaml:1-10](file://docker-compose.yaml#L1-L10)
-
-章节来源
-- [docker-compose.yaml:1-10](file://docker-compose.yaml#L1-L10)
-
-### VS Code DevContainer 组件分析
-- 关联 docker-compose
-  - 通过 dockerComposeFile 与 service 字段关联到 jekyll-site 服务。
-- 远程环境
-  - 设置远程用户为 vscode，工作区路径为 /usr/src/app，便于在容器内编辑与调试。
-- 端口转发
-  - 将容器 4000 端口转发到本地，便于在容器内打开浏览器预览。
-- 运行参数
-  - 以 1000:1000 用户身份启动，与镜像保持一致。
-
-```mermaid
-sequenceDiagram
-participant VSCode as "VS Code"
-participant DevCont as ".devcontainer/devcontainer.json"
-participant Compose as "docker-compose.yaml"
-participant Ctn as "Jekyll 容器"
-VSCode->>DevCont : 读取配置
-DevCont->>Compose : 关联服务 jekyll-site
-VSCode->>Compose : 执行“在容器中重新打开”
-Compose->>Ctn : 以 1000 : 1000 用户启动
-Ctn-->>VSCode : 提供开发环境与端口转发
-```
-
-图表来源
-- [.devcontainer/devcontainer.json:1-16](file://.devcontainer/devcontainer.json#L1-L16)
-- [docker-compose.yaml:1-10](file://docker-compose.yaml#L1-L10)
-
-章节来源
-- [.devcontainer/devcontainer.json:1-16](file://.devcontainer/devcontainer.json#L1-L16)
-- [docker-compose.yaml:1-10](file://docker-compose.yaml#L1-L10)
-
-### 配置文件与依赖组件分析
-- 站点配置（_config.yml）
-  - 控制站点标题、作者信息、社交链接、评论系统、分析提供商、集合类型、插件列表等。
-- 容器配置（_config_docker.yml）
-  - 在容器环境下将 url 设为空，避免相对路径导致的链接问题。
-- Ruby 依赖（Gemfile）
-  - 指定 Jekyll 与常用插件版本，确保构建一致性。
-- 前端依赖（package.json）
-  - 包含 jQuery、FitVids、Smooth Scroll、Plotly 等前端库及压缩脚本。
+### Hexo 配置文件组件分析
+- 站点配置（hexo-site/_config.yml）
+  - 基本信息：title、subtitle、description、author 等
+  - URL 设置：部署目标 URL 和链接格式
+  - 主题配置：启用 butterfly 主题
+  - 部署配置：Git 部署设置，指定仓库和分支
+- 主题配置（hexo-site/_config.butterfly.yml）
+  - 导航栏：Logo、菜单项、社交媒体链接
+  - 界面设置：深色模式、代码块样式、分页配置
+  - 功能支持：MathJax、Mermaid、字数统计等
+- 源内容结构
+  - 首页：自定义 HTML 和 CSS 样式
+  - 关于页面：个人介绍和联系方式
+  - 博客文章：Markdown 格式的文章内容
 
 ```mermaid
 graph LR
-Config["_config.yml"] --> Jekyll["Jekyll 构建"]
-DockerConfig["_config_docker.yml"] --> Jekyll
-Gemfile["Gemfile"] --> Bundler["Bundler 安装依赖"]
-PackageJSON["package.json"] --> Frontend["前端资源与脚本"]
-Jekyll --> Output["生成静态页面"]
-Frontend --> Output
+Config["_config.yml"] --> Hexo["Hexo 构建系统"]
+Theme["_config.butterfly.yml"] --> ThemeEngine["Butterfly 主题引擎"]
+Source["source/ 内容"] --> Hexo
+Hexo --> Static["静态网站文件"]
+Static --> Deploy["GitHub Pages 部署"]
 ```
 
-图表来源
-- [_config.yml:1-362](file://_config.yml#L1-L362)
-- [_config_docker.yml:1-1](file://_config_docker.yml#L1-L1)
-- [Gemfile:1-14](file://Gemfile#L1-L14)
-- [package.json:1-42](file://package.json#L1-L42)
+**图表来源**
+- [hexo-site/_config.yml:1-142](file://hexo-site/_config.yml#L1-L142)
+- [hexo-site/_config.butterfly.yml:1-459](file://hexo-site/_config.butterfly.yml#L1-L459)
 
-章节来源
-- [_config.yml:1-362](file://_config.yml#L1-L362)
-- [_config_docker.yml:1-1](file://_config_docker.yml#L1-L1)
-- [Gemfile:1-14](file://Gemfile#L1-L14)
-- [package.json:1-42](file://package.json#L1-L42)
+**章节来源**
+- [hexo-site/_config.yml:1-142](file://hexo-site/_config.yml#L1-L142)
+- [hexo-site/_config.butterfly.yml:1-459](file://hexo-site/_config.butterfly.yml#L1-L459)
+- [hexo-site/source/index.md:1-204](file://hexo-site/source/index.md#L1-L204)
+- [hexo-site/source/about/index.md:1-67](file://hexo-site/source/about/index.md#L1-L67)
 
-### 辅助脚本组件分析
-- 脚本功能
-  - 将 Markdown CV 转换为 JSON，支持可选触发本地 Jekyll 预览。
-- 执行流程
-  - 校验输入文件存在性，调用 Python 脚本转换，检查返回状态，成功后提示是否构建 Jekyll。
+### 本地开发组件分析
+- 环境准备
+  - Node.js 安装：根据操作系统安装 Node.js 和 npm
+  - 依赖安装：运行 `npm install` 安装 Hexo 及相关插件
+  - 权限设置：Linux 系统可能需要额外的构建工具
+- 本地运行
+  - 启动服务器：`npm run server` 启动本地预览服务器
+  - 热重载：修改内容后自动重新构建和刷新
+  - 预览访问：浏览器访问 http://localhost:4000
+- 构建流程
+  - 生成静态文件：`npm run build` 生成部署所需的静态文件
+  - 清理缓存：`npm run clean` 清理生成的文件
 
 ```mermaid
 flowchart TD
-Start(["开始"]) --> CheckPy["检查 Python 脚本是否存在"]
-CheckPy --> PyOK{"存在?"}
-PyOK --> |否| Err1["报错并退出"]
-PyOK --> |是| CheckMD["检查 Markdown CV 是否存在"]
-CheckMD --> MDOK{"存在?"}
-MDOK --> |否| Err2["报错并退出"]
-MDOK --> |是| Convert["执行 Python 脚本转换"]
-Convert --> ConvOK{"转换成功?"}
-ConvOK --> |否| Err3["报错并退出"]
-ConvOK --> |是| Done["输出成功信息"]
-Done --> AskBuild{"是否构建 Jekyll?"}
-AskBuild --> |是| Build["bundle exec jekyll serve"]
-AskBuild --> |否| End(["结束"])
-Build --> End
+Start(["开始开发"]) --> Install["安装 Node.js 和依赖"]
+Install --> Server["启动本地服务器"]
+Server --> Edit["编辑内容"]
+Edit --> Preview["实时预览"]
+Preview --> Build["生成静态文件"]
+Build --> Deploy["部署到 GitHub Pages"]
+Deploy --> End(["完成"])
 ```
 
-图表来源
-- [scripts/update_cv_json.sh:1-48](file://scripts/update_cv_json.sh#L1-L48)
+**图表来源**
+- [README.md:18-56](file://README.md#L18-L56)
+- [hexo-site/package.json:5-10](file://hexo-site/package.json#L5-L10)
 
-章节来源
-- [scripts/update_cv_json.sh:1-48](file://scripts/update_cv_json.sh#L1-L48)
+**章节来源**
+- [README.md:18-56](file://README.md#L18-L56)
+- [hexo-site/package.json:1-35](file://hexo-site/package.json#L1-L35)
+
+### GitHub Pages 部署组件分析
+- 自动化部署流程
+  - 代码提交：推送到 GitHub 仓库
+  - Actions 触发：GitHub Actions 自动检测代码变更
+  - 构建过程：自动安装依赖、构建静态网站
+  - 部署发布：将生成的静态文件部署到 GitHub Pages
+- 部署配置
+  - 仓库设置：配置正确的 GitHub 仓库 URL
+  - 分支选择：指定要部署的分支（通常是 main）
+  - 自动化：无需手动干预，代码提交即自动部署
+
+```mermaid
+sequenceDiagram
+participant Dev as "开发者"
+participant GitHub as "GitHub 仓库"
+participant Actions as "GitHub Actions"
+participant Build as "构建环境"
+participant Pages as "GitHub Pages"
+Dev->>GitHub : 推送代码
+GitHub->>Actions : 触发工作流
+Actions->>Build : 安装依赖
+Build->>Build : 构建静态网站
+Build->>GitHub : 生成静态文件
+GitHub->>Pages : 部署到 Pages
+Pages-->>Dev : 网站可用
+```
+
+**图表来源**
+- [hexo-site/_config.yml:126-142](file://hexo-site/_config.yml#L126-L142)
+
+**章节来源**
+- [hexo-site/_config.yml:126-142](file://hexo-site/_config.yml#L126-L142)
 
 ## 依赖关系分析
+**重要更新**：Docker 依赖关系已移除，现提供 Hexo 生态系统的依赖关系：
+
 - 组件耦合
-  - docker-compose.yaml 与 Dockerfile 强耦合：服务依赖镜像构建；镜像由 Dockerfile 定义。
-  - VS Code DevContainer 与 docker-compose.yaml 弱耦合：通过字段关联服务，便于一键启动。
-  - 配置文件与 Jekyll 构建强耦合：_config.yml 与 _config_docker.yml 决定站点行为。
-  - Gemfile 与 Bundler 强耦合：固定版本确保依赖一致性。
+  - hexo-site/_config.yml 与 Hexo 构建系统强耦合
+  - hexo-site/_config.butterfly.yml 与 Butterfly 主题强耦合
+  - package.json 与 npm 包管理器强耦合
+  - 源内容与构建系统弱耦合，通过约定的目录结构关联
 - 外部依赖
-  - Ruby 官方镜像、Node.js、构建工具链。
-  - Jekyll 插件生态（feed、sitemap、redirect-from、emoji 等）。
+  - Node.js 运行时环境
+  - Hexo 静态网站生成器
+  - Butterfly 主题及其依赖
+  - GitHub Pages 部署服务
 - 潜在循环依赖
-  - 当前结构无循环依赖，镜像构建与服务编排相互独立但协作。
+  - 当前结构无循环依赖，各组件职责明确
 
 ```mermaid
 graph TB
-Dockerfile["Dockerfile"] --> Image["Jekyll 镜像"]
-docker_compose["docker-compose.yaml"] --> Service["jekyll-site 服务"]
-Image --> Service
-DevContainer[".devcontainer/devcontainer.json"] --> Service
-Config["_config.yml"] --> Jekyll["Jekyll 构建"]
-DockerConfig["_config_docker.yml"] --> Jekyll
-Gemfile["Gemfile"] --> Bundler["Bundler 安装依赖"]
-Service --> Jekyll
+Config["hexo-site/_config.yml"] --> Hexo["Hexo 构建系统"]
+ThemeConfig["hexo-site/_config.butterfly.yml"] --> Theme["Butterfly 主题"]
+Package["hexo-site/package.json"] --> NPM["npm 包管理器"]
+Source["source/ 源内容"] --> Hexo
+Hexo --> Static["静态文件"]
+Static --> GitHub["GitHub 仓库"]
+GitHub --> Pages["GitHub Pages"]
 ```
 
-图表来源
-- [Dockerfile:1-36](file://Dockerfile#L1-L36)
-- [docker-compose.yaml:1-10](file://docker-compose.yaml#L1-L10)
-- [.devcontainer/devcontainer.json:1-16](file://.devcontainer/devcontainer.json#L1-L16)
-- [_config.yml:1-362](file://_config.yml#L1-L362)
-- [_config_docker.yml:1-1](file://_config_docker.yml#L1-L1)
-- [Gemfile:1-14](file://Gemfile#L1-L14)
+**图表来源**
+- [hexo-site/_config.yml:1-142](file://hexo-site/_config.yml#L1-L142)
+- [hexo-site/_config.butterfly.yml:1-459](file://hexo-site/_config.butterfly.yml#L1-L459)
+- [hexo-site/package.json:1-35](file://hexo-site/package.json#L1-L35)
 
-章节来源
-- [Dockerfile:1-36](file://Dockerfile#L1-L36)
-- [docker-compose.yaml:1-10](file://docker-compose.yaml#L1-L10)
-- [.devcontainer/devcontainer.json:1-16](file://.devcontainer/devcontainer.json#L1-L16)
-- [_config.yml:1-362](file://_config.yml#L1-L362)
-- [_config_docker.yml:1-1](file://_config_docker.yml#L1-L1)
-- [Gemfile:1-14](file://Gemfile#L1-L14)
+**章节来源**
+- [hexo-site/_config.yml:1-142](file://hexo-site/_config.yml#L1-L142)
+- [hexo-site/_config.butterfly.yml:1-459](file://hexo-site/_config.butterfly.yml#L1-L459)
+- [hexo-site/package.json:1-35](file://hexo-site/package.json#L1-L35)
 
 ## 性能考虑
-- 镜像层优化
-  - 合理分层：将变化频率低的步骤（如安装系统依赖）放在前面，变化频繁的步骤（如复制源码）放在后面，以提升缓存命中率。
-  - 清理包管理器缓存：安装依赖后清理缓存，减小镜像体积。
-- 启动与热重载
-  - 使用 Jekyll 的热重载模式，减少手动重启次数，提升开发效率。
-- 端口与网络
-  - 仅暴露必要端口（4000），避免不必要的网络暴露。
-- 数据持久化
-  - 利用卷挂载将源码与生成物分离，避免在容器内写入持久化数据，降低复杂度。
-- 前端资源
-  - 前端资源与 Jekyll 构建解耦，可通过 package.json 的脚本进行压缩与优化，减少构建时间。
+**重要更新**：Docker 性能优化已移除，现提供 Hexo 性能优化建议：
 
-[本节为通用指导，不涉及具体文件分析]
+- 构建性能优化
+  - 依赖管理：使用 package.json 精确管理依赖版本
+  - 缓存策略：利用 npm 缓存减少重复安装时间
+  - 构建优化：合理配置 Hexo 插件，避免不必要的处理
+- 内容优化
+  - 图片优化：压缩图片大小，使用适当的格式
+  - 代码高亮：配置合理的代码高亮设置
+  - 字体加载：优化字体加载策略
+- 部署优化
+  - 静态资源：GitHub Pages 具有良好的 CDN 加速
+  - 构建时间：合理安排文章数量，避免过大的构建负载
 
 ## 故障排除指南
-- 权限问题
-  - 症状：容器内无法写入或权限不足。
-  - 排查：确认容器以 UID/GID 1000 运行，卷挂载目标目录权限正确。
-  - 参考
-    - [Dockerfile:11-22](file://Dockerfile#L11-L22)
-    - [docker-compose.yaml:7](file://docker-compose.yaml#L7)
-- 端口占用
-  - 症状：浏览器无法访问或端口冲突。
-  - 排查：确认宿主机 4000 端口未被占用，docker-compose.yaml 中端口映射正确。
-  - 参考
-    - [docker-compose.yaml:6](file://docker-compose.yaml#L6)
-- 环境变量
-  - 症状：容器内环境与预期不符。
-  - 排查：确认 JEKYLL_ENV=docker 已设置，容器配置文件生效。
-  - 参考
-    - [docker-compose.yaml:8](file://docker-compose.yaml#L8)
-    - [_config_docker.yml:1](file://_config_docker.yml#L1)
-- 依赖安装失败
-  - 症状：bundle install 报错或插件版本冲突。
-  - 排查：核对 Gemfile 中版本约束，必要时清理缓存后重试。
-  - 参考
-    - [Gemfile:1-14](file://Gemfile#L1-L14)
-    - [Dockerfile:29-32](file://Dockerfile#L29-L32)
-- DevContainer 启动异常
-  - 症状：VS Code 无法在容器中重新打开或端口未转发。
-  - 排查：确认 .devcontainer/devcontainer.json 中 dockerComposeFile 与 service 正确，端口转发已开启。
-  - 参考
-    - [.devcontainer/devcontainer.json:1-16](file://.devcontainer/devcontainer.json#L1-L16)
-- 预览链接异常
-  - 症状：容器内访问链接错误或相对路径问题。
-  - 排查：确认 _config_docker.yml 中 url 为空，避免相对路径导致的问题。
-  - 参考
-    - [_config_docker.yml:1](file://_config_docker.yml#L1)
+**重要更新**：Docker 相关故障排除已移除，现提供 Hexo 开发故障排除：
 
-章节来源
-- [Dockerfile:11-22](file://Dockerfile#L11-L22)
-- [docker-compose.yaml:6-8](file://docker-compose.yaml#L6-L8)
-- [_config_docker.yml:1](file://_config_docker.yml#L1)
-- [Gemfile:1-14](file://Gemfile#L1-L14)
-- [Dockerfile:29-32](file://Dockerfile#L29-L32)
-- [.devcontainer/devcontainer.json:1-16](file://.devcontainer/devcontainer.json#L1-L16)
+### 环境配置问题
+- Node.js 版本不兼容
+  - 症状：npm install 失败或运行时报错
+  - 解决：确保安装兼容的 Node.js 版本
+  - 参考：[README.md:24-42](file://README.md#L24-L42)
+- 权限问题
+  - 症状：npm install 权限不足
+  - 解决：使用 `sudo` 或配置本地安装路径
+  - 参考：[README.md:45-50](file://README.md#L45-L50)
+
+### 构建问题
+- 依赖安装失败
+  - 症状：npm install 报错
+  - 解决：删除 node_modules 和 package-lock.json 重新安装
+  - 参考：[README.md:43-44](file://README.md#L43-L44)
+- 构建错误
+  - 症状：hexo generate 失败
+  - 解决：检查 Markdown 语法和配置文件格式
+  - 参考：[hexo-site/_config.yml:1-142](file://hexo-site/_config.yml#L1-L142)
+
+### 本地预览问题
+- 服务器启动失败
+  - 症状：npm run server 无法启动
+  - 解决：检查端口占用和防火墙设置
+  - 参考：[README.md:52-53](file://README.md#L52-L53)
+- 热重载失效
+  - 症状：修改内容后页面不刷新
+  - 解决：重启本地服务器或检查文件保存
+
+### 部署问题
+- GitHub Pages 部署失败
+  - 症状：GitHub Actions 构建失败
+  - 解决：检查配置文件中的仓库 URL 和分支设置
+  - 参考：[hexo-site/_config.yml:137-142](file://hexo-site/_config.yml#L137-L142)
+- 预览链接异常
+  - 症状：部署后链接显示 404
+  - 解决：检查 base_url 和 permalink 设置
+  - 参考：[hexo-site/_config.yml:30-42](file://hexo-site/_config.yml#L30-L42)
+
+**章节来源**
+- [README.md:18-56](file://README.md#L18-L56)
+- [hexo-site/_config.yml:1-142](file://hexo-site/_config.yml#L1-L142)
 
 ## 结论
-通过 Docker 与 docker-compose，本项目实现了 Jekyll 网站的标准化构建与运行；借助 VS Code DevContainer，开发者可以在统一的环境中进行高效迭代。配合非 root 用户、卷挂载与最小暴露原则，既提升了安全性，也简化了开发与部署流程。建议在生产场景中进一步引入只读根文件系统、健康检查、资源限制与日志采集等措施，以增强稳定性与可观测性。
+**重要更新**：Docker 部署方式已完全移除，项目现采用纯 Node.js + Hexo + GitHub Pages 的现代化部署方案。该方案具有以下优势：
+- 简化部署：无需 Docker 容器管理
+- 自动化程度高：GitHub Actions 实现完全自动化部署
+- 成本效益：利用 GitHub Pages 免费服务
+- 开发体验：Node.js 生态提供良好的开发工具链
 
-[本节为总结性内容，不涉及具体文件分析]
+建议在生产环境中关注 GitHub Pages 的性能优化和监控，同时保持 Hexo 和主题的及时更新。
 
 ## 附录
-- 容器化部署流程（从镜像构建到容器运行）
-  - 构建镜像：使用 docker-compose 构建服务（若镜像不存在）。
-  - 启动服务：运行 docker-compose up，自动挂载卷、映射端口、设置用户与环境变量。
-  - 访问站点：在浏览器中打开 http://localhost:4000。
-  - 参考
-    - [README.md:57-68](file://README.md#L57-L68)
-    - [docker-compose.yaml:1-10](file://docker-compose.yaml#L1-L10)
-- VS Code DevContainer 使用
-  - 在 VS Code 中执行“在容器中重新打开”，自动关联 docker-compose 服务，端口转发 4000。
-  - 参考
-    - [README.md:70-72](file://README.md#L70-L72)
-    - [.devcontainer/devcontainer.json:1-16](file://.devcontainer/devcontainer.json#L1-L16)
-- 容器网络与数据持久化
-  - 网络：仅暴露 4000 端口，便于本地预览。
-  - 数据：通过卷挂载将源码目录映射到容器，实现热更新与持久化。
-  - 参考
-    - [docker-compose.yaml:5-6](file://docker-compose.yaml#L5-L6)
-- 日志与监控
-  - 建议：将容器标准输出接入日志收集系统；在容器内启用健康检查；结合外部监控工具观察资源使用。
-  - 参考
-    - [docker-compose.yaml:1-10](file://docker-compose.yaml#L1-L10)
-- 安全最佳实践
-  - 使用非 root 用户运行容器；限制镜像权限；最小化暴露端口；定期更新基础镜像与依赖。
-  - 参考
-    - [Dockerfile:11-22](file://Dockerfile#L11-L22)
-    - [docker-compose.yaml:7](file://docker-compose.yaml#L7)
 
-章节来源
-- [README.md:57-72](file://README.md#L57-L72)
-- [docker-compose.yaml:1-10](file://docker-compose.yaml#L1-L10)
-- [Dockerfile:11-22](file://Dockerfile#L11-L22)
+### 本地开发部署流程
+- 环境准备：安装 Node.js 和 npm
+- 项目克隆：获取项目代码
+- 依赖安装：运行 `npm install`
+- 本地预览：运行 `npm run server`
+- 内容更新：编辑 source/ 目录下的内容
+- 部署发布：推送代码到 GitHub 仓库
+
+**章节来源**
+- [README.md:18-56](file://README.md#L18-L56)
+
+### GitHub Pages 自动化部署
+- 工作流配置：通过 GitHub Actions 实现自动化
+- 构建环境：自动安装依赖和构建静态网站
+- 部署流程：自动将静态文件部署到 GitHub Pages
+- 监控状态：通过 GitHub Actions 状态徽章监控部署状态
+
+**章节来源**
+- [hexo-site/_config.yml:126-142](file://hexo-site/_config.yml#L126-L142)
+- [README.md:76-96](file://README.md#L76-L96)
+
+### 主题定制指南
+- 导航栏配置：修改 _config.butterfly.yml 中的 menu 配置
+- 样式定制：通过 CSS 注入和主题配置调整外观
+- 功能开关：根据需要启用或禁用特定功能
+- 响应式设计：确保在不同设备上的良好显示效果
+
+**章节来源**
+- [hexo-site/_config.butterfly.yml:1-459](file://hexo-site/_config.butterfly.yml#L1-L459)
+- [hexo-site/source/index.md:1-204](file://hexo-site/source/index.md#L1-L204)
