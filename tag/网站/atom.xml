@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://CoolPig0720.github.io</id>
+    <title>CoolPig的个人网站 • Posts by &#34;网站&#34; tag</title>
+    <link href="https://CoolPig0720.github.io" />
+    <updated>2025-03-11T06:00:00.000Z</updated>
+    <category term="网站" />
+    <category term="编程" />
+    <category term="性能优化" />
+    <entry>
+        <id>https://coolpig0720.github.io/2025/03/11/2025-03-11-useful-website/</id>
+        <title>好用的网站</title>
+        <link rel="alternate" href="https://coolpig0720.github.io/2025/03/11/2025-03-11-useful-website/"/>
+        <content type="html">&lt;ul&gt;
+&lt;li&gt;游戏资源相关&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://opengameart.org/&#34;&gt;OpenGameArt.org&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.aigei.com/game/&#34;&gt;游戏素材 游戏源码 手游素材 - 免费下载 - 爱给网&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://indienova.com/&#34;&gt;indienova独立精神&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://itch.io/?ac=bJ85HZCTmhHDp&#34;&gt;itch.io&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;AI工具&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://chatgpt.com/&#34;&gt;ChatGPT&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://chat.deepseek.com/&#34;&gt;DeepSeek - 探索未至之境&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://grok.com/&#34;&gt;Grok&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.liblib.art/inspiration&#34;&gt;LiblibAI-哩布哩布AI - 中国领先的AI创作平台&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.html2web.com/&#34;&gt;HTML2WEB_粘贴代码，分享创意！&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://chromewebstore.google.com/detail/ai-timeline-double-your-a/fgebdnlceacaiaeikopldglhffljjlhh?utm_source=ext_app_menu&#34;&gt;AI Timeline：助你使用 AI 效率翻倍&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;文档教程&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://perfdog.qq.com/article_detail?id=10161&amp;issue_id=0&amp;plat_id=1&#34;&gt;PerfDog全平台性能测试分析专家&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://airtest.doc.io.netease.com/en/tutorial/1_quick_start_guide/&#34;&gt;I. Get Started with Airtest+Poco - Airtest Project Docs&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://learnopengl-cn.github.io/01%20Getting%20started/01%20OpenGL/&#34;&gt;OpenGL - LearnOpenGL CN&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.runoob.com/markdown/md-link.html&#34;&gt;Markdown 链接（菜鸟教程）&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.w3schools.com/cs/cs_operators.php&#34;&gt;C# Operators&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://liaoxuefeng.com/books/python/introduction/index.html&#34;&gt;简介 - Python教程 - 廖雪峰的官方网站&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://testerhome.com/&#34;&gt;测试之家&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.icourses.cn/sCourse/course_2987.html&#34;&gt;爱课程 计算机图形学&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.icourse163.org/course/CUC-1450317378?tid=1475429448&#34;&gt;游戏引擎原理及应用_中国传媒大学_中国大学MOOC(慕课)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.cnblogs.com/timlly/p/10463467.html&#34;&gt;移动游戏性能优化通用技法 - 0向往0 - 博客园&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://zhuanlan.zhihu.com/p/692168575&#34;&gt;游戏性能优化全流程建设(Unity) - 自动化管线&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.coder-ljx.cn:8825/project_test/%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E6%A1%86%E6%9E%B6%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/#%F0%9F%93%9A-%E9%A1%B9%E7%9B%AE%E8%83%8C%E6%99%AF&#34;&gt;性能测试框架项目实战完整指南（测试成长笔录）&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.wolai.com/dpaCHvw9WZRaB3aM2BzF9j&#34;&gt;《实时渲染（第四版）》&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/QianMo/Real-Time-Rendering-4th-Bibliography-Collection&#34;&gt;《实时渲染》Git仓库&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Unity学习&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://zhuanlan.zhihu.com/p/51391047&#34;&gt;Unity使用Profiler进行性能分析 - 知乎&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.cnblogs.com/zhaolaosan/p/15229153.html&#34;&gt;unity性能分析之Profiler工具的使用 - 赵不灰 - 博客园&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://community.uwa4d.com/objective&#34;&gt;UWA-社区&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;个人网站建站相关&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.zhihu.com/question/660189212/answer/1981472378094642650&#34;&gt;自建博客如何选择博客框架？ - 知乎&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://classicalqy.github.io/website_building/&#34;&gt;如何用Github Pages搭建自己的个人网站？ - 经典量子黄(Classicalqy)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.csdn.net/qd1813100174/article/details/128604858&#34;&gt;【保姆级教程】手把手教你用github制作学术个人主页&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Godot相关&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.gdquest.com/&#34;&gt;Learn to Make Games · GDQuest&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://my.feishu.cn/docx/Hn5jd0cE6op1Sux9RrFcl8Npnbd&#34;&gt;Godot&amp;amp;Cursor踩坑总结 - 飞书云文档&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://gdbook.kidsgame.top/&#34;&gt;序言 - 肖老师的Godot实验室&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;图片视频相关&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://jimeng.jianying.com/ai-tool/home&#34;&gt;即梦AI - 一站式AI创作平台&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.xingliu.art/&#34;&gt;星流 - 新一代设计Agent&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.pixilart.com/draw&#34;&gt;Pixilart - 在线绘制像素图&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.spritefusion.com/editor&#34;&gt;免费图块地图编辑器&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.iloveimg.com/zh-cn&#34;&gt;iLoveIMG图像文件在线编辑工具&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://products.aspose.app/imaging/zh-hans/image-merge&#34;&gt;免费在线图像合并工具 - 合并图像、照片、图片&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://zh.bgsub.com/&#34;&gt;消除或者替换图像背景，无需上传图像 - BgSub&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.jpgall.cn/zh&#34;&gt;在线去水印｜免费在线去除图片水印&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.dpdf.com/zh&#34;&gt;Dpdf帮您轻松搞定 PDF，免费，无限制，功能强大&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;有趣的网站&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://cook.yunyoujun.cn/&#34;&gt;食用手册&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.ysjf.com/material&#34;&gt;影视飓风&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/jbiaojerry/ebook-treasure-chest&#34;&gt;jbiaojerry&amp;#x2F;ebook-treasure-chest: 电子书下载宝库&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://api.laozhang.ai/login&#34;&gt;老张API&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.duanwuqiufenmao.top/&#34;&gt;技术博客阅读器 - 专业开发者阅读工具&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://jackylvm.github.io/&#34;&gt;路虽远行则将至. 事虽难做则必成!个人网站&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://shitjournal.org/&#34;&gt;shitjournal.org&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;好用软件&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.voidtools.com/zh-cn/support/everything/&#34;&gt;Everything - voidtools&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.snipaste.com/download.html&#34;&gt;Snipaste Downloads&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://obsidian.md/&#34;&gt;Obsidian - Sharpen your thinking&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://s0ft.cuanfeng.cn/soft/261375.html?qhclickid=1b034915c918ea13&#34;&gt;OBS Studio&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.uwa4d.com/product.html?t=Gears&#34;&gt;UWA - 简单优化、优化简单&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+        <category term="网站" />
+        <category term="编程" />
+        <updated>2025-03-11T06:00:00.000Z</updated>
+    </entry>
+</feed>
