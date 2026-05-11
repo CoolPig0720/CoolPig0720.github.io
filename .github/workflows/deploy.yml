@@ -31,6 +31,13 @@ jobs:
           cd hexo-site
           npm install
 
+      - name: Apply custom theme patches
+        run: |
+          cd hexo-site
+          cp -f themes/butterfly/layout/includes/widget/card_post_toc.pug node_modules/hexo-theme-butterfly/layout/includes/widget/card_post_toc.pug
+          cp -f themes/butterfly/source/js/main.js node_modules/hexo-theme-butterfly/source/js/main.js
+          cp -f themes/butterfly/source/js/utils.js node_modules/hexo-theme-butterfly/source/js/utils.js
+
       - name: Generate static files
         run: |
           cd hexo-site
