@@ -16,7 +16,7 @@ nav:
   # 是否显示文章标题
   display_post_title: true
   # 导航栏是否固定在顶部
-  fixed: true
+  fixed: false
 
 # 【修改】导航菜单配置
 # 格式：菜单名: /路径/ || 图标类名
@@ -303,8 +303,9 @@ readmode: true
 toc:
   enable: true
   list_number: true
-  depth: 3
+  depth: 2
   expand_percent: 0
+  scroll_percent: false
   scrollspy: false
   update_url: false
 
@@ -442,6 +443,45 @@ inject:
       .site-data .length-num {
         font-size: 1.5em !important;
         font-weight: bold !important;
+      }
+
+      /* ====== 表格文字居中 ====== */
+      body #post #article-container table,
+      body #post #article-container .table-wrap table {
+        text-align: center !important;
+      }
+
+      body #post #article-container table th,
+      body #post #article-container table td,
+      body #post #article-container .table-wrap table th,
+      body #post #article-container .table-wrap table td {
+        text-align: center !important;
+        vertical-align: middle !important;
+      }
+
+      /* ====== 增大正文字号，减小行高与间距 ====== */
+      body #post #article-container {
+        font-size: 1.05em !important;
+        line-height: 1.7 !important;
+      }
+
+      body #post #article-container p {
+        margin: 0.6em 0 !important;
+      }
+
+      body #post #article-container li {
+        margin: 0.3em 0 !important;
+        line-height: 1.7 !important;
+      }
+
+      body #post #article-container li > p {
+        margin: 0.2em 0 !important;
+      }
+
+      body #post #article-container ol,
+      body #post #article-container ul {
+        margin: 0.5em 0 !important;
+        padding-left: 1.8em !important;
       }
       </style>
 
