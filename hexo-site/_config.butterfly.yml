@@ -302,7 +302,7 @@ readmode: true
 
 toc:
   enable: true
-  list_number: true
+  number: false
   depth: 2
   expand_percent: 0
   scroll_percent: false
@@ -483,7 +483,162 @@ inject:
         margin: 0.5em 0 !important;
         padding-left: 1.8em !important;
       }
+
+      /* ====== 三栏布局：左侧栏 + 主内容 + 右侧TOC（全宽） ====== */
+      @media (min-width: 901px) {
+        .layout {
+          max-width: 100% !important;
+          padding: 40px 20px !important;
+        }
+
+        /* 隐藏侧边栏时，主内容居中且有最大宽度 */
+        .layout.hide-aside {
+          max-width: 1000px !important;
+        }
+
+        .layout.hide-aside > div:first-child {
+          width: 100% !important;
+          flex: none !important;
+        }
+
+        /* 左侧栏固定宽度 */
+        #aside-content {
+          width: 280px !important;
+          flex-shrink: 0 !important;
+        }
+
+        /* 主内容区 - 弹性填充中间空间 */
+        .layout > div:first-child {
+          width: auto !important;
+          flex: 1 !important;
+          margin-right: 0 !important;
+          min-width: 0 !important;
+        }
+
+        /* 侧边栏卡片更紧凑 */
+        #aside-content .card-widget {
+          padding: 16px 18px !important;
+          margin-bottom: 15px !important;
+        }
+      }
+
+      /* 右侧TOC容器样式 */
+      #right-toc-container {
+        display: none;
+      }
+
+      @media (min-width: 901px) {
+        #right-toc-container {
+          display: block !important;
+          width: 240px !important;
+          flex-shrink: 0 !important;
+          order: 3 !important;
+          padding-left: 0 !important;
+        }
+
+        #right-toc-container .sticky_layout {
+          position: sticky !important;
+          top: 20px !important;
+          transition: top .3s;
+        }
+
+        /* 右侧TOC卡片样式 */
+        #right-toc-container #card-toc {
+          padding: 16px 18px !important;
+          margin-bottom: 15px !important;
+          background: var(--card-bg) !important;
+          box-shadow: var(--card-box-shadow) !important;
+          border-radius: 8px !important;
+        }
+
+        #right-toc-container #card-toc .toc-content {
+          max-height: calc(100vh - 120px) !important;
+          overflow-y: auto !important;
+          margin: 0 -18px !important;
+          width: calc(100% + 36px) !important;
+        }
+
+        #right-toc-container #card-toc .toc-content > * {
+          margin: 0 12px !important;
+        }
+
+        #right-toc-container #card-toc .toc-link {
+          margin: 3px 0 !important;
+          padding: 1px 6px !important;
+          font-size: 0.88em !important;
+        }
+
+        #right-toc-container #card-toc .item-headline {
+          font-size: 1.1em !important;
+          padding-bottom: 4px !important;
+        }
+      }
       </style>
+    - |-
+      <script>
+      // 将TOC目录从左侧侧边栏移动到右侧独立容器
+      function moveTocToRight() {
+        var toc = document.getElementById('card-toc');
+        var layout = document.querySelector('.layout');
+        if (!toc || !layout) return;
+
+        // 只在桌面端(>=901px)执行移动
+        if (window.innerWidth < 901) return;
+
+        var rightContainer = document.getElementById('right-toc-container');
+        if (!rightContainer) {
+          rightContainer = document.createElement('div');
+          rightContainer.id = 'right-toc-container';
+          var stickyWrap = document.createElement('div');
+          stickyWrap.className = 'sticky_layout';
+          rightContainer.appendChild(stickyWrap);
+          layout.appendChild(rightContainer);
+        }
+
+        var stickyWrap = rightContainer.querySelector('.sticky_layout');
+        if (toc.parentElement !== stickyWrap) {
+          stickyWrap.appendChild(toc);
+          toc.style.display = 'block';
+        }
+      }
+
+      // 页面加载和窗口resize时执行
+      document.addEventListener('DOMContentLoaded', function() {
+        moveTocToRight();
+        setTimeout(moveTocToRight, 500);
+      });
+      window.addEventListener('resize', function() {
+        moveTocToRight();
+      });
+
+      // PJAX导航后重新执行
+      document.addEventListener('pjax:complete', function() {
+        moveTocToRight();
+        setTimeout(moveTocToRight, 500);
+      });
+
+      // ====== 修复：滚动时显示右侧按钮（回到顶部、黑夜模式等）======
+      (function() {
+        var rightside = document.getElementById('rightside');
+        if (!rightside) return;
+
+        function toggleRightside() {
+          var scrollY = window.scrollY || document.documentElement.scrollTop;
+          if (scrollY > 200) {
+            rightside.classList.add('rightside-show');
+          } else {
+            rightside.classList.remove('rightside-show');
+          }
+        }
+
+        // 页面加载时检查一次
+        toggleRightside();
+        // 滚动时切换显示
+        window.addEventListener('scroll', function() {
+          toggleRightside();
+        }, { passive: true });
+      })();
+      </script>
 
 cdn:
   enable: false
