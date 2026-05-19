@@ -381,16 +381,13 @@ inject:
       #blog-info .site-name {
         font-size: 1.4em !important;
         font-weight: 600 !important;
+        vertical-align: middle !important;
       }
 
       #blog-info .site-icon {
         width: 32px !important;
         height: 32px !important;
         margin-right: 8px !important;
-        vertical-align: middle !important;
-      }
-
-      #blog-info .site-name {
         vertical-align: middle !important;
       }
 
