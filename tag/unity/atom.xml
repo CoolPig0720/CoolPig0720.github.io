@@ -1,0 +1,269 @@
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://CoolPig0720.github.io</id>
+    <title>CoolPig的个人网站 • Posts by &#34;unity&#34; tag</title>
+    <link href="https://CoolPig0720.github.io" />
+    <updated>2026-05-11T02:00:00.000Z</updated>
+    <category term="网站" />
+    <category term="编程" />
+    <category term="性能优化" />
+    <category term="性能测试" />
+    <category term="面试" />
+    <category term="游戏测试" />
+    <category term="Unity" />
+    <category term="功能测试" />
+    <entry>
+        <id>https://coolpig0720.github.io/2026/05/11/2026-05-11-interview-huanlehuyu/</id>
+        <title>客户端性能测试面试记录（欢乐互娱）</title>
+        <link rel="alternate" href="https://coolpig0720.github.io/2026/05/11/2026-05-11-interview-huanlehuyu/"/>
+        <content type="html">&lt;h2 id=&#34;什么是静态合批？什么是动态合批？什么是实例化？&#34;&gt;&lt;a href=&#34;#什么是静态合批？什么是动态合批？什么是实例化？&#34; class=&#34;headerlink&#34; title=&#34;什么是静态合批？什么是动态合批？什么是实例化？&#34;&gt;&lt;/a&gt;什么是静态合批？什么是动态合批？什么是实例化？&lt;/h2&gt;&lt;h3 id=&#34;概念定义&#34;&gt;&lt;a href=&#34;#概念定义&#34; class=&#34;headerlink&#34; title=&#34;概念定义&#34;&gt;&lt;/a&gt;概念定义&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;静态合批&lt;/strong&gt;：在项目构建阶段，对标记为 &lt;code&gt;Static&lt;/code&gt; 的静态物体的网格进行合并，生成一个合并后的大网格与材质包。运行时仅提交 &lt;strong&gt;1 次 DrawCall&lt;/strong&gt;，全程不再修改，&lt;strong&gt;CPU 开销极低&lt;/strong&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;动态合批&lt;/strong&gt;：在运行时实时对符合条件的动态物体进行网格合并，每帧都要执行合批计算，&lt;strong&gt;CPU 有额外开销&lt;/strong&gt;，无需提前标记 Static。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;实例化（GPU Instancing）&lt;/strong&gt;：同一个 Mesh、同一个 Material，只上传一次模型数据，GPU 重复绘制多份。适用于草、树、子弹、重复小怪、同类特效等。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;适用场景与限制对比&#34;&gt;&lt;a href=&#34;#适用场景与限制对比&#34; class=&#34;headerlink&#34; title=&#34;适用场景与限制对比&#34;&gt;&lt;/a&gt;适用场景与限制对比&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;特性&lt;/th&gt;
+&lt;th&gt;静态合批&lt;/th&gt;
+&lt;th&gt;动态合批&lt;/th&gt;
+&lt;th&gt;实例化&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;执行时机&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;构建阶段&lt;/td&gt;
+&lt;td&gt;运行时每帧&lt;/td&gt;
+&lt;td&gt;运行时&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;CPU 开销&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;极低&lt;/td&gt;
+&lt;td&gt;较高&lt;/td&gt;
+&lt;td&gt;低&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;顶点限制&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;无上限&lt;/td&gt;
+&lt;td&gt;低于 900&lt;/td&gt;
+&lt;td&gt;无硬性限制&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;材质要求&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;可不同&lt;/td&gt;
+&lt;td&gt;必须完全一致&lt;/td&gt;
+&lt;td&gt;必须完全一致&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Transform 修改&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;禁止（会失效）&lt;/td&gt;
+&lt;td&gt;允许&lt;/td&gt;
+&lt;td&gt;允许&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;适用对象&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;地形、建筑、固定装饰&lt;/td&gt;
+&lt;td&gt;特效、UI、小型动态物件&lt;/td&gt;
+&lt;td&gt;大量重复物体&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;额外代价&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;包体与内存占用增加&lt;/td&gt;
+&lt;td&gt;CPU 每帧计算&lt;/td&gt;
+&lt;td&gt;需要相同 Mesh + Material&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;注意&lt;/strong&gt;：动态合批由引擎自动完成，开发者无需额外操作，但需确保物体满足条件（顶点数、材质一致）。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;多人团战，比如说-50-人团战，哪些东西可以做动态合批？&#34;&gt;&lt;a href=&#34;#多人团战，比如说-50-人团战，哪些东西可以做动态合批？&#34; class=&#34;headerlink&#34; title=&#34;多人团战，比如说 50 人团战，哪些东西可以做动态合批？&#34;&gt;&lt;/a&gt;多人团战，比如说 50 人团战，哪些东西可以做动态合批？&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;核心原则&lt;/strong&gt;：材质相同、顶点少、频繁出现的小物体可以做动态合批。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;具体可分为以下几类：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;UI 类&lt;/strong&gt;：血条、小图标、飘字、伤害数字等&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;小型动态物件&lt;/strong&gt;：掉落物、小道具、简单投射物&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;小特效&lt;/strong&gt;：小火花、小碎片、小范围粒子、简单光效等&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;如何测一个产品的-LOD-分级？&#34;&gt;&lt;a href=&#34;#如何测一个产品的-LOD-分级？&#34; class=&#34;headerlink&#34; title=&#34;如何测一个产品的 LOD 分级？&#34;&gt;&lt;/a&gt;如何测一个产品的 LOD 分级？&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;LOD 核心思想&lt;/strong&gt;：根据物体与相机的距离动态切换不同精度的模型——近处使用高精度模型，远处使用低精度模型，在保证视觉效果的同时显著提升渲染性能。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;测试 LOD 的核心是看&lt;strong&gt;不同机型、不同距离、不同画质&lt;/strong&gt;下，资源复杂度如何变化。以王者技能为例，测试思路如下：&lt;/p&gt;
+&lt;h3 id=&#34;测试步骤&#34;&gt;&lt;a href=&#34;#测试步骤&#34; class=&#34;headerlink&#34; title=&#34;测试步骤&#34;&gt;&lt;/a&gt;测试步骤&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;确定测试维度&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;模型：面数、Object 数量&lt;/li&gt;
+&lt;li&gt;特效：粒子数量、粒子生命周期、粒子发射率&lt;/li&gt;
+&lt;li&gt;渲染：Draw Call、Overdraw、Shader 复杂度&lt;/li&gt;
+&lt;li&gt;真机性能：帧率、内存、CPU&amp;#x2F;GPU 时间&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;固定测试条件&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;同机型、同分辨率、同场景，确保变量唯一&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;测试不同 LOD 档位&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;LOD-高&lt;/strong&gt;：全粒子、全 Shader、完整模型&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;LOD-中&lt;/strong&gt;：减少粒子、降低贴图精度&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;LOD-低&lt;/strong&gt;：简化特效、关闭后处理&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;分析 Overdraw&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;工具：RenderDoc、Frame Debugger&lt;/li&gt;
+&lt;li&gt;场景：单特效 → 组合特效 → 多人团战实战&lt;/li&gt;
+&lt;li&gt;重点观察：火焰、烟雾、半透明光效的大量透明堆叠&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;分析粒子和 Object&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;关注指标：粒子峰值、粒子同屏数、Object 数量、Draw Call 变化&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;如何使用-RenderDoc-分析竞品渲染策略？&#34;&gt;&lt;a href=&#34;#如何使用-RenderDoc-分析竞品渲染策略？&#34; class=&#34;headerlink&#34; title=&#34;如何使用 RenderDoc 分析竞品渲染策略？&#34;&gt;&lt;/a&gt;如何使用 RenderDoc 分析竞品渲染策略？&lt;/h2&gt;&lt;p&gt;以获取王者荣耀孙悟空的面数、粒子数量、贴图大小为例：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;截帧&lt;/strong&gt;：固定视角下抓取孙悟空释放技能的一帧&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;定位&lt;/strong&gt;：通过 Event Browser 定位角色、技能特效以及相关 Draw Call&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;分析角色模型面数&lt;/strong&gt;&lt;ul&gt;
+&lt;li&gt;进入 &lt;strong&gt;Mesh Viewer&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;查看 Vertices（顶点数）、Indices（索引数）、Triangles（三角面数）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;分析粒子系统与特效压力&lt;/strong&gt;&lt;ul&gt;
+&lt;li&gt;重点查看 Transparent Pass、特效相关 Draw Call 数量&lt;/li&gt;
+&lt;li&gt;关注 Quad 数量以及 Overdraw 情况&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;分析贴图大小与压缩策略&lt;/strong&gt;&lt;ul&gt;
+&lt;li&gt;进入 &lt;strong&gt;Texture Viewer&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;查看贴图分辨率、压缩格式（ASTC、ETC2 等）、Mipmap、显存占用&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;分析 Shader 与渲染流程&lt;/strong&gt;&lt;ul&gt;
+&lt;li&gt;进入 &lt;strong&gt;Pipeline State&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;查看 Shader Pass 数量、Blend 模式、深度测试、后处理流程、Render Target 切换&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;综合分析&lt;/strong&gt;&lt;ul&gt;
+&lt;li&gt;结合 Draw Call、模型复杂度、粒子数量、Overdraw、Shader 复杂度及贴图规格，评估整体渲染优化策略和 LOD 资源控制方案&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;如何用-Unity-Profiler-分析函数耗时问题？&#34;&gt;&lt;a href=&#34;#如何用-Unity-Profiler-分析函数耗时问题？&#34; class=&#34;headerlink&#34; title=&#34;如何用 Unity Profiler 分析函数耗时问题？&#34;&gt;&lt;/a&gt;如何用 Unity Profiler 分析函数耗时问题？&lt;/h2&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;案例&lt;/strong&gt;：函数 &lt;code&gt;MinigameTestUpdate&lt;/code&gt; 耗时 68ms，60FPS 对应 16.6ms，已掉到十几帧，属于&lt;strong&gt;严重卡顿&lt;/strong&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;分析步骤&#34;&gt;&lt;a href=&#34;#分析步骤&#34; class=&#34;headerlink&#34; title=&#34;分析步骤&#34;&gt;&lt;/a&gt;分析步骤&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;查看调用树指标&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Self Time 高&lt;/strong&gt; → 函数自身逻辑过重&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Total Time 高&lt;/strong&gt; → 子函数调用链存在问题&lt;/li&gt;
+&lt;li&gt;关注 Calls（调用次数）、GC Alloc（GC 分配）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;展开调用链&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;逐层深入，找到真正的耗时热点&lt;/li&gt;
+&lt;li&gt;重点排查：高频 GC、高频 Instantiate&amp;#x2F;Destroy、频繁调用、大量循环&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;TimeLine 分析&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;判断是&lt;strong&gt;主线程卡&lt;/strong&gt;、&lt;strong&gt;渲染线程卡&lt;/strong&gt;，还是其他原因&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;辅助工具验证&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;必要时结合 Deep Profiler、Frame Debugger 等工具进一步定位&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;如何使用-Memory-Profiler-分析内存？&#34;&gt;&lt;a href=&#34;#如何使用-Memory-Profiler-分析内存？&#34; class=&#34;headerlink&#34; title=&#34;如何使用 Memory Profiler 分析内存？&#34;&gt;&lt;/a&gt;如何使用 Memory Profiler 分析内存？&lt;/h2&gt;&lt;h3 id=&#34;分析维度&#34;&gt;&lt;a href=&#34;#分析维度&#34; class=&#34;headerlink&#34; title=&#34;分析维度&#34;&gt;&lt;/a&gt;分析维度&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;拍摄内存快照&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;使用 Memory Profiler 抓取目标场景的快照&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Texture（纹理）&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;关注：Size（内存占用）、Format（压缩格式）、Resolution（分辨率）、Mipmap&lt;/li&gt;
+&lt;li&gt;目的：判断纹理是否合理、是否做了压缩&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Mesh（网格）&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;关注：Vertex Count、Index Count、Mesh Size&lt;/li&gt;
+&lt;li&gt;目的：判断面数是否过高、是否存在重复 Mesh&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;RenderTexture（RT）&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;重点排查：是否泄漏、分辨率是否过高、是否长期驻留&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Reference（资源引用链）&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;分析：为什么资源没释放、谁引用了它、是否存在内存泄漏&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Mono &amp;#x2F; Lua 内存&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Mono Heap（C# 托管内存）&lt;/li&gt;
+&lt;li&gt;Lua Heap（Lua 脚本内存）&lt;/li&gt;
+&lt;li&gt;Native（引擎原生内存）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;什么是超频，什么是降频？&#34;&gt;&lt;a href=&#34;#什么是超频，什么是降频？&#34; class=&#34;headerlink&#34; title=&#34;什么是超频，什么是降频？&#34;&gt;&lt;/a&gt;什么是超频，什么是降频？&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;特性&lt;/th&gt;
+&lt;th&gt;超频&lt;/th&gt;
+&lt;th&gt;降频&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;定义&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;让 CPU&amp;#x2F;GPU 运行频率超过默认频率&lt;/td&gt;
+&lt;td&gt;系统主动降低 CPU&amp;#x2F;GPU 频率&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;触发原因&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;用户&amp;#x2F;系统主动开启高性能模式&lt;/td&gt;
+&lt;td&gt;温度过高、功耗过高&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;目的&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;提升性能&lt;/td&gt;
+&lt;td&gt;保护硬件、降低温度&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;典型场景&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;高帧率模式、狂暴模式、电竞模式&lt;/td&gt;
+&lt;td&gt;长时间游戏后手机发热&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;代价&amp;#x2F;结果&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;发热增加、功耗增加、更容易降频&lt;/td&gt;
+&lt;td&gt;FPS 下降、卡顿、掉帧、抖动帧&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+</content>
+        <category term="性能测试" />
+        <category term="面试" />
+        <category term="游戏测试" />
+        <category term="Unity" />
+        <updated>2026-05-11T02:00:00.000Z</updated>
+    </entry>
+</feed>

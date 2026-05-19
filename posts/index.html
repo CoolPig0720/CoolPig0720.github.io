@@ -1,0 +1,913 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>CoolPig的个人网站 - CoolPig's Academic Portfolio</title><meta name="author" content="CoolPig"><meta name="copyright" content="CoolPig"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="CoolPig 的个人网站主页 - 分享想法、记录学习">
+<meta property="og:type" content="website">
+<meta property="og:title" content="CoolPig的个人网站">
+<meta property="og:url" content="https://coolpig0720.github.io/posts/index.html">
+<meta property="og:site_name" content="CoolPig的个人网站">
+<meta property="og:description" content="CoolPig 的个人网站主页 - 分享想法、记录学习">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://coolpig0720.github.io/images/avatar.png">
+<meta property="article:author" content="CoolPig">
+<meta property="article:tag" content="博客，学术，技术，论文，报告">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://coolpig0720.github.io/images/avatar.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "CoolPig的个人网站",
+  "alternateName": [
+    "CoolPig's Academic Portfolio",
+    "coolpig0720.github.io"
+  ],
+  "url": "https://coolpig0720.github.io/"
+}</script><link rel="shortcut icon" href="/images/favicon.png"><link rel="canonical" href="https://coolpig0720.github.io/posts/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'CoolPig的个人网站',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'home'
+}</script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div class="bg-animation" id="web_bg" style="background-color: #f5f7fa;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/cv/"><i class="fa-fw fas fa-file-alt"></i><span> 关于我</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/profile.png" alt="Logo"><span class="site-name">CoolPig的个人网站</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/cv/"><i class="fa-fw fas fa-file-alt"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><h1 class="title-seo">CoolPig的个人网站</h1></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/05/11/2026-05-11-interview-huanlehuyu/" title="客户端性能测试面试记录（欢乐互娱）">客户端性能测试面试记录（欢乐互娱）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-05-11T02:00:00.000Z" title="发表于 2026-05-11 10:00:00">2026-05-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98/">面试问题</a></span></div><div class="content">什么是静态合批？什么是动态合批？什么是实例化？概念定义 静态合批：在项目构建阶段，对标记为 Static 的静态物体的网格进行合并，生成一个合并后的大网格与材质包。运行时仅提交 1 次 DrawCall，全程不再修改，CPU 开销极低。  动态合批：在运行时实时对符合条件的动态物体进行网格合并，每帧都要执行合批计算，CPU 有额外开销，无需提前标记 Static。  实例化（GPU Instancing）：同一个 Mesh、同一个 Material，只上传一次模型数据，GPU 重复绘制多份。适用于草、树、子弹、重复小怪、同类特效等。   适用场景与限制对比   特性 静态合批 动态合批 实例化    执行时机 构建阶段 运行时每帧 运行时   CPU 开销 极低 较高 低   顶点限制 无上限 低于 900 无硬性限制   材质要求 可不同 必须完全一致 必须完全一致   Transform 修改 禁止（会失效） 允许 允许   适用对象 地形、建筑、固定装饰 特效、UI、小型动态物件 大量重复物体   额外代价 包体与内存占用增加 CPU 每帧计算 需要相同 Mesh + Ma...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/05/11/2026-05-11-interview-crazygame/" title="游戏功能测试面试题整理（疯狂游戏）">游戏功能测试面试题整理（疯狂游戏）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-05-11T02:00:00.000Z" title="发表于 2026-05-11 10:00:00">2026-05-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98/">面试问题</a></span></div><div class="content">模块一：适配性核心拷问你过往的工作几乎全是性能专项测试，怎么看待性能测试和功能测试的差异？为什么想从性能测试转向功能测试？   维度 性能测试 功能测试    侧重 帧率、内存、稳定性等底层指标 逻辑、流程、交互是否符合需求   方向 偏向专项与瓶颈定位 偏向全量覆盖与质量保障   我想转功能测试，是因为希望从专项深度走向全流程质量把控，更全面地参与产品迭代，同时我相信我的性能视角也能帮团队提前发现隐性问题。  你的简历里没有体现功能测试、Bug管理工具相关的实战经验，你是否有相关的落地实践？我在项目中同步参与过版本回归、功能验证，会按需求设计验证点、复现路径与影响范围。虽然以性能为主，但我熟悉提报规范、优先级判定、回归闭环全流程，相信自己能快速上手功能测试。  《香肠派对》射击竞技类和《咸鱼之王》休闲放置卡牌，这两类产品的测试核心重点有什么区别？   游戏类型 测试核心重点    《香肠派对》（射击竞技） 实时战斗、多人同步、场景加载的稳定与流畅   《咸鱼之王》（休闲放置卡牌） 数值计算、离线收益、抽卡概率、养成逻辑的准确无误，更看重数据严谨与长期稳定    你过往的性能测试...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/04/08/2026-04-08-interview-questions/" title="游戏客户端性能测试面试题整理">游戏客户端性能测试面试题整理</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2026-04-08T01:00:00.000Z" title="发表于 2026-04-08 09:00:00">2026-04-08</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98/">面试问题</a></span></div><div class="content">功耗方面和性能关系是怎么样的？游戏性能拉得越高，比如高帧率、高画质、高频运算，CPU和GPU的负载就越大，功耗自然跟着涨；但如果游戏有内存泄漏、渲染冗余这类性能问题，硬件会做很多无效运算，功耗直接飙升，功耗高了发热降频，又会加剧卡顿，让性能表现更差。  关键理解：功耗与性能是双向影响的关系——性能问题推高功耗，功耗过高又反过来拖垮性能。   使用PerfDog采集功耗时会注意哪些指标？功耗异常是什么原因？关注指标 整机平均功耗 实时功耗曲线 平均电流 CPU&#x2F;GPU占用率  功耗异常原因 CPU方面：代码死循环，频繁GC等导致CPU瓶颈，拉高功耗 GPU方面：DrawCall太高、模型面数超标、特效太多等导致GPU瓶颈，功耗超标 内存方面：内存泄漏、频繁加载卸载资源，导致频繁GC和IO操作，间接拉高功耗   三角洲用M4A1来测试你会如何编写性能测试用例？ 选择测试机型：Android&#x2F;iOS、高&#x2F;中&#x2F;低不同档位 基础加载测试：测M4A1的资源加载，比如拾取丢弃武器，看拾取武器瞬间是否有卡顿，拾取前后内存是否存在明显增长 核心操作测试：玩家...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/03/12/2025-03-12-optimize/" title="性能测试核心指标解释">性能测试核心指标解释</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2025-03-12T01:00:00.000Z" title="发表于 2025-03-12 09:00:00">2025-03-12</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/">技术文档</a></span></div><div class="content">总述优化无止境，优化的最高境界是不渲染。优化的本质就是不渲染或少渲染或用更省的方法渲染。知识网站：移动游戏性能优化通用技法 1 性能测试需要关注哪些指标FPS、Jank、BigJank、平均内存、峰值内存、网络收发流量、CPU 使用率等 2 FPS含义：Frames Per Second，每秒渲染的帧数，表示应用（尤其是游戏或 UI 动画）的画面流畅度。正常范围：移动设备目标为 60 FPS（高端设备可达 90-120 FPS），稳定在 50-60 FPS 以上用户体验良好。低于 30 FPS 会明显卡顿。异常原因：主线程阻塞、复杂渲染、GPU&#x2F;CPU 负载过高、内存泄漏导致 GC 频繁、资源加载慢等。常见检测方法：• Android Studio Profiler（CPU&#x2F;GPU 渲染轨迹）。• adb 命令：adb shell dumpsys gfxinfo &lt;package&gt; 计算帧时间和 Jank。• 第三方工具如 PerfDog、GameBench。• 开发者选项中启用”Profile GPU rendering”显示柱状图。 3 CPU...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2025/03/11/2025-03-11-useful-website/" title="好用的网站">好用的网站</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">发表于</span><time datetime="2025-03-11T06:00:00.000Z" title="发表于 2025-03-11 14:00:00">2025-03-11</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/">技术文档</a></span></div><div class="content"> 游戏资源相关 OpenGameArt.org 游戏素材 游戏源码 手游素材 - 免费下载 - 爱给网 indienova独立精神 itch.io   AI工具 ChatGPT DeepSeek - 探索未至之境 Grok LiblibAI-哩布哩布AI - 中国领先的AI创作平台 HTML2WEB_粘贴代码，分享创意！ AI Timeline：助你使用 AI 效率翻倍   文档教程 PerfDog全平台性能测试分析专家 I. Get Started with Airtest+Poco - Airtest Project Docs OpenGL - LearnOpenGL CN Markdown 链接（菜鸟教程） C# Operators 简介 - Python教程 - 廖雪峰的官方网站 测试之家 爱课程 计算机图形学 游戏引擎原理及应用_中国传媒大学_中国大学MOOC(慕课) 移动游戏性能优化通用技法 - 0向往0 - 博客园 游戏性能优化全流程建设(Unity) - 自动化管线 性能测试框架项目实战完整指南（测试成长笔录） 《实时渲染（第四版）》 《实时渲染》Git仓库   ...</div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">CoolPig</div><div class="author-info-description">路虽远行则将至，事虽难做则必成。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">5</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">2</div></a></div><div class="card-info-social-icons"><a class="social-icon" href="/Github" target="_blank" title="'#24292e'\r"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:coolpig0720@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的个人网站！</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/11/2026-05-11-interview-huanlehuyu/" title="客户端性能测试面试记录（欢乐互娱）">客户端性能测试面试记录（欢乐互娱）</a><time datetime="2026-05-11T02:00:00.000Z" title="发表于 2026-05-11 10:00:00">2026-05-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/05/11/2026-05-11-interview-crazygame/" title="游戏功能测试面试题整理（疯狂游戏）">游戏功能测试面试题整理（疯狂游戏）</a><time datetime="2026-05-11T02:00:00.000Z" title="发表于 2026-05-11 10:00:00">2026-05-11</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/04/08/2026-04-08-interview-questions/" title="游戏客户端性能测试面试题整理">游戏客户端性能测试面试题整理</a><time datetime="2026-04-08T01:00:00.000Z" title="发表于 2026-04-08 09:00:00">2026-04-08</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/12/2025-03-12-optimize/" title="性能测试核心指标解释">性能测试核心指标解释</a><time datetime="2025-03-12T01:00:00.000Z" title="发表于 2025-03-12 09:00:00">2025-03-12</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2025/03/11/2025-03-11-useful-website/" title="好用的网站">好用的网站</a><time datetime="2025-03-11T06:00:00.000Z" title="发表于 2025-03-11 14:00:00">2025-03-11</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline">
+            <i class="fas fa-folder-open"></i>
+            <span>分类</span>
+            
+          </div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/"><span class="card-category-list-name">技术文档</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E9%9D%A2%E8%AF%95%E9%97%AE%E9%A2%98/"><span class="card-category-list-name">面试问题</span><span class="card-category-list-count">3</span></a></li>
+          </ul></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By CoolPig</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><script src="/js/tw_cn.js?v=5.5.4"></script><div class="js-pjax"><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? '' : ''
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (false) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><style>
+/* ====== 放大网站标题 ====== */
+#blog-info .site-name {
+  font-size: 1.4em !important;
+  font-weight: 600 !important;
+  vertical-align: middle !important;
+}
+
+#blog-info .site-icon {
+  width: 32px !important;
+  height: 32px !important;
+  margin-right: 8px !important;
+  vertical-align: middle !important;
+}
+
+/* ====== 减小导航栏与内容之间的距离 ====== */
+#page-header {
+  margin-bottom: 0 !important;
+}
+
+#content-inner {
+  margin-top: 10px !important;
+  padding-top: 0 !important;
+}
+
+.layout {
+  margin-top: 10px !important;
+}
+
+/* ====== 导航标签样式 ====== */
+#menus .menus_item {
+  margin: 0 4px !important;
+}
+
+#menus .site-page {
+  font-size: 1em !important;
+  padding: 8px 12px !important;
+  border-radius: 8px !important;
+  transition: all 0.3s ease !important;
+}
+
+#menus .site-page:hover {
+  background: rgba(102, 126, 234, 0.1) !important;
+  transform: translateY(-2px) !important;
+}
+
+#menus .site-page i {
+  font-size: 1em !important;
+  margin-right: 5px !important;
+}
+
+/* 搜索按钮独立样式 */
+#search-button {
+  margin-right: 8px !important;
+}
+#search-button .site-page {
+  background: rgba(102, 126, 234, 0.12) !important;
+  border-radius: 20px !important;
+  padding: 6px 14px !important;
+  font-size: 0.92em !important;
+  color: var(--text-highlight-color, #667eea) !important;
+}
+#search-button .site-page:hover {
+  background: rgba(102, 126, 234, 0.22) !important;
+  color: var(--text-highlight-color, #667eea) !important;
+}
+
+/* ====== 侧边栏作者卡片 - 隐藏标签统计 ====== */
+.site-data a:nth-child(2) {
+  display: none !important;
+}
+
+/* ====== 放大文章和分类统计 ====== */
+.site-data a {
+  padding: 12px 18px !important;
+  margin: 6px !important;
+}
+
+.site-data .headline {
+  font-size: 1.15em !important;
+  font-weight: 600 !important;
+}
+
+.site-data .length-num {
+  font-size: 1.5em !important;
+  font-weight: bold !important;
+}
+
+/* ====== 表格文字居中 ====== */
+body #post #article-container table,
+body #post #article-container .table-wrap table {
+  text-align: center !important;
+}
+
+body #post #article-container table th,
+body #post #article-container table td,
+body #post #article-container .table-wrap table th,
+body #post #article-container .table-wrap table td {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+/* ====== 增大正文字号，减小行高与间距 ====== */
+body #post #article-container {
+  font-size: 1.05em !important;
+  line-height: 1.7 !important;
+}
+
+body #post #article-container p {
+  margin: 0.6em 0 !important;
+}
+
+body #post #article-container li {
+  margin: 0.3em 0 !important;
+  line-height: 1.7 !important;
+}
+
+body #post #article-container li > p {
+  margin: 0.2em 0 !important;
+}
+
+body #post #article-container ol,
+body #post #article-container ul {
+  margin: 0.5em 0 !important;
+  padding-left: 1.8em !important;
+}
+
+/* ====== 归档页分类分组样式 ====== */
+.category-group {
+  margin-bottom: 16px !important;
+  background: var(--card-bg) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+  overflow: hidden !important;
+  transition: box-shadow 0.3s ease !important;
+}
+.category-group:hover {
+  box-shadow: 0 4px 16px rgba(102,126,234,0.12) !important;
+}
+.category-group-title {
+  font-size: 1.1em !important;
+  font-weight: 600 !important;
+  padding: 14px 20px !important;
+  margin-bottom: 0 !important;
+  border-left: none !important;
+  background: transparent !important;
+  border-radius: 12px !important;
+  color: var(--font-color) !important;
+  cursor: pointer !important;
+  user-select: none !important;
+  transition: all 0.25s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+.category-group-title:hover {
+  background: rgba(102, 126, 234, 0.08) !important;
+  color: var(--text-highlight-color, #667eea) !important;
+}
+.category-group-title i.fas.fa-folder {
+  color: var(--text-highlight-color, #667eea) !important;
+  font-size: 1em !important;
+}
+.category-toggle-icon {
+  font-size: 0.8em !important;
+  margin-right: 6px !important;
+  color: var(--text-highlight-color, #667eea) !important;
+  transition: transform 0.3s ease !important;
+}
+.category-group[data-collapsed='false'] .category-toggle-icon {
+  transform: rotate(90deg) !important;
+}
+.category-group-count {
+  font-size: 0.78em !important;
+  font-weight: 500 !important;
+  color: #fff !important;
+  background: var(--text-highlight-color, #667eea) !important;
+  border-radius: 12px !important;
+  padding: 1px 10px !important;
+  margin-left: auto !important;
+}
+.category-group-posts {
+  max-height: 0 !important;
+  overflow: hidden !important;
+  padding: 0 20px !important;
+  transition: max-height 0.4s ease, padding 0.3s ease !important;
+}
+.category-group[data-collapsed='false'] .category-group-posts {
+  max-height: 2000px !important;
+  padding: 4px 20px 16px !important;
+}
+.category-group-posts .article-sort-item {
+  padding: 10px 14px !important;
+  margin: 6px 0 !important;
+  border-radius: 8px !important;
+  transition: background 0.2s ease !important;
+}
+.category-group-posts .article-sort-item:hover {
+  background: rgba(102, 126, 234, 0.06) !important;
+}
+.category-group-posts .article-sort-item-title {
+  font-weight: 500 !important;
+}
+/* 归档页总标题美化 */
+#archive .article-sort-title {
+  font-size: 1.4em !important;
+  font-weight: 700 !important;
+  margin-bottom: 24px !important;
+  padding-bottom: 12px !important;
+  border-bottom: 2px solid rgba(102,126,234,0.15) !important;
+}
+
+/* ====== 阅读进度条（仅文章页显示） ====== */
+#reading-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  z-index: 9999;
+  transition: width 0.1s linear;
+  pointer-events: none;
+  display: none;
+}
+
+/* ====== 三栏布局：左侧栏 + 主内容 + 右侧TOC（全宽） ====== */
+@media (min-width: 901px) {
+  .layout {
+    max-width: 100% !important;
+    padding: 40px 20px !important;
+  }
+
+  /* 隐藏侧边栏时，主内容居中且有最大宽度 */
+  .layout.hide-aside {
+    max-width: 1000px !important;
+  }
+
+  .layout.hide-aside > div:first-child {
+    width: 100% !important;
+    flex: none !important;
+  }
+
+  /* 左侧栏固定宽度 */
+  #aside-content {
+    width: 280px !important;
+    flex-shrink: 0 !important;
+  }
+
+  /* 主内容区 - 弹性填充中间空间 */
+  .layout > div:first-child {
+    width: auto !important;
+    flex: 1 !important;
+    margin-right: 0 !important;
+    min-width: 0 !important;
+  }
+
+  /* 侧边栏卡片更紧凑 */
+  #aside-content .card-widget {
+    padding: 16px 18px !important;
+    margin-bottom: 15px !important;
+  }
+}
+
+/* ====== 最新文章卡片：标题单行截断+省略号 ====== */
+.card-recent-post .aside-list .aside-list-item .content > .title {
+  -webkit-line-clamp: 1 !important;
+}
+
+/* 右侧TOC容器样式 */
+#right-toc-container {
+  display: none;
+}
+
+@media (min-width: 901px) {
+  #right-toc-container {
+    display: block !important;
+    width: 240px !important;
+    flex-shrink: 0 !important;
+    order: 3 !important;
+    padding-left: 0 !important;
+  }
+
+  #right-toc-container .sticky_layout {
+    position: sticky !important;
+    top: 20px !important;
+    transition: top .3s;
+  }
+
+  /* 右侧TOC卡片样式 */
+  #right-toc-container #card-toc {
+    padding: 16px 18px !important;
+    margin-bottom: 15px !important;
+    background: var(--card-bg) !important;
+    box-shadow: var(--card-box-shadow) !important;
+    border-radius: 8px !important;
+  }
+
+  #right-toc-container #card-toc .toc-content {
+    max-height: calc(100vh - 120px) !important;
+    overflow-y: auto !important;
+    margin: 0 -18px !important;
+    width: calc(100% + 36px) !important;
+  }
+
+  #right-toc-container #card-toc .toc-content > * {
+    margin: 0 12px !important;
+  }
+
+  #right-toc-container #card-toc .toc-link {
+    margin: 3px 0 !important;
+    padding: 1px 6px !important;
+    font-size: 0.88em !important;
+  }
+
+  #right-toc-container #card-toc .item-headline {
+    font-size: 1.1em !important;
+    padding-bottom: 4px !important;
+  }
+}
+</style><script>
+// 将TOC目录从左侧侧边栏移动到右侧独立容器
+function moveTocToRight() {
+  var toc = document.getElementById('card-toc');
+  var layout = document.querySelector('.layout');
+  if (!toc || !layout) return;
+
+  // 只在桌面端(>=901px)执行移动
+  if (window.innerWidth < 901) return;
+
+  var rightContainer = document.getElementById('right-toc-container');
+  if (!rightContainer) {
+    rightContainer = document.createElement('div');
+    rightContainer.id = 'right-toc-container';
+    var stickyWrap = document.createElement('div');
+    stickyWrap.className = 'sticky_layout';
+    rightContainer.appendChild(stickyWrap);
+    layout.appendChild(rightContainer);
+  }
+
+  var stickyWrap = rightContainer.querySelector('.sticky_layout');
+  if (toc.parentElement !== stickyWrap) {
+    stickyWrap.appendChild(toc);
+    toc.style.display = 'block';
+  }
+}
+
+// 页面加载和窗口resize时执行
+document.addEventListener('DOMContentLoaded', function() {
+  moveTocToRight();
+  setTimeout(moveTocToRight, 500);
+});
+window.addEventListener('resize', function() {
+  moveTocToRight();
+});
+
+// PJAX导航后重新执行
+document.addEventListener('pjax:complete', function() {
+  moveTocToRight();
+  setTimeout(moveTocToRight, 500);
+});
+
+// ====== 修复：滚动时显示右侧按钮（回到顶部、黑夜模式等）======
+(function() {
+  var rightside = document.getElementById('rightside');
+  if (!rightside) return;
+
+  function toggleRightside() {
+    var scrollY = window.scrollY || document.documentElement.scrollTop;
+    if (scrollY > 200) {
+      rightside.classList.add('rightside-show');
+    } else {
+      rightside.classList.remove('rightside-show');
+    }
+  }
+
+  // 页面加载时检查一次
+  toggleRightside();
+  // 滚动时切换显示
+  window.addEventListener('scroll', function() {
+    toggleRightside();
+  }, { passive: true });
+})();
+
+// ====== 归档页分类展开/收起 ======
+document.querySelectorAll('.category-group-title').forEach(function(title) {
+  title.addEventListener('click', function() {
+    var group = this.parentElement;
+    var isCollapsed = group.getAttribute('data-collapsed') === 'true';
+    group.setAttribute('data-collapsed', isCollapsed ? 'false' : 'true');
+    this.setAttribute('aria-expanded', isCollapsed ? 'true' : 'false');
+  });
+  // 支持键盘 Enter/Space 操作
+  title.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      this.click();
+    }
+  });
+});
+
+// ====== 阅读进度条（仅文章页） ======
+(function() {
+  var bar = document.createElement('div');
+  bar.id = 'reading-progress-bar';
+  document.body.appendChild(bar);
+
+  function updateProgress() {
+    var postEl = document.getElementById('post');
+    if (!postEl) {
+      bar.style.display = 'none';
+      return;
+    }
+    bar.style.display = 'block';
+    var scrollTop = window.scrollY || document.documentElement.scrollTop;
+    var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    var progress = docHeight > 0 ? Math.min((scrollTop / docHeight) * 100, 100) : 0;
+    bar.style.width = progress + '%';
+  }
+
+  window.addEventListener('scroll', updateProgress, { passive: true });
+  document.addEventListener('DOMContentLoaded', updateProgress);
+  document.addEventListener('pjax:complete', function() {
+    setTimeout(updateProgress, 100);
+  });
+  updateProgress();
+})();
+</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.4"></script></div></div></body></html>

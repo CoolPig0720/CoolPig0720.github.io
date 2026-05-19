@@ -1,0 +1,219 @@
+<?xml version="1.0"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://CoolPig0720.github.io</id>
+    <title>CoolPig的个人网站 • Posts by &#34;功能测试&#34; tag</title>
+    <link href="https://CoolPig0720.github.io" />
+    <updated>2026-05-11T02:00:00.000Z</updated>
+    <category term="网站" />
+    <category term="编程" />
+    <category term="性能优化" />
+    <category term="性能测试" />
+    <category term="面试" />
+    <category term="游戏测试" />
+    <category term="Unity" />
+    <category term="功能测试" />
+    <entry>
+        <id>https://coolpig0720.github.io/2026/05/11/2026-05-11-interview-crazygame/</id>
+        <title>游戏功能测试面试题整理（疯狂游戏）</title>
+        <link rel="alternate" href="https://coolpig0720.github.io/2026/05/11/2026-05-11-interview-crazygame/"/>
+        <content type="html">&lt;h2 id=&#34;模块一：适配性核心拷问&#34;&gt;&lt;a href=&#34;#模块一：适配性核心拷问&#34; class=&#34;headerlink&#34; title=&#34;模块一：适配性核心拷问&#34;&gt;&lt;/a&gt;模块一：适配性核心拷问&lt;/h2&gt;&lt;h3 id=&#34;你过往的工作几乎全是性能专项测试，怎么看待性能测试和功能测试的差异？为什么想从性能测试转向功能测试？&#34;&gt;&lt;a href=&#34;#你过往的工作几乎全是性能专项测试，怎么看待性能测试和功能测试的差异？为什么想从性能测试转向功能测试？&#34; class=&#34;headerlink&#34; title=&#34;你过往的工作几乎全是性能专项测试，怎么看待性能测试和功能测试的差异？为什么想从性能测试转向功能测试？&#34;&gt;&lt;/a&gt;你过往的工作几乎全是性能专项测试，怎么看待性能测试和功能测试的差异？为什么想从性能测试转向功能测试？&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;维度&lt;/th&gt;
+&lt;th&gt;性能测试&lt;/th&gt;
+&lt;th&gt;功能测试&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;侧重&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;帧率、内存、稳定性等底层指标&lt;/td&gt;
+&lt;td&gt;逻辑、流程、交互是否符合需求&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;方向&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;偏向专项与瓶颈定位&lt;/td&gt;
+&lt;td&gt;偏向全量覆盖与质量保障&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;p&gt;我想转功能测试，是因为希望从专项深度走向全流程质量把控，更全面地参与产品迭代，同时我相信我的性能视角也能帮团队提前发现隐性问题。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;你的简历里没有体现功能测试、Bug管理工具相关的实战经验，你是否有相关的落地实践？&#34;&gt;&lt;a href=&#34;#你的简历里没有体现功能测试、Bug管理工具相关的实战经验，你是否有相关的落地实践？&#34; class=&#34;headerlink&#34; title=&#34;你的简历里没有体现功能测试、Bug管理工具相关的实战经验，你是否有相关的落地实践？&#34;&gt;&lt;/a&gt;你的简历里没有体现功能测试、Bug管理工具相关的实战经验，你是否有相关的落地实践？&lt;/h3&gt;&lt;p&gt;我在项目中同步参与过版本回归、功能验证，会按需求设计验证点、复现路径与影响范围。虽然以性能为主，但我熟悉提报规范、优先级判定、回归闭环全流程，相信自己能快速上手功能测试。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;《香肠派对》射击竞技类和《咸鱼之王》休闲放置卡牌，这两类产品的测试核心重点有什么区别？&#34;&gt;&lt;a href=&#34;#《香肠派对》射击竞技类和《咸鱼之王》休闲放置卡牌，这两类产品的测试核心重点有什么区别？&#34; class=&#34;headerlink&#34; title=&#34;《香肠派对》射击竞技类和《咸鱼之王》休闲放置卡牌，这两类产品的测试核心重点有什么区别？&#34;&gt;&lt;/a&gt;《香肠派对》射击竞技类和《咸鱼之王》休闲放置卡牌，这两类产品的测试核心重点有什么区别？&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;游戏类型&lt;/th&gt;
+&lt;th&gt;测试核心重点&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;《香肠派对》&lt;/strong&gt;（射击竞技）&lt;/td&gt;
+&lt;td&gt;实时战斗、多人同步、场景加载的稳定与流畅&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;《咸鱼之王》&lt;/strong&gt;（休闲放置卡牌）&lt;/td&gt;
+&lt;td&gt;数值计算、离线收益、抽卡概率、养成逻辑的准确无误，更看重数据严谨与长期稳定&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;你过往的性能测试经验，能给功能测试岗位带来什么差异化的价值？&#34;&gt;&lt;a href=&#34;#你过往的性能测试经验，能给功能测试岗位带来什么差异化的价值？&#34; class=&#34;headerlink&#34; title=&#34;你过往的性能测试经验，能给功能测试岗位带来什么差异化的价值？&#34;&gt;&lt;/a&gt;你过往的性能测试经验，能给功能测试岗位带来什么差异化的价值？&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;从底层性能角度提前发现功能隐患&lt;/strong&gt;，减少线上崩溃、卡顿问题&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;更懂引擎与资源机制&lt;/strong&gt;，能更精准描述复现路径，提高研发修复效率&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;擅长数据量化评估&lt;/strong&gt;，让功能质量验收更标准、可衡量&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;如果入职这个岗位，最快多久能上手？怎么快速补足功能测试的短板？&#34;&gt;&lt;a href=&#34;#如果入职这个岗位，最快多久能上手？怎么快速补足功能测试的短板？&#34; class=&#34;headerlink&#34; title=&#34;如果入职这个岗位，最快多久能上手？怎么快速补足功能测试的短板？&#34;&gt;&lt;/a&gt;如果入职这个岗位，最快多久能上手？怎么快速补足功能测试的短板？&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;1周内&lt;/strong&gt;：尽快熟悉项目与流程&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;2周&lt;/strong&gt;：可独立执行用例与回归&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;同时快速学习黑盒用例设计方法；学习使用Bug管理工具；深度体验《咸鱼之王》，梳理核心玩法与测试点；主动向前辈请教，快速对齐团队标准。&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;模块二：过往经历深挖&#34;&gt;&lt;a href=&#34;#模块二：过往经历深挖&#34; class=&#34;headerlink&#34; title=&#34;模块二：过往经历深挖&#34;&gt;&lt;/a&gt;模块二：过往经历深挖&lt;/h2&gt;&lt;h3 id=&#34;请详细介绍一下在《香肠派对》项目中，资源性能专项测试的完整流程&#34;&gt;&lt;a href=&#34;#请详细介绍一下在《香肠派对》项目中，资源性能专项测试的完整流程&#34; class=&#34;headerlink&#34; title=&#34;请详细介绍一下在《香肠派对》项目中，资源性能专项测试的完整流程&#34;&gt;&lt;/a&gt;请详细介绍一下在《香肠派对》项目中，资源性能专项测试的完整流程&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;参考简历中的工作经历部分，从需求对接、测试设计、问题定位到推动优化落地的全环节。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;请介绍一下你的Unity植物大战僵尸Demo项目，如果让你给这个Demo的核心玩法设计功能测试用例，你会从哪些维度入手？&#34;&gt;&lt;a href=&#34;#请介绍一下你的Unity植物大战僵尸Demo项目，如果让你给这个Demo的核心玩法设计功能测试用例，你会从哪些维度入手？&#34; class=&#34;headerlink&#34; title=&#34;请介绍一下你的Unity植物大战僵尸Demo项目，如果让你给这个Demo的核心玩法设计功能测试用例，你会从哪些维度入手？&#34;&gt;&lt;/a&gt;请介绍一下你的Unity植物大战僵尸Demo项目，如果让你给这个Demo的核心玩法设计功能测试用例，你会从哪些维度入手？&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;种植逻辑&lt;/strong&gt;：冷却、阳光消耗、拖拽放置、碰撞生效&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;僵尸行为&lt;/strong&gt;：生成、移动、攻击、死亡、波次刷新&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数值与资源&lt;/strong&gt;：阳光增减、音效播放、界面状态同步&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;异常场景&lt;/strong&gt;：快速操作、边界情况、卡顿复现&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;模块三：岗位核心能力（功能测试）专业提问&#34;&gt;&lt;a href=&#34;#模块三：岗位核心能力（功能测试）专业提问&#34; class=&#34;headerlink&#34; title=&#34;模块三：岗位核心能力（功能测试）专业提问&#34;&gt;&lt;/a&gt;模块三：岗位核心能力（功能测试）专业提问&lt;/h2&gt;&lt;h3 id=&#34;请简述手游黑盒功能测试的完整流程&#34;&gt;&lt;a href=&#34;#请简述手游黑盒功能测试的完整流程&#34; class=&#34;headerlink&#34; title=&#34;请简述手游黑盒功能测试的完整流程&#34;&gt;&lt;/a&gt;请简述手游黑盒功能测试的完整流程&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;需求评审 → 编写测试用例 → 用例评审 → 执行测试 → 发现问题提交Bug并跟踪 → 修复后回归验证 → 全量回归、冒烟测试 → 确认无问题后版本上线&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;设计测试用例的常用方法有哪些？怎么保障用例的严谨性和覆盖率？&#34;&gt;&lt;a href=&#34;#设计测试用例的常用方法有哪些？怎么保障用例的严谨性和覆盖率？&#34; class=&#34;headerlink&#34; title=&#34;设计测试用例的常用方法有哪些？怎么保障用例的严谨性和覆盖率？&#34;&gt;&lt;/a&gt;设计测试用例的常用方法有哪些？怎么保障用例的严谨性和覆盖率？&lt;/h3&gt;&lt;p&gt;常用方法有&lt;strong&gt;等价类&lt;/strong&gt;、&lt;strong&gt;边界值&lt;/strong&gt;、&lt;strong&gt;场景法&lt;/strong&gt;、&lt;strong&gt;错误推测法&lt;/strong&gt;。&lt;/p&gt;
+&lt;p&gt;为了保证用例的严谨性和覆盖率：先覆盖主流程，再补异常&amp;#x2F;边界&amp;#x2F;兼容场景；用例评审时和策划、开发对齐，避免遗漏。&lt;/p&gt;
+&lt;h3 id=&#34;你使用过哪些Bug管理工具？一个规范的Bug单必须包含哪些核心要素？&#34;&gt;&lt;a href=&#34;#你使用过哪些Bug管理工具？一个规范的Bug单必须包含哪些核心要素？&#34; class=&#34;headerlink&#34; title=&#34;你使用过哪些Bug管理工具？一个规范的Bug单必须包含哪些核心要素？&#34;&gt;&lt;/a&gt;你使用过哪些Bug管理工具？一个规范的Bug单必须包含哪些核心要素？&lt;/h3&gt;&lt;p&gt;之前没有用过Bug管理工具，有了解过Jira、禅道。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;标准Bug单必须包含：&lt;strong&gt;标题、环境、步骤、预期结果、实际结果、截图&amp;#x2F;日志、优先级&lt;/strong&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;如果让你给《咸鱼之王》的”闯关战斗”核心玩法设计测试用例，从哪些核心维度设计？&#34;&gt;&lt;a href=&#34;#如果让你给《咸鱼之王》的”闯关战斗”核心玩法设计测试用例，从哪些核心维度设计？&#34; class=&#34;headerlink&#34; title=&#34;如果让你给《咸鱼之王》的”闯关战斗”核心玩法设计测试用例，从哪些核心维度设计？&#34;&gt;&lt;/a&gt;如果让你给《咸鱼之王》的”闯关战斗”核心玩法设计测试用例，从哪些核心维度设计？&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;入场与操作&lt;/strong&gt;：阵容摆放、技能释放是否正常&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数值计算&lt;/strong&gt;：血量、伤害、暴击、控制等数值计算正确&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;胜负与奖励&lt;/strong&gt;：胜利&amp;#x2F;失败条件、奖励发放准确&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;异常场景&lt;/strong&gt;：断线重连、切后台、卡顿等异常场景稳定&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;测试中发现一个偶现、很难复现的Bug，你会通过哪些步骤去定位和稳定复现它？&#34;&gt;&lt;a href=&#34;#测试中发现一个偶现、很难复现的Bug，你会通过哪些步骤去定位和稳定复现它？&#34; class=&#34;headerlink&#34; title=&#34;测试中发现一个偶现、很难复现的Bug，你会通过哪些步骤去定位和稳定复现它？&#34;&gt;&lt;/a&gt;测试中发现一个偶现、很难复现的Bug，你会通过哪些步骤去定位和稳定复现它？&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;先记录现场信息&lt;/strong&gt;：包括设备、版本、操作路径、时间等&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;再使用固定变量复现&lt;/strong&gt;：使用同设备、同账号、同操作顺序进行复现&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;然后抓日志&amp;#x2F;录屏&lt;/strong&gt;，辅助开发定位&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;最后归纳触发条件&lt;/strong&gt;，形成稳定复现步骤&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;研发团队反馈你提交的Bug非必现、无法修复，你会怎么沟通？&#34;&gt;&lt;a href=&#34;#研发团队反馈你提交的Bug非必现、无法修复，你会怎么沟通？&#34; class=&#34;headerlink&#34; title=&#34;研发团队反馈你提交的Bug非必现、无法修复，你会怎么沟通？&#34;&gt;&lt;/a&gt;研发团队反馈你提交的Bug非必现、无法修复，你会怎么沟通？&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;提供复现录屏、日志、触发条件，明确影响范围&lt;/li&gt;
+&lt;li&gt;和研发一起复现，确认问题根因&lt;/li&gt;
+&lt;li&gt;按优先级推动修复，重要问题必须解决&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;版本上线前发现了一个严重级别的Bug，但修复会影响原定上线时间，你会怎么处理？&#34;&gt;&lt;a href=&#34;#版本上线前发现了一个严重级别的Bug，但修复会影响原定上线时间，你会怎么处理？&#34; class=&#34;headerlink&#34; title=&#34;版本上线前发现了一个严重级别的Bug，但修复会影响原定上线时间，你会怎么处理？&#34;&gt;&lt;/a&gt;版本上线前发现了一个严重级别的Bug，但修复会影响原定上线时间，你会怎么处理？&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;第一时间上报负责人&lt;/strong&gt;，评估影响范围&lt;/li&gt;
+&lt;li&gt;协调研发紧急修复，测试快速回归&lt;/li&gt;
+&lt;li&gt;如果修复风险大，建议延期上线，保证线上质量&lt;/li&gt;
+&lt;/ol&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;核心原则&lt;/strong&gt;：线上质量永远是第一优先级。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h3 id=&#34;针对《咸鱼之王》的离线收益核心机制，如何设计测试用例验证收益计算的准确性？&#34;&gt;&lt;a href=&#34;#针对《咸鱼之王》的离线收益核心机制，如何设计测试用例验证收益计算的准确性？&#34; class=&#34;headerlink&#34; title=&#34;针对《咸鱼之王》的离线收益核心机制，如何设计测试用例验证收益计算的准确性？&#34;&gt;&lt;/a&gt;针对《咸鱼之王》的离线收益核心机制，如何设计测试用例验证收益计算的准确性？&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;正常离线不同时长，收益计算正确&lt;/li&gt;
+&lt;li&gt;离线期间升级、解锁新功能，收益正常&lt;/li&gt;
+&lt;li&gt;切后台、杀进程、重启手机后收益一致&lt;/li&gt;
+&lt;li&gt;跨天、满收益上限、双倍奖励等边界场景验证&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;模块四：游戏理解与品类适配提问&#34;&gt;&lt;a href=&#34;#模块四：游戏理解与品类适配提问&#34; class=&#34;headerlink&#34; title=&#34;模块四：游戏理解与品类适配提问&#34;&gt;&lt;/a&gt;模块四：游戏理解与品类适配提问&lt;/h2&gt;&lt;h3 id=&#34;有没有玩过《咸鱼之王》？你觉得这款游戏的核心玩法和玩家痛点是什么？&#34;&gt;&lt;a href=&#34;#有没有玩过《咸鱼之王》？你觉得这款游戏的核心玩法和玩家痛点是什么？&#34; class=&#34;headerlink&#34; title=&#34;有没有玩过《咸鱼之王》？你觉得这款游戏的核心玩法和玩家痛点是什么？&#34;&gt;&lt;/a&gt;有没有玩过《咸鱼之王》？你觉得这款游戏的核心玩法和玩家痛点是什么？&lt;/h3&gt;&lt;p&gt;我很久之前有玩过，后来没玩了，最近又深度体验了一下。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;核心玩法&lt;/strong&gt;：以咸将养成为核心，结合离线放置挂机、闯关推图、爬塔挑战，搭配军团社交、跨服竞技的轻量化休闲卡牌，主打低门槛上手，适配玩家碎片化时间的长线养成需求。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;体感比较深的玩家痛点：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;离线收益上限容易溢出&lt;/strong&gt;，造成资源浪费&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;中后期养成资源缺口大&lt;/strong&gt;，部分活动数值平衡有体感偏差&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;性能问题&lt;/strong&gt;：多武将技能同屏释放时，部分机型会出现卡顿、闪退；长时间游玩可能有发热现象&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;抽卡体感问题&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;《咸鱼之王》这类放置卡牌手游，测试的核心风险点和重点是什么？&#34;&gt;&lt;a href=&#34;#《咸鱼之王》这类放置卡牌手游，测试的核心风险点和重点是什么？&#34; class=&#34;headerlink&#34; title=&#34;《咸鱼之王》这类放置卡牌手游，测试的核心风险点和重点是什么？&#34;&gt;&lt;/a&gt;《咸鱼之王》这类放置卡牌手游，测试的核心风险点和重点是什么？&lt;/h3&gt;&lt;p&gt;核心测试重点和风险点集中在四大块，也是这类游戏的生命线：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;数值准确性&lt;/strong&gt;：最核心的重点，包括养成属性、离线收益、战斗伤害、公示概率等，一旦出错直接影响玩家体验和付费信任&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数据持久化与同步&lt;/strong&gt;：重点验证离线、切后台、断网重连后，养成数据、收益数据不丢失、不异常，客户端和服务器数据完全一致&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;长周期迭代稳定性&lt;/strong&gt;：这类游戏活动更新频繁，必须保障新活动和老养成体系不冲突，规避数值膨胀、数据回滚的风险&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;付费合规风险&lt;/strong&gt;：抽卡概率、充值礼包、首充福利等付费点必须100%覆盖，确保符合监管要求，杜绝合规隐患&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;你玩过的手游里，哪一款你觉得测试做得最好-最差？为什么？&#34;&gt;&lt;a href=&#34;#你玩过的手游里，哪一款你觉得测试做得最好-最差？为什么？&#34; class=&#34;headerlink&#34; title=&#34;你玩过的手游里，哪一款你觉得测试做得最好&amp;#x2F;最差？为什么？&#34;&gt;&lt;/a&gt;你玩过的手游里，哪一款你觉得测试做得最好&amp;#x2F;最差？为什么？&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;维度&lt;/th&gt;
+&lt;th&gt;最好：《王者荣耀》&lt;/th&gt;
+&lt;th&gt;最差：某小众放置卡牌手游&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;线上稳定性&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;长线运营多年，版本迭代频率高，但线上严重bug发生率极低，核心玩法稳定性拉满&lt;/td&gt;
+&lt;td&gt;上线初期就频繁出现离线收益计算错误、抽卡保底失效、养成属性异常&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;兼容性&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;从低端机到旗舰机都能保障流畅的游戏体验&lt;/td&gt;
+&lt;td&gt;甚至出现过全服回档的情况&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;测试体系&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;覆盖功能、性能、安全、玩家体验全维度，玩家反馈的问题能快速响应修复&lt;/td&gt;
+&lt;td&gt;对核心数值、离线逻辑、边界场景覆盖严重不足，也没有做长周期稳定性测试&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;h3 id=&#34;针对《咸鱼之王》的咸将招募抽卡系统，测试的核心重点有哪些？&#34;&gt;&lt;a href=&#34;#针对《咸鱼之王》的咸将招募抽卡系统，测试的核心重点有哪些？&#34; class=&#34;headerlink&#34; title=&#34;针对《咸鱼之王》的咸将招募抽卡系统，测试的核心重点有哪些？&#34;&gt;&lt;/a&gt;针对《咸鱼之王》的咸将招募抽卡系统，测试的核心重点有哪些？&lt;/h3&gt;&lt;p&gt;抽卡是游戏的核心付费系统，测试核心重点有5个，&lt;strong&gt;零容错要求&lt;/strong&gt;：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;概率准确性&lt;/strong&gt;：严格验证各种抽卡池的公示概率，通过大样本量测试，确保实际统计概率和公示值完全一致，符合监管要求&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;保底机制完整性&lt;/strong&gt;：验证单抽、十连的保底计数是否准确，保底触发是否正常，跨池、跨活动的保底继承&amp;#x2F;重置规则是否完全符合设定&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;流程与资源逻辑&lt;/strong&gt;：验证招募券&amp;#x2F;金砖扣除是否正确，抽取的武将、道具是否正常到账，重复武将的转化逻辑是否无误&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;异常场景全覆盖&lt;/strong&gt;：重点测试抽卡时断网重连、切后台、资源不足、活动结束瞬间、跨天等边界场景，确保不出现数据异常、道具丢失、多扣资源的问题&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;数据一致性&lt;/strong&gt;：确保客户端显示和服务器存储的抽卡计数、保底进度、道具数量完全一致，杜绝作弊风险&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;模块五：综合素养与职业规划提问&#34;&gt;&lt;a href=&#34;#模块五：综合素养与职业规划提问&#34; class=&#34;headerlink&#34; title=&#34;模块五：综合素养与职业规划提问&#34;&gt;&lt;/a&gt;模块五：综合素养与职业规划提问&lt;/h2&gt;&lt;h3 id=&#34;有没有遇到过对方不配合修改问题的情况？你是怎么处理的？&#34;&gt;&lt;a href=&#34;#有没有遇到过对方不配合修改问题的情况？你是怎么处理的？&#34; class=&#34;headerlink&#34; title=&#34;有没有遇到过对方不配合修改问题的情况？你是怎么处理的？&#34;&gt;&lt;/a&gt;有没有遇到过对方不配合修改问题的情况？你是怎么处理的？&lt;/h3&gt;&lt;p&gt;最典型的是某次新皮肤资源测试，我们测出资源面数超标、低端机帧率波动大，但TA团队觉得修改会破坏美术效果，不愿意配合调整。我的处理分四步走：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;先共情对齐目标&lt;/strong&gt;：先认可美术效果的重要性，明确我们的核心目标都是保障上线后玩家的完整体验，不是互相挑错&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;拿量化数据说话&lt;/strong&gt;：同步不同机型的帧率、内存实测数据，以及玩家投诉风险、线上闪退率的预估，让对方直观看到问题影响&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;给出折中方案&lt;/strong&gt;：不是要求全量修改，而是和TA一起定位核心冗余面数，在不影响视觉效果的前提下做精简优化&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;全程跟进闭环&lt;/strong&gt;：优化后第一时间复测同步结果，最终问题顺利解决，也没有影响版本上线节奏&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;游戏测试会有大量重复的回归测试，版本上线前也会有高强度加班，你能不能承受？&#34;&gt;&lt;a href=&#34;#游戏测试会有大量重复的回归测试，版本上线前也会有高强度加班，你能不能承受？&#34; class=&#34;headerlink&#34; title=&#34;游戏测试会有大量重复的回归测试，版本上线前也会有高强度加班，你能不能承受？&#34;&gt;&lt;/a&gt;游戏测试会有大量重复的回归测试，版本上线前也会有高强度加班，你能不能承受？&lt;/h3&gt;&lt;p&gt;我完全可以承受，也有对应的实战经验。之前在《香肠派对》赛季大版本上线前，我们也会有集中的全量回归测试和高强度的版本值守，我全程参与过多个赛季的上线保障，完全能适应这种工作节奏。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;对于重复性的回归测试，我不觉得是无意义的机械工作：它是游戏上线前的最后一道质量防线，每一次回归都是在规避线上风险，保障玩家体验。同时我也不会被动重复，会在过程中梳理高频回归点，优化用例、沉淀提效方法，减少无效重复，让测试工作更高效。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;你为什么想加入疯狂游戏？你对公司和《咸鱼之王》有什么了解？&#34;&gt;&lt;a href=&#34;#你为什么想加入疯狂游戏？你对公司和《咸鱼之王》有什么了解？&#34; class=&#34;headerlink&#34; title=&#34;你为什么想加入疯狂游戏？你对公司和《咸鱼之王》有什么了解？&#34;&gt;&lt;/a&gt;你为什么想加入疯狂游戏？你对公司和《咸鱼之王》有什么了解？&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;对公司的认可&lt;/strong&gt;：疯狂游戏是国内精品休闲手游的标杆厂商，一直坚持做长线运营、玩家口碑好的产品，尤其是《咸鱼之王》能在休闲卡牌赛道保持多年的长线热度，不管是产品打磨、运营能力还是质量把控，都让我非常认可&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;岗位匹配度&lt;/strong&gt;：我有完整的手游测试全流程经验，深度理解手游玩家的需求，同时我的性能测试专项能力，也能给《咸鱼之王》的产品质量带来额外的补充，和岗位的需求高度契合&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;个人成长&lt;/strong&gt;：我希望能加入国内顶尖的手游团队，在成熟的产品和测试体系里，全面提升自己的游戏测试能力，和公司一起成长&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;对《咸鱼之王》的了解：除了我自己深度体验过产品，也清楚它是国内放置卡牌赛道的头部产品，以轻量化的放置养成、碎片化的玩法体验为核心，同时靠丰富的活动和长线的养成体系，保持了极高的用户粘性，是休闲手游长线运营的标杆产品。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;你的职业规划是什么？从性能测试转向功能测试，是怎么规划自己的职业发展的？&#34;&gt;&lt;a href=&#34;#你的职业规划是什么？从性能测试转向功能测试，是怎么规划自己的职业发展的？&#34; class=&#34;headerlink&#34; title=&#34;你的职业规划是什么？从性能测试转向功能测试，是怎么规划自己的职业发展的？&#34;&gt;&lt;/a&gt;你的职业规划是什么？从性能测试转向功能测试，是怎么规划自己的职业发展的？&lt;/h3&gt;&lt;p&gt;我的职业规划是成为一名&lt;strong&gt;全栈型的游戏测试专家&lt;/strong&gt;，最终能独当一面负责游戏全流程的质量保障。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;短期1年内&lt;/strong&gt;：核心目标是快速吃透岗位要求，完全上手《咸鱼之王》的功能测试全流程，熟练掌握黑盒测试方法论、用例设计、Bug全生命周期管理，能独立负责核心模块的测试工作，成为团队里靠谱的测试工程师，同时把过往的性能测试经验融入到日常工作中，帮团队提前规避性能相关的隐性问题&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;中期1-3年&lt;/strong&gt;：在功能测试的基础上，继续深耕性能专项优势，成长为既懂功能全流程、又能兼顾性能、兼容性专项的全栈测试专家，能独立负责版本全周期的质量保障，参与测试体系、用例体系的搭建和优化，给产品带来更多的价值&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;长期&lt;/strong&gt;：往测试专家或者测试管理方向发展，和公司一起成长，打造更完善的游戏测试体系，保障产品的长线质量&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h3 id=&#34;有没有因为测试疏漏导致线上出现问题的经历？怎么处理的？总结了什么经验？&#34;&gt;&lt;a href=&#34;#有没有因为测试疏漏导致线上出现问题的经历？怎么处理的？总结了什么经验？&#34; class=&#34;headerlink&#34; title=&#34;有没有因为测试疏漏导致线上出现问题的经历？怎么处理的？总结了什么经验？&#34;&gt;&lt;/a&gt;有没有因为测试疏漏导致线上出现问题的经历？怎么处理的？总结了什么经验？&lt;/h3&gt;&lt;p&gt;我遇到过一次非核心功能的线上疏漏，没有造成大范围的影响，但也给了我很深的教训。当时是一套新的角色挂饰资源，我在测试时覆盖了主流机型的常规场景，性能和显示都正常，但疏漏了低内存、低版本系统的极端边界场景，上线后有少量低端机玩家反馈挂饰加载异常、偶尔闪退。&lt;/p&gt;
+&lt;h3 id=&#34;处理方式&#34;&gt;&lt;a href=&#34;#处理方式&#34; class=&#34;headerlink&#34; title=&#34;处理方式&#34;&gt;&lt;/a&gt;处理方式&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;第一时间同步项目组，收集玩家的设备信息和报错日志，快速在对应机型上复现问题，定位根因&lt;/li&gt;
+&lt;li&gt;对接资源团队快速输出优化方案，加急复测验证后，通过热更完成了修复，同时给受影响的玩家发放了补偿，把影响降到最低&lt;/li&gt;
+&lt;li&gt;事后做了完整的复盘，把低内存、低版本系统的极端场景，补充到了资源测试的标准用例里，纳入每一次上线前的必测环节&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;核心经验总结&#34;&gt;&lt;a href=&#34;#核心经验总结&#34; class=&#34;headerlink&#34; title=&#34;核心经验总结&#34;&gt;&lt;/a&gt;核心经验总结&lt;/h3&gt;&lt;ol&gt;
+&lt;li&gt;&lt;strong&gt;测试不能只覆盖主流场景&lt;/strong&gt;，极端边界、小众机型的场景必须纳入标准测试流程，不能有侥幸心理&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;上线前必须建立完整的线上监控预警机制&lt;/strong&gt;，小范围的问题要能提前发现、快速响应&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;每一次测试疏漏都要闭环复盘&lt;/strong&gt;，把教训转化为标准化的测试规范，避免同类问题重复发生&lt;/li&gt;
+&lt;/ol&gt;
+</content>
+        <category term="面试" />
+        <category term="游戏测试" />
+        <category term="功能测试" />
+        <updated>2026-05-11T02:00:00.000Z</updated>
+    </entry>
+</feed>
