@@ -50,7 +50,7 @@ aside: true
 }
 
 .intro-card {
-  background: white;
+  background: var(--card-bg);
   padding: 25px;
   border-radius: 10px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.08);
@@ -60,7 +60,7 @@ aside: true
 .intro-title {
   font-size: 1.3em;
   margin-bottom: 15px;
-  color: #2c3e50;
+  color: var(--font-color);
   border-left: 4px solid #667eea;
   padding-left: 12px;
 }
@@ -73,7 +73,7 @@ aside: true
 }
 
 .feature-card {
-  background: white;
+  background: var(--card-bg);
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
@@ -96,13 +96,14 @@ aside: true
 .feature-content h3 {
   margin: 0 0 5px 0;
   font-size: 1.1em;
-  color: #2c3e50;
+  color: var(--font-color);
 }
 
 .feature-content p {
   margin: 0;
   font-size: 0.9em;
-  color: #7f8c8d;
+  color: var(--font-color);
+  opacity: 0.6;
 }
 
 .quick-nav {
@@ -113,7 +114,7 @@ aside: true
 }
 
 .nav-item {
-  background: white;
+  background: var(--card-bg);
   padding: 15px;
   border-radius: 8px;
   text-align: center;
@@ -141,7 +142,7 @@ aside: true
 }
 
 .contact-section {
-  background: white;
+  background: var(--card-bg);
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 2px 12px rgba(0,0,0,0.08);
@@ -162,7 +163,8 @@ aside: true
   text-align: center;
   margin-top: 40px;
   padding: 20px;
-  color: #95a5a6;
+  color: var(--font-color);
+  opacity: 0.5;
   font-style: italic;
 }
 </style>

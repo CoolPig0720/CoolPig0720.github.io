@@ -35,6 +35,7 @@ jobs:
         run: |
           cd hexo-site
           cp -f themes/_patches/layout/includes/widget/card_post_toc.pug node_modules/hexo-theme-butterfly/layout/includes/widget/card_post_toc.pug
+          cp -f themes/_patches/layout/archive.pug node_modules/hexo-theme-butterfly/layout/archive.pug
           cp -f themes/_patches/source/js/main.js node_modules/hexo-theme-butterfly/source/js/main.js
           cp -f themes/_patches/source/js/utils.js node_modules/hexo-theme-butterfly/source/js/utils.js
 

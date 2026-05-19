@@ -6,8 +6,17 @@
 - [.github/workflows/deploy.yml](file://.github/workflows/deploy.yml)
 - [hexo-site/_config.yml](file://hexo-site/_config.yml)
 - [hexo-site/package.json](file://hexo-site/package.json)
+- [hexo-site/themes/_patches/layout/includes/widget/card_post_toc.pug](file://hexo-site/themes/_patches/layout/includes/widget/card_post_toc.pug)
+- [hexo-site/themes/_patches/source/js/main.js](file://hexo-site/themes/_patches/source/js/main.js)
+- [hexo-site/themes/_patches/source/js/utils.js](file://hexo-site/themes/_patches/source/js/utils.js)
 - [开发文档.md](file://开发文档.md)
 </cite>
+
+## 更新摘要
+**变更内容**
+- 新增主题补丁自动应用功能，包括 card_post_toc.pug、main.js、utils.js 的自动化复制流程
+- 更新 CI/CD 工作流以集成主题补丁系统
+- 新增主题补丁文件的详细说明和使用指南
 
 ## 目录
 1. [简介](#简介)
@@ -15,16 +24,17 @@
 3. [核心组件](#核心组件)
 4. [架构总览](#架构总览)
 5. [详细组件分析](#详细组件分析)
-6. [依赖关系分析](#依赖关系分析)
-7. [性能考虑](#性能考虑)
-8. [故障排除指南](#故障排除指南)
-9. [结论](#结论)
-10. [附录](#附录)
+6. [主题补丁系统](#主题补丁系统)
+7. [依赖关系分析](#依赖关系分析)
+8. [性能考虑](#性能考虑)
+9. [故障排除指南](#故障排除指南)
+10. [结论](#结论)
+11. [附录](#附录)
 
 ## 简介
 本指南面向使用 GitHub Pages 托管的 Academic Pages Jekyll 网站（仓库：CoolPig0720/CoolPig0720.github.io），系统性讲解如何在本地与容器环境中进行构建与预览，并基于现有配置推导出可落地的 CI/CD 工作流程设计思路。根据最新发现，该仓库已在使用 GitHub Actions 进行自动化部署，主要通过 Academic Pages 模板提供的标准工作流实现页面构建与部署。
 
-**更新** 新增了基于 Hexo 的 GitHub Actions 工作流程，替代了原有的 scrape_talks.yml，实现了从代码提交到 GitHub Pages 的完整自动化部署流程。
+**更新** 新增了基于 Hexo 的 GitHub Actions 工作流程，替代了原有的 scrape_talks.yml，实现了从代码提交到 GitHub Pages 的完整自动化部署流程。**新增** 主题补丁系统，通过自动化应用定制化的主题修改，确保网站功能的稳定性和一致性。
 
 ## 项目结构
 该项目采用 Academic Pages Jekyll 模板与静态内容组织方式，同时提供 Docker 化开发环境与 VS Code Dev Container 支持。关键目录与文件如下：
@@ -34,6 +44,7 @@
 - scripts：辅助脚本（如 CV JSON 更新）
 - docker-compose 与 Dockerfile：本地容器化构建与服务
 - .github/workflows：GitHub Actions 工作流程定义
+- **新增** hexo-site/themes/_patches：主题补丁文件集合
 
 ```mermaid
 graph TB
@@ -47,15 +58,22 @@ A --> H["scripts/update_cv_json.sh<br/>数据转换脚本"]
 A --> I["hexo-site/_config.yml<br/>Hexo 部署配置"]
 A --> J["hexo-site/package.json<br/>Hexo 依赖与脚本"]
 A --> K[".github/workflows/deploy.yml<br/>Hexo 自动化部署工作流"]
+A --> L["hexo-site/themes/_patches/<br/>主题补丁文件集合"]
+L --> M["layout/includes/widget/card_post_toc.pug<br/>TOC 组件定制"]
+L --> N["source/js/main.js<br/>主 JavaScript 文件"]
+L --> O["source/js/utils.js<br/>工具函数库"]
 ```
 
-图表来源
+**图表来源**
 - [README.md](file://README.md)
 - [hexo-site/_config.yml](file://hexo-site/_config.yml)
 - [hexo-site/package.json](file://hexo-site/package.json)
 - [.github/workflows/deploy.yml](file://.github/workflows/deploy.yml)
+- [hexo-site/themes/_patches/layout/includes/widget/card_post_toc.pug](file://hexo-site/themes/_patches/layout/includes/widget/card_post_toc.pug)
+- [hexo-site/themes/_patches/source/js/main.js](file://hexo-site/themes/_patches/source/js/main.js)
+- [hexo-site/themes/_patches/source/js/utils.js](file://hexo-site/themes/_patches/source/js/utils.js)
 
-章节来源
+**章节来源**
 - [README.md](file://README.md)
 - [hexo-site/_config.yml](file://hexo-site/_config.yml)
 - [hexo-site/package.json](file://hexo-site/package.json)
@@ -71,22 +89,26 @@ A --> K[".github/workflows/deploy.yml<br/>Hexo 自动化部署工作流"]
   - 配置了自动部署到 GitHub Pages 的部署信息
   - 提供 Hexo 依赖管理和构建脚本
   - 新增了专用的 GitHub Actions 工作流程文件
+- **新增** 主题补丁系统
+  - 自动化应用定制化的主题修改
+  - 支持 Pug 模板和 JavaScript 文件的补丁
+  - 确保主题更新时的功能一致性
 - 容器化运行
   - Dockerfile 指定基础镜像、安装依赖、切换非 root 用户并启动 Jekyll
   - docker-compose 将宿主机目录挂载至容器，暴露端口并以环境变量控制 Jekyll 环境
 - 开发容器支持
   - .devcontainer/devcontainer.json 通过 docker-compose 启动 VS Code 远程开发环境
 
-**更新** 移除了旧的 scrape_talks.yml 工作流程，新增了专门的 Hexo 部署工作流程，实现了更高效的自动化部署。
+**更新** 移除了旧的 scrape_talks.yml 工作流程，新增了专门的 Hexo 部署工作流程，实现了更高效的自动化部署。**新增** 主题补丁系统，通过自动化应用定制化修改，确保网站功能的稳定性。
 
-章节来源
+**章节来源**
 - [README.md](file://README.md)
 - [hexo-site/_config.yml](file://hexo-site/_config.yml)
 - [hexo-site/package.json](file://hexo-site/package.json)
 - [.github/workflows/deploy.yml](file://.github/workflows/deploy.yml)
 
 ## 架构总览
-下图展示了从"本地开发/容器化"到"GitHub Pages 自动部署"的完整流水线映射。该映射基于现有配置，特别是 README.md 中的 GitHub Actions 徽章和 hexo-site 的部署配置：
+下图展示了从"本地开发/容器化"到"GitHub Pages 自动部署"的完整流水线映射，包括新增的主题补丁系统：
 
 ```mermaid
 graph TB
@@ -99,18 +121,19 @@ end
 subgraph "GitHub Actions 工作流"
 C1["触发器<br/>push/pull_request/schedule"]
 C2["安装依赖<br/>bundle install / npm ci"]
-C3["构建站点<br/>jekyll build / hexo generate"]
-C4["可选：测试/校验<br/>语法/链接/压缩资源"]
-C5["部署到 Pages<br/>gh-pages 分支或指定目录"]
+C3["应用主题补丁<br/>自动复制定制文件"]
+C4["构建站点<br/>jekyll build / hexo generate"]
+C5["可选：测试/校验<br/>语法/链接/压缩资源"]
+C6["部署到 Pages<br/>gh-pages 分支或指定目录"]
 end
 subgraph "托管"
 G["GitHub Pages<br/>CoolPig0720.github.io"]
 end
 L1 --> L2 --> L3 --> L4
-L4 --> C1 --> C2 --> C3 --> C4 --> C5 --> G
+L4 --> C1 --> C2 --> C3 --> C4 --> C5 --> C6 --> G
 ```
 
-图表来源
+**图表来源**
 - [README.md](file://README.md)
 - [hexo-site/_config.yml](file://hexo-site/_config.yml)
 - [.github/workflows/deploy.yml](file://.github/workflows/deploy.yml)
@@ -139,10 +162,10 @@ Test --> Deploy["部署到 GitHub Pages"]
 Deploy --> End(["结束"])
 ```
 
-图表来源
+**图表来源**
 - [README.md](file://README.md)
 
-章节来源
+**章节来源**
 - [README.md](file://README.md)
 
 ### 组件二：Hexo 站点部署配置与自动化工作流
@@ -172,18 +195,19 @@ Build --> Server["服务器脚本：hexo server"]
 Workflow["deploy.yml 工作流"] --> Trigger["分支触发：master/main"]
 Trigger --> NodeSetup["Node.js 20 环境"]
 NodeSetup --> InstallDeps["安装 npm 依赖"]
-InstallDeps --> Generate["生成静态文件"]
+InstallDeps --> ApplyPatches["应用主题补丁"]
+ApplyPatches --> Generate["生成静态文件"]
 Generate --> DeployPages["部署到 GitHub Pages"]
 ```
 
-图表来源
+**图表来源**
 - [hexo-site/_config.yml](file://hexo-site/_config.yml)
 - [hexo-site/package.json](file://hexo-site/package.json)
 - [.github/workflows/deploy.yml](file://.github/workflows/deploy.yml)
 
 **更新** 新增了专门的 Hexo 部署工作流程，替代了原有的 scrape_talks.yml，实现了更完整的自动化部署解决方案。
 
-章节来源
+**章节来源**
 - [hexo-site/_config.yml](file://hexo-site/_config.yml)
 - [hexo-site/package.json](file://hexo-site/package.json)
 - [.github/workflows/deploy.yml](file://.github/workflows/deploy.yml)
@@ -213,11 +237,73 @@ Image->>Jekyll : 启动 jekyll serve -H 0.0.0.0 -w --config ...
 Jekyll-->>Dev : 本地预览 http : //localhost : 4000
 ```
 
-图表来源
+**图表来源**
 - [README.md](file://README.md)
 
-章节来源
+**章节来源**
 - [README.md](file://README.md)
+
+## 主题补丁系统
+
+### 系统概述
+主题补丁系统是本次更新的核心功能，通过自动化应用定制化的主题修改，确保网站功能的稳定性和一致性。该系统包含三个主要补丁文件，分别针对不同的功能模块。
+
+### 补丁文件结构
+- **card_post_toc.pug**：TOC（文章目录）组件的定制化修改
+- **main.js**：主 JavaScript 文件的功能增强和 bug 修复
+- **utils.js**：工具函数库的性能优化和功能扩展
+
+### 自动化应用流程
+工作流中的 `Apply custom theme patches` 步骤负责将补丁文件自动应用到 `hexo-theme-butterfly` 主题中：
+
+```mermaid
+flowchart TD
+Start["工作流开始"] --> Checkout["代码检出"]
+Checkout --> SetupNode["Node.js 环境设置"]
+SetupNode --> InstallDeps["安装 npm 依赖"]
+InstallDeps --> ApplyPatches["应用主题补丁"]
+ApplyPatches --> CopyFiles["复制补丁文件到主题目录"]
+CopyFiles --> Generate["生成静态文件"]
+Generate --> Deploy["部署到 GitHub Pages"]
+Deploy --> End["工作流结束"]
+```
+
+**图表来源**
+- [.github/workflows/deploy.yml](file://.github/workflows/deploy.yml)
+
+### 补丁内容分析
+
+#### card_post_toc.pug 补丁
+该补丁文件对 TOC 组件进行了定制化修改，增强了目录显示功能和用户体验：
+
+- 支持动态 TOC 数字显示
+- 增强了目录展开/折叠功能
+- 优化了加密文章的目录显示逻辑
+- 支持自定义目录深度和样式
+
+#### main.js 补丁
+主 JavaScript 文件包含了大量功能增强和 bug 修复：
+
+- **代码高亮功能**：增强代码块的复制、展开、全屏等功能
+- **图片画廊功能**：支持无限滚动和标签页切换
+- **滚动处理**：优化滚动条显示和 TOC 同步
+- **响应式设计**：改进移动端菜单和侧边栏交互
+- **版权保护**：添加复制时的版权声明功能
+
+#### utils.js 补丁
+工具函数库提供了核心的性能优化和功能支持：
+
+- **防抖和节流函数**：优化滚动和窗口大小变化事件处理
+- **动画工具**：提供平滑的动画效果和过渡处理
+- **加载状态管理**：支持图片懒加载和加载指示器
+- **滚动百分比计算**：精确计算页面滚动进度
+- **全局事件管理**：统一管理事件监听和清理
+
+**章节来源**
+- [.github/workflows/deploy.yml](file://.github/workflows/deploy.yml)
+- [hexo-site/themes/_patches/layout/includes/widget/card_post_toc.pug](file://hexo-site/themes/_patches/layout/includes/widget/card_post_toc.pug)
+- [hexo-site/themes/_patches/source/js/main.js](file://hexo-site/themes/_patches/source/js/main.js)
+- [hexo-site/themes/_patches/source/js/utils.js](file://hexo-site/themes/_patches/source/js/utils.js)
 
 ## 依赖关系分析
 - 构建链路耦合
@@ -225,11 +311,13 @@ Jekyll-->>Dev : 本地预览 http : //localhost : 4000
   - Hexo 站点配置与 Jekyll 构建配置相互独立但可并行使用
   - Docker 环境为两种构建方式提供一致的运行时
   - 新增的 Hexo 工作流与现有配置形成互补
+  - **新增** 主题补丁系统与 Hexo 主题形成紧密耦合关系
 - 部署策略
   - GitHub Actions 工作流自动处理页面构建与部署
   - Hexo 配置支持手动部署和自动化部署两种模式
   - 容器化环境确保本地开发与 CI/CD 环境的一致性
   - 移除了旧的 scrape_talks.yml，简化了工作流程管理
+  - **新增** 主题补丁的自动化应用确保部署一致性
 
 ```mermaid
 graph LR
@@ -241,16 +329,17 @@ ManualDeploy --> Pages["GitHub Pages"]
 AutoDeploy --> Pages
 Both --> Pages
 Workflows["工作流程管理"] --> Simplified["简化流程"]
+Patches["主题补丁系统"] --> Consistent["部署一致性"]
 ```
 
-图表来源
+**图表来源**
 - [README.md](file://README.md)
 - [hexo-site/_config.yml](file://hexo-site/_config.yml)
 - [.github/workflows/deploy.yml](file://.github/workflows/deploy.yml)
 
-**更新** 移除了旧的 scrape_talks.yml 工作流程，新增了专门的 Hexo 部署工作流，实现了更清晰的工作流程管理。
+**更新** 移除了旧的 scrape_talks.yml 工作流程，新增了专门的 Hexo 部署工作流，实现了更清晰的工作流程管理。**新增** 主题补丁系统确保了部署的一致性和功能稳定性。
 
-章节来源
+**章节来源**
 - [README.md](file://README.md)
 - [hexo-site/_config.yml](file://hexo-site/_config.yml)
 - [.github/workflows/deploy.yml](file://.github/workflows/deploy.yml)
@@ -261,16 +350,19 @@ Workflows["工作流程管理"] --> Simplified["简化流程"]
   - Docker 层缓存优化，避免每次重新安装完整依赖
   - Hexo 构建缓存，支持增量构建
   - 新增的专用工作流减少了不必要的构建步骤
+  - **新增** 主题补丁的自动化应用避免了重复的手动修改
 - 资源优化
   - Jekyll 和 Hexo 都支持静态资源压缩和优化
   - 容器环境提供一致的构建性能
   - GitHub Pages CDN 加速全球访问
+  - **新增** 优化的 JavaScript 函数减少内存占用
 - 部署优化
   - GitHub Pages CDN 加速全球访问
   - 自动化部署减少人工干预和错误
   - 专用工作流提高了部署效率
+  - **新增** 主题补丁确保部署质量的一致性
 
-**更新** 新的 Hexo 工作流通过专用的部署步骤，避免了不必要的构建和部署操作，提升了整体性能。
+**更新** 新的 Hexo 工作流通过专用的部署步骤，避免了不必要的构建和部署操作，提升了整体性能。**新增** 主题补丁系统通过自动化应用，减少了部署过程中的手动干预。
 
 ## 故障排除指南
 - GitHub Actions 工作流失败
@@ -278,25 +370,36 @@ Workflows["工作流程管理"] --> Simplified["简化流程"]
   - 查看工作流日志中的具体错误信息
   - 验证依赖版本兼容性和缓存配置
   - 检查新工作流文件的语法和权限设置
+  - **新增** 检查主题补丁文件的路径和权限
 - Hexo 部署问题
   - 检查 _config.yml 中的部署配置是否正确
   - 验证 GitHub 仓库访问权限和部署密钥
   - 确认网络连接和代理设置
   - 检查 Node.js 版本兼容性
+  - **新增** 验证主题补丁文件是否正确复制到目标目录
 - 容器环境问题
   - 检查 Dockerfile 中的基础镜像版本
   - 验证 docker-compose 配置和服务依赖
   - 确认端口映射和卷挂载配置
+- **新增** 主题补丁相关问题
+  - 检查补丁文件是否存在且可读
+  - 验证目标主题目录的写入权限
+  - 确认补丁文件与主题版本的兼容性
+  - 查看补丁应用步骤的执行日志
 
-**更新** 新增了针对 Hexo 工作流的故障排除指导，包括 Node.js 版本和专用部署步骤的问题排查。
+**更新** 新增了针对 Hexo 工作流的故障排除指导，包括 Node.js 版本和专用部署步骤的问题排查。**新增** 主题补丁系统的故障排除指南，包括文件路径、权限和兼容性问题的诊断。
 
-章节来源
+**章节来源**
 - [README.md](file://README.md)
 - [hexo-site/_config.yml](file://hexo-site/_config.yml)
 - [.github/workflows/deploy.yml](file://.github/workflows/deploy.yml)
 
 ## 结论
-本项目已采用 Academic Pages 模板和 GitHub Actions 实现了完整的自动化 CI/CD 流水线。通过 pages-build-deployment 工作流，实现了从代码提交到页面部署的全流程自动化。同时，项目保留了 Hexo 站点配置作为备选方案，以及完整的 Docker 化开发环境支持。**更新** 新增的专用 Hexo 工作流进一步完善了自动化部署能力，移除了旧的 scrape_talks.yml，简化了工作流程管理。建议充分利用现有的 GitHub Actions 工作流，结合 Docker 环境进行本地开发和测试，确保构建过程的一致性和可靠性。
+本项目已采用 Academic Pages 模板和 GitHub Actions 实现了完整的自动化 CI/CD 流水线。通过 pages-build-deployment 工作流，实现了从代码提交到页面部署的全流程自动化。同时，项目保留了 Hexo 站点配置作为备选方案，以及完整的 Docker 化开发环境支持。
+
+**更新** 新增的专用 Hexo 工作流进一步完善了自动化部署能力，移除了旧的 scrape_talks.yml，简化了工作流程管理。**新增** 主题补丁系统通过自动化应用定制化的主题修改，确保了网站功能的稳定性和一致性，为项目的长期维护提供了可靠保障。
+
+建议充分利用现有的 GitHub Actions 工作流，结合 Docker 环境进行本地开发和测试，确保构建过程的一致性和可靠性。同时，定期审查和更新主题补丁，确保与主题版本的兼容性和功能的完整性。
 
 ## 附录
 
@@ -319,18 +422,21 @@ Workflows["工作流程管理"] --> Simplified["简化流程"]
 - Node 依赖缓存：npm / pnpm/yarn 缓存目录
 - 构建缓存：Jekyll _site 目录和 Hexo public 目录
 - 工作流缓存：GitHub Actions 缓存机制
+- **新增** 主题补丁缓存：避免重复应用相同的补丁
 
 ### C. 多环境部署（建议）
 - 开发环境：本地 docker-compose 预览
 - 测试环境：PR 构建产物预览
 - 生产环境：main 分支构建并部署到 GitHub Pages
 - 备份环境：gh-pages 分支作为备份部署目标
+- **新增** 补丁版本管理：确保不同环境使用一致的补丁版本
 
 ### D. 监控与日志
 - 查看 README.md 中的 GitHub Actions 徽章状态
 - 在 CI 日志中记录关键步骤耗时
 - 对构建失败进行分段重试与告警
 - 监控工作流执行时间和成功率
+- **新增** 监控主题补丁应用状态和效果
 
 ### E. 安全与权限
 - 使用 GitHub Actions 官方工作流，确保安全性
@@ -338,5 +444,15 @@ Workflows["工作流程管理"] --> Simplified["简化流程"]
 - 对敏感信息使用 GitHub Secrets
 - 最小权限原则：仅授予必要的仓库访问权限
 - 定期审查工作流权限配置
+- **新增** 主题补丁文件的访问控制和版本管理
 
-**更新** 新增了针对工作流权限和安全性的最佳实践建议。
+**更新** 新增了针对工作流权限和安全性的最佳实践建议。**新增** 主题补丁系统的安全和权限管理指导。
+
+### F. 主题补丁维护指南
+- **补丁版本控制**：为每个补丁文件建立版本号和变更日志
+- **兼容性测试**：在主题升级前测试补丁的兼容性
+- **回滚机制**：建立补丁应用失败时的回滚策略
+- **文档更新**：及时更新补丁使用的相关文档
+- **性能监控**：监控补丁应用后的性能影响
+
+**新增** 主题补丁系统的维护和管理指南，确保系统的长期稳定运行。

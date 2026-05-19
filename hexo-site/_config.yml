@@ -139,3 +139,10 @@ deploy:
   repo: https://github.com/CoolPig0720/CoolPig0720.github.io.git
   branch: main
   message: "Site updated: {{ now('YYYY-MM-DD HH:mm:ss') }}"
+
+# Search
+search:
+  path: search.xml
+  field: post
+  content: true
+  format: html

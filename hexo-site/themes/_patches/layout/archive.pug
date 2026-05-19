@@ -1,0 +1,20 @@
+extends includes/layout.pug
+
+block content
+  #archive
+    .article-sort-title= `${_p('page.articles')} - ${getArchiveLength()}`
+    each category in site.categories.toArray()
+      .category-group(data-collapsed='true')
+        .category-group-title(tabindex='0' role='button' aria-expanded='false')
+          i.fas.fa-caret-right.category-toggle-icon
+          i.fas.fa-folder
+          span= ' ' + category.name
+          span.category-group-count= ` (${category.length})`
+        .category-group-posts
+          each article in category.posts.toArray()
+            .article-sort-item.no-article-cover
+              .article-sort-item-info
+                .article-sort-item-time
+                  i.far.fa-calendar-alt
+                  time.post-meta-date-created(datetime=date_xml(article.date) title=_p('post.created') + ' ' + full_date(article.date))= date(article.date, config.date_format)
+                a.article-sort-item-title(href=url_for(article.path) title=article.title || _p('no_title'))= article.title || _p('no_title')
