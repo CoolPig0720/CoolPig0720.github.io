@@ -464,14 +464,11 @@ inject:
         font-weight: bold !important;
       }
 
-      /* ====== 表格文字居中 ====== */
-      body #post #article-container table,
+      /* ====== 表格文字居中（仅限普通表格，排除代码块行号表格） ====== */
       body #post #article-container .table-wrap table {
         text-align: center !important;
       }
 
-      body #post #article-container table th,
-      body #post #article-container table td,
       body #post #article-container .table-wrap table th,
       body #post #article-container .table-wrap table td {
         text-align: center !important;
@@ -621,7 +618,7 @@ inject:
 
         /* 左侧栏固定宽度 */
         #aside-content {
-          width: 280px !important;
+          width: 240px !important;
           flex-shrink: 0 !important;
         }
 
@@ -631,6 +628,11 @@ inject:
           flex: 1 !important;
           margin-right: 0 !important;
           min-width: 0 !important;
+        }
+
+        /* 文章卡片内边距收紧，正文更宽 */
+        #post {
+          padding: 40px 28px !important;
         }
 
         /* 侧边栏卡片更紧凑 */
@@ -653,7 +655,7 @@ inject:
       @media (min-width: 901px) {
         #right-toc-container {
           display: block !important;
-          width: 240px !important;
+          width: 220px !important;
           flex-shrink: 0 !important;
           order: 3 !important;
           padding-left: 0 !important;
