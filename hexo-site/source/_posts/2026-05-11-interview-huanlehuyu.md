@@ -2,7 +2,7 @@
 title: 客户端性能测试面试记录（欢乐互娱）
 excerpt: 整理欢乐互娱客户端性能测试岗位面试问答，涵盖渲染优化、LOD分级测试、RenderDoc截帧分析、Unity Profiler函数耗时分析、Memory Profiler内存分析等核心模块
 categories:
-  - 面试问题
+  - 面试复盘
 tags:
   - 游戏测试
   - 面试

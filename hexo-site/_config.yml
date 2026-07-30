@@ -118,27 +118,14 @@ ignore:
 ## Themes: https://hexo.io/themes/
 theme: butterfly
 
-# Butterfly Theme Configuration
-butterfly:
-  live2d:
-    enable: false
-
 # Deployment
-## Docs: https://hexo.io/docs/one-command-deployment
-
 # ========================================
-# 部署配置（部署到 GitHub Pages）
+# 部署说明（部署到 GitHub Pages）
 # ========================================
-# 【使用方法】
-# 1. 提交代码到 GitHub
-# 2. GitHub Actions 会自动部署
+# 本项目不使用 hexo deploy，部署完全由 GitHub Actions 接管：
+# 1. 提交代码并推送到 GitHub（master 分支）
+# 2. GitHub Actions 自动构建并发布到 gh-pages 分支
 # 3. 访问 https://coolpig0720.github.io/ 查看效果
-
-deploy:
-  type: git
-  repo: https://github.com/CoolPig0720/CoolPig0720.github.io.git
-  branch: main
-  message: "Site updated: {{ now('YYYY-MM-DD HH:mm:ss') }}"
 
 # Search
 search:

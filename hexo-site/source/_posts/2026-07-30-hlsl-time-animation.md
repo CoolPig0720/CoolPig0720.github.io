@@ -2,7 +2,7 @@
 title: HLSL 学习笔记（三）：时间动画
 excerpt: 利用 iTime 与 sin 函数实现动态条纹效果，理解时间频率与空间频率的作用。
 categories:
-  - 技术文档
+  - 学习笔记
 tags:
   - HLSL
 toc: true

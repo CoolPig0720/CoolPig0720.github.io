@@ -2,7 +2,7 @@
 title: HLSL 学习笔记（五）：距离场与基础形状（SDF 思想）
 excerpt: 用 length 距离场画圆、圆环、矩形，配合 smoothstep 柔边与 min/max 布尔组合，最后完成风标与靶子两个综合练习。
 categories:
-  - 技术文档
+  - 学习笔记
 tags:
   - HLSL
 toc: true

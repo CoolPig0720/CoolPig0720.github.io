@@ -44,7 +44,7 @@ social:
 # --------------------------------------
 
 # 【修改】网站图标
-favicon: /images/favicon.png
+favicon: /images/favicon.ico
 
 # 【修改】头像配置
 # img: 头像图片路径（放在 source/images/ 目录下）
@@ -65,6 +65,36 @@ footer_img: false
 
 # Website Background (light color instead of blue)
 background: "#f5f7fa"
+
+# --------------------------------------
+# 404 Page
+# --------------------------------------
+
+# 自定义 404 页面（启用后生成 404.html，GitHub Pages 自动接管）
+# background 使用主题自带插图；如想换图，放到 source/images/ 后改路径即可
+error_404:
+  enable: true
+  subtitle: "页面走丢了，去首页看看吧"
+  background: /img/404.jpg
+
+# --------------------------------------
+# Footer
+# --------------------------------------
+
+# 页脚配置（显式声明，覆盖主题默认值）
+# owner.since：建站年份，与当前年不同时显示为区间，如 © 2025 - 2026 By CoolPig
+# copyright：Hexo 框架与 Butterfly 主题的版本信息
+# custom_text：自定义文案，支持 HTML
+# nav：页脚导航栏，占位页面完善后可在此添加入口
+footer:
+  nav:
+  owner:
+    enable: true
+    since: 2025
+  copyright:
+    enable: true
+    version: true
+  custom_text: 记录游戏开发与图形学习之路 🎮
 
 cover:
   index_enable: true
@@ -221,16 +251,6 @@ search:
   use: local_search
   placeholder: 搜索文章...
 
-# Algolia search
-algolia_search:
-  enable: false
-  hits:
-    per_page: 6
-  labels:
-    input_placeholder: Search for Posts
-    hits_empty: "We didn't find any results for the search you were looking for:{query}"
-    hits_stats: "{hits} results found in {time} ms"
-
 # Local search
 local_search:
   enable: true
@@ -261,6 +281,13 @@ post_copyright:
 # 【禁用】文章编辑按钮
 post_edit:
   enable: false
+
+# 相关文章推荐：文章末尾按 tag 重合度推荐，串联系列笔记
+# 此前靠主题默认值生效，这里显式声明便于调整
+related_post:
+  enable: true
+  limit: 4          # 最多展示 4 篇，全站文章还不多，6 篇容易凑数
+  date_type: created
 
 # --------------------------------------
 # Dark Mode Settings
@@ -355,11 +382,16 @@ wordcount:
   wordcount: true
   separation: true
 
+# 图片灯箱：点击文章图片平滑放大，再点/滚动收回（可选 fancybox / medium_zoom）
+lightbox: medium_zoom
+
+# 图片懒加载：滞后加载文章内图片，提升长图文（如 HLSL 笔记）首屏速度
+# field: post = 仅对文章内容生效；blur = 加载前模糊占位效果
 lazyload:
-  enable: false
+  enable: true
   field: post
   placeholder:
-  blur: false
+  blur: true
   progress: false
   error_img: false
   stream: false
@@ -373,441 +405,10 @@ pjax:
 
 inject:
   enable: true
-  head: []
+  head:
+    - <link rel="stylesheet" href="/css/custom.css">
   bottom:
-    - |-
-      <style>
-      /* ====== 放大网站标题 ====== */
-      #blog-info .site-name {
-        font-size: 1.4em !important;
-        font-weight: 600 !important;
-        vertical-align: middle !important;
-      }
-
-      #blog-info .site-icon {
-        width: 32px !important;
-        height: 32px !important;
-        margin-right: 8px !important;
-        vertical-align: middle !important;
-      }
-
-      /* ====== 减小导航栏与内容之间的距离 ====== */
-      #page-header {
-        margin-bottom: 0 !important;
-      }
-
-      #content-inner {
-        margin-top: 10px !important;
-        padding-top: 0 !important;
-      }
-
-      .layout {
-        margin-top: 10px !important;
-      }
-
-      /* ====== 导航标签样式 ====== */
-      #menus .menus_item {
-        margin: 0 4px !important;
-      }
-
-      #menus .site-page {
-        font-size: 1em !important;
-        padding: 8px 12px !important;
-        border-radius: 8px !important;
-        transition: all 0.3s ease !important;
-      }
-
-      #menus .site-page:hover {
-        background: rgba(102, 126, 234, 0.1) !important;
-        transform: translateY(-2px) !important;
-      }
-
-      #menus .site-page i {
-        font-size: 1em !important;
-        margin-right: 5px !important;
-      }
-
-      /* 搜索按钮独立样式 */
-      #search-button {
-        margin-right: 8px !important;
-      }
-      #search-button .site-page {
-        background: rgba(102, 126, 234, 0.12) !important;
-        border-radius: 20px !important;
-        padding: 6px 14px !important;
-        font-size: 0.92em !important;
-        color: var(--text-highlight-color, #667eea) !important;
-      }
-      #search-button .site-page:hover {
-        background: rgba(102, 126, 234, 0.22) !important;
-        color: var(--text-highlight-color, #667eea) !important;
-      }
-
-      /* ====== 侧边栏作者卡片 - 隐藏标签统计 ====== */
-      .site-data a:nth-child(2) {
-        display: none !important;
-      }
-
-      /* ====== 放大文章和分类统计 ====== */
-      .site-data a {
-        padding: 12px 18px !important;
-        margin: 6px !important;
-      }
-
-      .site-data .headline {
-        font-size: 1.15em !important;
-        font-weight: 600 !important;
-      }
-
-      .site-data .length-num {
-        font-size: 1.5em !important;
-        font-weight: bold !important;
-      }
-
-      /* ====== 表格文字居中（仅限普通表格，排除代码块行号表格） ====== */
-      body #post #article-container .table-wrap table {
-        text-align: center !important;
-      }
-
-      body #post #article-container .table-wrap table th,
-      body #post #article-container .table-wrap table td {
-        text-align: center !important;
-        vertical-align: middle !important;
-      }
-
-      /* ====== 增大正文字号，减小行高与间距 ====== */
-      body #post #article-container {
-        font-size: 1.05em !important;
-        line-height: 1.7 !important;
-      }
-
-      body #post #article-container p {
-        margin: 0.6em 0 !important;
-      }
-
-      body #post #article-container li {
-        margin: 0.3em 0 !important;
-        line-height: 1.7 !important;
-      }
-
-      body #post #article-container li > p {
-        margin: 0.2em 0 !important;
-      }
-
-      body #post #article-container ol,
-      body #post #article-container ul {
-        margin: 0.5em 0 !important;
-        padding-left: 1.8em !important;
-      }
-
-      /* ====== 归档页分类分组样式 ====== */
-      .category-group {
-        margin-bottom: 16px !important;
-        background: var(--card-bg) !important;
-        border-radius: 12px !important;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
-        overflow: hidden !important;
-        transition: box-shadow 0.3s ease !important;
-      }
-      .category-group:hover {
-        box-shadow: 0 4px 16px rgba(102,126,234,0.12) !important;
-      }
-      .category-group-title {
-        font-size: 1.1em !important;
-        font-weight: 600 !important;
-        padding: 14px 20px !important;
-        margin-bottom: 0 !important;
-        border-left: none !important;
-        background: transparent !important;
-        border-radius: 12px !important;
-        color: var(--font-color) !important;
-        cursor: pointer !important;
-        user-select: none !important;
-        transition: all 0.25s ease !important;
-        display: flex !important;
-        align-items: center !important;
-        gap: 4px !important;
-      }
-      .category-group-title:hover {
-        background: rgba(102, 126, 234, 0.08) !important;
-        color: var(--text-highlight-color, #667eea) !important;
-      }
-      .category-group-title i.fas.fa-folder {
-        color: var(--text-highlight-color, #667eea) !important;
-        font-size: 1em !important;
-      }
-      .category-toggle-icon {
-        font-size: 0.8em !important;
-        margin-right: 6px !important;
-        color: var(--text-highlight-color, #667eea) !important;
-        transition: transform 0.3s ease !important;
-      }
-      .category-group[data-collapsed='false'] .category-toggle-icon {
-        transform: rotate(90deg) !important;
-      }
-      .category-group-count {
-        font-size: 0.78em !important;
-        font-weight: 500 !important;
-        color: #fff !important;
-        background: var(--text-highlight-color, #667eea) !important;
-        border-radius: 12px !important;
-        padding: 1px 10px !important;
-        margin-left: auto !important;
-      }
-      .category-group-posts {
-        max-height: 0 !important;
-        overflow: hidden !important;
-        padding: 0 20px !important;
-        transition: max-height 0.4s ease, padding 0.3s ease !important;
-      }
-      .category-group[data-collapsed='false'] .category-group-posts {
-        max-height: 2000px !important;
-        padding: 4px 20px 16px !important;
-      }
-      .category-group-posts .article-sort-item {
-        padding: 10px 14px !important;
-        margin: 6px 0 !important;
-        border-radius: 8px !important;
-        transition: background 0.2s ease !important;
-      }
-      .category-group-posts .article-sort-item:hover {
-        background: rgba(102, 126, 234, 0.06) !important;
-      }
-      .category-group-posts .article-sort-item-title {
-        font-weight: 500 !important;
-      }
-      /* 归档页总标题美化 */
-      #archive .article-sort-title {
-        font-size: 1.4em !important;
-        font-weight: 700 !important;
-        margin-bottom: 24px !important;
-        padding-bottom: 12px !important;
-        border-bottom: 2px solid rgba(102,126,234,0.15) !important;
-      }
-
-      /* ====== 阅读进度条（仅文章页显示） ====== */
-      #reading-progress-bar {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 0;
-        height: 3px;
-        background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-        z-index: 9999;
-        transition: width 0.1s linear;
-        pointer-events: none;
-        display: none;
-      }
-
-      /* ====== 三栏布局：左侧栏 + 主内容 + 右侧TOC（全宽） ====== */
-      @media (min-width: 901px) {
-        .layout {
-          max-width: 100% !important;
-          padding: 40px 20px !important;
-        }
-
-        /* 隐藏侧边栏时，主内容居中且有最大宽度 */
-        .layout.hide-aside {
-          max-width: 1000px !important;
-        }
-
-        .layout.hide-aside > div:first-child {
-          width: 100% !important;
-          flex: none !important;
-        }
-
-        /* 左侧栏固定宽度 */
-        #aside-content {
-          width: 240px !important;
-          flex-shrink: 0 !important;
-        }
-
-        /* 主内容区 - 弹性填充中间空间 */
-        .layout > div:first-child {
-          width: auto !important;
-          flex: 1 !important;
-          margin-right: 0 !important;
-          min-width: 0 !important;
-        }
-
-        /* 文章卡片内边距收紧，正文更宽 */
-        #post {
-          padding: 40px 28px !important;
-        }
-
-        /* 侧边栏卡片更紧凑 */
-        #aside-content .card-widget {
-          padding: 16px 18px !important;
-          margin-bottom: 15px !important;
-        }
-      }
-
-      /* ====== 最新文章卡片：标题单行截断+省略号 ====== */
-      .card-recent-post .aside-list .aside-list-item .content > .title {
-        -webkit-line-clamp: 1 !important;
-      }
-
-      /* 右侧TOC容器样式 */
-      #right-toc-container {
-        display: none;
-      }
-
-      @media (min-width: 901px) {
-        #right-toc-container {
-          display: block !important;
-          width: 220px !important;
-          flex-shrink: 0 !important;
-          order: 3 !important;
-          padding-left: 0 !important;
-        }
-
-        #right-toc-container .sticky_layout {
-          position: sticky !important;
-          top: 20px !important;
-          transition: top .3s;
-        }
-
-        /* 右侧TOC卡片样式 */
-        #right-toc-container #card-toc {
-          padding: 16px 18px !important;
-          margin-bottom: 15px !important;
-          background: var(--card-bg) !important;
-          box-shadow: var(--card-box-shadow) !important;
-          border-radius: 8px !important;
-        }
-
-        #right-toc-container #card-toc .toc-content {
-          max-height: calc(100vh - 120px) !important;
-          overflow-y: auto !important;
-          margin: 0 -18px !important;
-          width: calc(100% + 36px) !important;
-        }
-
-        #right-toc-container #card-toc .toc-content > * {
-          margin: 0 12px !important;
-        }
-
-        #right-toc-container #card-toc .toc-link {
-          margin: 3px 0 !important;
-          padding: 1px 6px !important;
-          font-size: 0.88em !important;
-        }
-
-        #right-toc-container #card-toc .item-headline {
-          font-size: 1.1em !important;
-          padding-bottom: 4px !important;
-        }
-      }
-      </style>
-    - |-
-      <script>
-      // 将TOC目录从左侧侧边栏移动到右侧独立容器
-      function moveTocToRight() {
-        var toc = document.getElementById('card-toc');
-        var layout = document.querySelector('.layout');
-        if (!toc || !layout) return;
-
-        // 只在桌面端(>=901px)执行移动
-        if (window.innerWidth < 901) return;
-
-        var rightContainer = document.getElementById('right-toc-container');
-        if (!rightContainer) {
-          rightContainer = document.createElement('div');
-          rightContainer.id = 'right-toc-container';
-          var stickyWrap = document.createElement('div');
-          stickyWrap.className = 'sticky_layout';
-          rightContainer.appendChild(stickyWrap);
-          layout.appendChild(rightContainer);
-        }
-
-        var stickyWrap = rightContainer.querySelector('.sticky_layout');
-        if (toc.parentElement !== stickyWrap) {
-          stickyWrap.appendChild(toc);
-          toc.style.display = 'block';
-        }
-      }
-
-      // 页面加载和窗口resize时执行
-      document.addEventListener('DOMContentLoaded', function() {
-        moveTocToRight();
-        setTimeout(moveTocToRight, 500);
-      });
-      window.addEventListener('resize', function() {
-        moveTocToRight();
-      });
-
-      // PJAX导航后重新执行
-      document.addEventListener('pjax:complete', function() {
-        moveTocToRight();
-        setTimeout(moveTocToRight, 500);
-      });
-
-      // ====== 修复：滚动时显示右侧按钮（回到顶部、黑夜模式等）======
-      (function() {
-        var rightside = document.getElementById('rightside');
-        if (!rightside) return;
-
-        function toggleRightside() {
-          var scrollY = window.scrollY || document.documentElement.scrollTop;
-          if (scrollY > 200) {
-            rightside.classList.add('rightside-show');
-          } else {
-            rightside.classList.remove('rightside-show');
-          }
-        }
-
-        // 页面加载时检查一次
-        toggleRightside();
-        // 滚动时切换显示
-        window.addEventListener('scroll', function() {
-          toggleRightside();
-        }, { passive: true });
-      })();
-
-      // ====== 归档页分类展开/收起 ======
-      document.querySelectorAll('.category-group-title').forEach(function(title) {
-        title.addEventListener('click', function() {
-          var group = this.parentElement;
-          var isCollapsed = group.getAttribute('data-collapsed') === 'true';
-          group.setAttribute('data-collapsed', isCollapsed ? 'false' : 'true');
-          this.setAttribute('aria-expanded', isCollapsed ? 'true' : 'false');
-        });
-        // 支持键盘 Enter/Space 操作
-        title.addEventListener('keydown', function(e) {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            this.click();
-          }
-        });
-      });
-
-      // ====== 阅读进度条（仅文章页） ======
-      (function() {
-        var bar = document.createElement('div');
-        bar.id = 'reading-progress-bar';
-        document.body.appendChild(bar);
-
-        function updateProgress() {
-          var postEl = document.getElementById('post');
-          if (!postEl) {
-            bar.style.display = 'none';
-            return;
-          }
-          bar.style.display = 'block';
-          var scrollTop = window.scrollY || document.documentElement.scrollTop;
-          var docHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-          var progress = docHeight > 0 ? Math.min((scrollTop / docHeight) * 100, 100) : 0;
-          bar.style.width = progress + '%';
-        }
-
-        window.addEventListener('scroll', updateProgress, { passive: true });
-        document.addEventListener('DOMContentLoaded', updateProgress);
-        document.addEventListener('pjax:complete', function() {
-          setTimeout(updateProgress, 100);
-        });
-        updateProgress();
-      })();
-      </script>
+    - <script src="/js/custom.js"></script>
 
 cdn:
   enable: false

@@ -1,0 +1,14 @@
+version: 2
+updates:
+  # Hexo 站点的 npm 依赖检查（package.json 位于 hexo-site/ 子目录）
+  - package-ecosystem: npm
+    directory: "/hexo-site"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+
+  # GitHub Actions 版本检查（deploy.yml 用到的 action）
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly

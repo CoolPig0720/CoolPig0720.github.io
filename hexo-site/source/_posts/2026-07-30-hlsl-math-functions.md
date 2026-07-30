@@ -2,7 +2,7 @@
 title: HLSL 学习笔记（四）：常用数学函数
 excerpt: frac、step、smoothstep、lerp、saturate、abs/min/max 等着色器核心数学函数的用法与图案实验。
 categories:
-  - 技术文档
+  - 学习笔记
 tags:
   - HLSL
 toc: true
