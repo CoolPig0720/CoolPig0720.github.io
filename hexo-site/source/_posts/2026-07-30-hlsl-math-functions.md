@@ -43,9 +43,9 @@ float4 main(PSInput pin) : SV_TARGET
 - `frac` = 取小数 = 周期循环，乘的系数控制重复次数。
 - `abs` 的作用是"以 0.5 为镜子对折"，把周期信号再套一层 `abs(x - 0.5)`，可以做出对称的三角波。
 
-![锯齿波条纹](/images/hlsl/4-1-1.png)
+![锯齿波条纹](/images/hlsl/4-1-1.webp)
 
-![三角波条纹](/images/hlsl/4-1-2.png)
+![三角波条纹](/images/hlsl/4-1-2.webp)
 
 ## 4.2 step —— 硬边界（黑白二值分界）
 
@@ -81,11 +81,11 @@ float4 main(PSInput pin) : SV_TARGET
 - 门槛值 `edge` 控制黑白分界位置（也就控制了黑白占比）。
 - 组合顺序有意义：`step` 是"坍缩成二值"的收尾操作，放在你想裁决的那个图案的最外层。
 
-![step硬边条纹1](/images/hlsl/4-2-1.png)
+![step硬边条纹1](/images/hlsl/4-2-1.webp)
 
-![step硬边条纹2](/images/hlsl/4-2-2.png)
+![step硬边条纹2](/images/hlsl/4-2-2.webp)
 
-![step硬边条纹3](/images/hlsl/4-2-3.png)
+![step硬边条纹3](/images/hlsl/4-2-3.webp)
 
 ## 4.3 smoothstep —— 柔和过渡（抗锯齿）
 
@@ -132,9 +132,9 @@ float4 main(PSInput pin) : SV_TARGET
 - 两端斜率为 0 → 无折角 → 抗锯齿；这才是它比 `step`、比线性优秀的本质。
 - `e1 - e0` 控制过渡带宽度，越窄越接近 `step`。
 
-![smoothstep渐变条纹](/images/hlsl/4-3-1.png)
+![smoothstep渐变条纹](/images/hlsl/4-3-1.webp)
 
-![线性与S曲线对比](/images/hlsl/4-3-2.png)
+![线性与S曲线对比](/images/hlsl/4-3-2.webp)
 
 ## 4.4 lerp —— 两个值/颜色间插值
 
@@ -173,11 +173,11 @@ float4 main(PSInput pin) : SV_TARGET
 - A、B 可以是单个数，也可以是 `float3` 颜色（R/G/B 三个通道各自独立混合）。
 - **任何一个 0~1 的信号，都能当 lerp 的滑块，去驱动两种颜色的过渡。信号是什么形状，配色就是什么节奏**——这是着色器配色的通用心法。
 
-![lerp全屏渐变](/images/hlsl/4-4-1.png)
+![lerp全屏渐变](/images/hlsl/4-4-1.webp)
 
-![frac周期渐变](/images/hlsl/4-4-2.png)
+![frac周期渐变](/images/hlsl/4-4-2.webp)
 
-![smoothstep周期渐变](/images/hlsl/4-4-3.png)
+![smoothstep周期渐变](/images/hlsl/4-4-3.webp)
 
 ## 4.5 saturate / clamp —— 限制范围防溢出
 
@@ -212,9 +212,9 @@ float4 main(PSInput pin) : SV_TARGET
 - `clamp(x, a, b)`：更通用，夹到任意区间 `[a, b]`。
 - **为什么需要它**：颜色分量的有效范围是 `[0, 1]`，而很多运算（除法、减法、乘大系数）会把值冲出这个范围，产生异常色或意外截断。`saturate` 是给结果"上保险"。
 
-![saturate处理后](/images/hlsl/4-5-1.png)
+![saturate处理后](/images/hlsl/4-5-1.webp)
 
-![未saturate的鬼影](/images/hlsl/4-5-2.png)
+![未saturate的鬼影](/images/hlsl/4-5-2.webp)
 
 ## 4.6 abs / min / max / fmod —— 对称、镜像、取模
 
@@ -255,8 +255,8 @@ float4 main(PSInput pin) : SV_TARGET
 | `min(a, b)` | 两者中小的 | "谁暗谁赢" → 图案的交集（只留重叠处） |
 | `abs(a - b)` | 差的绝对值 | 状态不同才亮 → 异或 |
 
-![max并集棋盘](/images/hlsl/4-6-1.png)
+![max并集棋盘](/images/hlsl/4-6-1.webp)
 
-![min交集棋盘](/images/hlsl/4-6-2.png)
+![min交集棋盘](/images/hlsl/4-6-2.webp)
 
-![abs异或棋盘](/images/hlsl/4-6-3.png)
+![abs异或棋盘](/images/hlsl/4-6-3.webp)

@@ -176,6 +176,13 @@ body #post #article-container ul {
   padding: 1px 10px !important;
   margin-left: auto !important;
 }
+/* 分类描述小字（文案来自 source/_data/category_desc.yml） */
+.category-group-desc {
+  font-size: 0.82em;
+  color: var(--second-text-color, #999);
+  padding: 0 20px 12px 46px;
+  line-height: 1.5;
+}
 .category-group-posts {
   max-height: 0 !important;
   overflow: hidden !important;

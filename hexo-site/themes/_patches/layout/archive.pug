@@ -10,6 +10,8 @@ block content
           i.fas.fa-folder
           span= ' ' + category.name
           span.category-group-count= ` (${category.length})`
+        if site.data.category_desc && site.data.category_desc[category.name]
+          .category-group-desc= site.data.category_desc[category.name]
         .category-group-posts
           each article in category.posts.toArray()
             .article-sort-item.no-article-cover

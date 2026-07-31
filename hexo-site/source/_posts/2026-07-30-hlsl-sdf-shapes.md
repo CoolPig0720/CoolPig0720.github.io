@@ -39,7 +39,7 @@ float4 main(PSInput pin) : SV_TARGET
 
 **总结**：`length(v)` 求一个向量的长度，即 `sqrt(v.x*v.x + v.y*v.y)`。把距离直接当颜色输出，就得到一个"中心黑、四周亮"的径向渐变——这就是最原始的距离场可视化。
 
-![径向距离场](/images/hlsl/5-1-1.png)
+![径向距离场](/images/hlsl/5-1-1.webp)
 
 ## 5.2 居中坐标系 + 修正宽高比
 
@@ -64,13 +64,13 @@ float4 main(PSInput pin) : SV_TARGET
 
 修正之后，屏幕中心那个像素的 d 仍然是 0（乘法不改变 0），而左右两侧及四个角的 d 会因为修正变大。
 
-![未修正的拉伸圆](/images/hlsl/5-2-1.png)
+![未修正的拉伸圆](/images/hlsl/5-2-1.webp)
 
-![修正后的正圆距离场](/images/hlsl/5-2-2.png)
+![修正后的正圆距离场](/images/hlsl/5-2-2.webp)
 
-![宽高比修正对比](/images/hlsl/5-2-3.png)
+![宽高比修正对比](/images/hlsl/5-2-3.webp)
 
-![修正后角落距离变化](/images/hlsl/5-2-4.png)
+![修正后角落距离变化](/images/hlsl/5-2-4.webp)
 
 ## 5.3 画实心圆
 
@@ -90,7 +90,7 @@ float4 main(PSInput pin) : SV_TARGET
 
 **总结**：`step(a, b)` 是 `b >= a` 给 1；要让"半径内（d 小）"为 1，就得 `r >= d`，所以第一个参数放 `d`、第二个放 `r` → `step(d, r)`。
 
-![step实心圆](/images/hlsl/5-3-1.png)
+![step实心圆](/images/hlsl/5-3-1.webp)
 
 ## 5.4 smoothstep 做柔边圆
 
@@ -116,9 +116,9 @@ float4 main(PSInput pin) : SV_TARGET
 
 所以推荐写法是对 d 正向 smoothstep 后再用 `1.0 -` 翻转：`1.0 - smoothstep(r-w, r+w, d)`。
 
-![柔边圆](/images/hlsl/5-4-1.png)
+![柔边圆](/images/hlsl/5-4-1.webp)
 
-![w变大形成光晕](/images/hlsl/5-4-2.png)
+![w变大形成光晕](/images/hlsl/5-4-2.webp)
 
 ## 5.5 圆环与矩形
 
@@ -152,7 +152,7 @@ float4 main(PSInput pin) : SV_TARGET
 | 环带（在外圆内、内圆外） | 1 | 0 | **1**（白）✅ |
 | 环外 | 0 | 0 | **0**（黑）✅ |
 
-![圆环](/images/hlsl/5-5-1.png)
+![圆环](/images/hlsl/5-5-1.webp)
 
 ### 5.5.2 矩形
 
@@ -184,7 +184,7 @@ float4 main(PSInput pin) : SV_TARGET
 - 矩形 = 横向带子 ∩ 纵向带子，用 `min` 取交集。
 - `min` 与乘法只在硬 mask（0/1）时完全等价，柔边时结果不同（`min` 保边缘更干净）。
 
-![柔边矩形](/images/hlsl/5-5-2.png)
+![柔边矩形](/images/hlsl/5-5-2.webp)
 
 ## 5.6 min/max 组合（并 / 交 / 减）
 
@@ -228,11 +228,11 @@ float4 main(PSInput pin) : SV_TARGET
 
 注意减法**不能**直接写 `abs(A - B)`——那是异或，B 超出 A 的部分也会亮。
 
-![并集](/images/hlsl/5-6-1.png)
+![并集](/images/hlsl/5-6-1.webp)
 
-![交集](/images/hlsl/5-6-2.png)
+![交集](/images/hlsl/5-6-2.webp)
 
-![减法](/images/hlsl/5-6-3.png)
+![减法](/images/hlsl/5-6-3.webp)
 
 ## 5.7 综合练习：柔边图标
 
@@ -271,7 +271,7 @@ float4 main(PSInput pin) : SV_TARGET
 
 **要点**：想把形状移到任意位置，只需在算距离前对坐标做平移——`length(p - ctr)` 就是"以 ctr 为圆心"。
 
-![风标图](/images/hlsl/5-7-1.png)
+![风标图](/images/hlsl/5-7-1.webp)
 
 ### 5.7.2 靶子
 
@@ -308,4 +308,4 @@ float4 main(PSInput pin) : SV_TARGET
 - `sqrt(d)` 对距离做非线性拉伸，调整环与环之间的间距。
 - 最外层再用一个圆盘 mask + `lerp` 背景色，把靶子裁进圆里。
 
-![靶子](/images/hlsl/5-7-2.png)
+![靶子](/images/hlsl/5-7-2.webp)
