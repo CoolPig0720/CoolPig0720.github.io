@@ -1,0 +1,189 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+    <channel>
+        <title>CoolPig的个人网站 • Posts by &#34;lua&#34; tag</title>
+        <link>https://CoolPig0720.github.io</link>
+        <description>CoolPig 的个人网站主页 - 分享想法、记录学习</description>
+        <language>zh-CN</language>
+        <pubDate>Thu, 30 Jul 2026 07:00:00 +0000</pubDate>
+        <lastBuildDate>Thu, 30 Jul 2026 07:00:00 +0000</lastBuildDate>
+        <category>网站</category>
+        <category>编程</category>
+        <category>性能优化</category>
+        <category>性能测试</category>
+        <category>面试</category>
+        <category>游戏测试</category>
+        <category>功能测试</category>
+        <category>Unity</category>
+        <category>HLSL</category>
+        <category>C#</category>
+        <category>Lua</category>
+        <item>
+            <guid isPermalink="true">https://coolpig0720.github.io/2026/07/30/2026-07-30-unity-xlua-hotupdate/</guid>
+            <title>Unity 学习笔记（四）：xLua 环境搭建与热更新原理</title>
+            <link>https://coolpig0720.github.io/2026/07/30/2026-07-30-unity-xlua-hotupdate/</link>
+            <category>Unity</category>
+            <category>C#</category>
+            <category>Lua</category>
+            <pubDate>Thu, 30 Jul 2026 07:00:00 +0000</pubDate>
+            <description><![CDATA[ &lt;blockquote&gt;
+&lt;p&gt;课程对应：3D 台球 Demo 阶段 1.3 &amp;#x2F; Task 15，完成日期 2026-07-30&lt;/p&gt;
+&lt;p&gt;本课目标：把 xLua 装进团结引擎并跑通 hello world，理解”为什么要引入第二门语言”。验证结果：团结引擎 Tuanjie 1.6.7 兼容 xLua v2.1.16 ✅&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;一、核心理论&#34;&gt;&lt;a href=&#34;#一、核心理论&#34; class=&#34;headerlink&#34; title=&#34;一、核心理论&#34;&gt;&lt;/a&gt;一、核心理论&lt;/h2&gt;&lt;h3 id=&#34;1-1-为什么要引入脚本语言（Lua）&#34;&gt;&lt;a href=&#34;#1-1-为什么要引入脚本语言（Lua）&#34; class=&#34;headerlink&#34; title=&#34;1.1 为什么要引入脚本语言（Lua）&#34;&gt;&lt;/a&gt;1.1 为什么要引入脚本语言（Lua）&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;C# 的问题：改一行代码 → 重新编译 → 重启播放；&lt;strong&gt;发布后&lt;/strong&gt;更致命——C# 被编译成 Mono&amp;#x2F;IL2CPP 产物打进客户端，想改规则只能让玩家重新下载整个包。&lt;/li&gt;
+&lt;li&gt;Lua 的本质：&lt;strong&gt;文本&lt;/strong&gt;。不参与编译，运行时才被读取、解释执行。文本 &amp;#x3D; 随时可以换。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;1-2-热更新（Hot-Update）&#34;&gt;&lt;a href=&#34;#1-2-热更新（Hot-Update）&#34; class=&#34;headerlink&#34; title=&#34;1.2 热更新（Hot Update）&#34;&gt;&lt;/a&gt;1.2 热更新（Hot Update）&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;类比：&lt;strong&gt;电影放映机换胶片&lt;/strong&gt;。放映机（C# 引擎层：物理&amp;#x2F;渲染&amp;#x2F;输入）不动，换胶片（Lua 规则脚本）就能放新片。&lt;/li&gt;
+&lt;li&gt;手游”不用重下客户端就修了 bug &amp;#x2F; 换了活动规则”，多半就是这套机制。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;1-3-热重载（Hot-Reload）&#34;&gt;&lt;a href=&#34;#1-3-热重载（Hot-Reload）&#34; class=&#34;headerlink&#34; title=&#34;1.3 热重载（Hot Reload）&#34;&gt;&lt;/a&gt;1.3 热重载（Hot Reload）&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;比热更新更极端：&lt;strong&gt;电影正在放映时换胶片&lt;/strong&gt;——游戏运行中改规则、立即生效，不停止播放。&lt;/li&gt;
+&lt;li&gt;这是第 8 课的最终目标。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;1-4-xLua-与-LuaEnv&#34;&gt;&lt;a href=&#34;#1-4-xLua-与-LuaEnv&#34; class=&#34;headerlink&#34; title=&#34;1.4 xLua 与 LuaEnv&#34;&gt;&lt;/a&gt;1.4 xLua 与 LuaEnv&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;xLua &amp;#x3D; 腾讯维护的”C# ⇄ Lua 双向调用的桥”。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;LuaEnv&lt;/code&gt; &amp;#x3D; 一个&lt;strong&gt;完整独立的 Lua 虚拟机实例&lt;/strong&gt;。类比：&lt;code&gt;new LuaEnv()&lt;/code&gt; 是给程序&lt;strong&gt;请了一位常驻的 Lua 翻译&lt;/strong&gt;；&lt;code&gt;DoString&lt;/code&gt; 是递纸条让他执行；&lt;code&gt;Dispose&lt;/code&gt; 是送他下班。&lt;/li&gt;
+&lt;li&gt;它是 new 出来的实例，不是静态工具。new 两个 &amp;#x3D; 两位互不认识的翻译，变量互不相通 → 所以第 6 课要做单例，全项目只请一位。&lt;/li&gt;
+&lt;li&gt;不 Dispose &amp;#x3D; 翻译赖在内存里不走（泄漏）；编辑器不重启进程，反复播放会越积越多。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;1-5-边界成本：”过桥要交税”&#34;&gt;&lt;a href=&#34;#1-5-边界成本：”过桥要交税”&#34; class=&#34;headerlink&#34; title=&#34;1.5 边界成本：”过桥要交税”&#34;&gt;&lt;/a&gt;1.5 边界成本：”过桥要交税”&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;每次跨语言调用，数据都要在两个世界间”翻译”，有开销。&lt;/li&gt;
+&lt;li&gt;“每帧调 Lua 几百次”是反模式。延用阶段 1.2 的&lt;strong&gt;频率分级&lt;/strong&gt;思维：物理运算每帧几百次 → 留在 C#；犯规判定一杆一次 → 适合放 Lua。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;1-6-字符串-密封袋（本课最重要的底层概念）&#34;&gt;&lt;a href=&#34;#1-6-字符串-密封袋（本课最重要的底层概念）&#34; class=&#34;headerlink&#34; title=&#34;1.6 字符串 &amp;#x3D; 密封袋（本课最重要的底层概念）&#34;&gt;&lt;/a&gt;1.6 字符串 &amp;#x3D; 密封袋（本课最重要的底层概念）&lt;/h3&gt;&lt;ul&gt;
+&lt;li&gt;字符串就是一对引号包起来的内容。&lt;strong&gt;引号内是数据，引号外是代码&lt;/strong&gt;：C# 编译器只执行引号外的，一个字都不看引号内的。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;DoString&lt;/code&gt; 的原理：C# 把密封袋原样递给 Lua 翻译，&lt;strong&gt;翻译拆袋&lt;/strong&gt;才去读里面的 Lua 代码。&lt;/li&gt;
+&lt;li&gt;所以：Lua 代码写在袋子里 → 安全；漏到袋子外 → C# 编译器看不懂 → 编译报错。&lt;/li&gt;
+&lt;li&gt;C# 的 &lt;code&gt;@&amp;quot;...&amp;quot;&lt;/code&gt;（逐字字符串）&amp;#x3D; 能装多行的大袋子，引号内可以直接换行。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;1-7-错误三件套（本课集齐的认知地图）&#34;&gt;&lt;a href=&#34;#1-7-错误三件套（本课集齐的认知地图）&#34; class=&#34;headerlink&#34; title=&#34;1.7 错误三件套（本课集齐的认知地图）&#34;&gt;&lt;/a&gt;1.7 错误三件套（本课集齐的认知地图）&lt;/h3&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;错误类型&lt;/th&gt;
+&lt;th&gt;属于哪个世界&lt;/th&gt;
+&lt;th&gt;发生时机&lt;/th&gt;
+&lt;th&gt;本课实例&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;编译错误（CS0246&amp;#x2F;CS1003）&lt;/td&gt;
+&lt;td&gt;C#&lt;/td&gt;
+&lt;td&gt;编译时，游戏根本跑不起来&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;local&lt;/code&gt; 裸写在 C# 里&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;静默无效&lt;/td&gt;
+&lt;td&gt;Unity&lt;/td&gt;
+&lt;td&gt;不报错但不执行&lt;/td&gt;
+&lt;td&gt;小写 &lt;code&gt;start&lt;/code&gt;、&lt;code&gt;OnSDestroy&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;运行时异常（LuaException）&lt;/td&gt;
+&lt;td&gt;Lua&lt;/td&gt;
+&lt;td&gt;跑到那一行才炸&lt;/td&gt;
+&lt;td&gt;字符串做算术&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;p&gt;排查任何问题先问：这是哪个世界、哪个时机的错？&lt;/p&gt;
+&lt;h2 id=&#34;二、为什么要这样做（关键思想）&#34;&gt;&lt;a href=&#34;#二、为什么要这样做（关键思想）&#34; class=&#34;headerlink&#34; title=&#34;二、为什么要这样做（关键思想）&#34;&gt;&lt;/a&gt;二、为什么要这样做（关键思想）&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;环境风险优先&lt;/strong&gt;：xLua 含原生 C 库（xlua.dll），是最容易和团结引擎不兼容的插件类型。所以铁律是&lt;strong&gt;先跑通 hello world 再学理论&lt;/strong&gt;——绝不学两小时理论才发现装不上。本课验证结果：团结引擎 Tuanjie 1.6.7 兼容 xLua v2.1.16 ✅，兜底方案 MoonSharp 不再需要。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;架构故事&lt;/strong&gt;：阶段 1.2 的 GameEvents 让”引擎层与规则层解耦”；阶段 1.3 的 Lua 让”规则层可热更”。两阶段合起来才完整。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;只迁规则，不迁物理&lt;/strong&gt;：延用”工具匹配”原则——经常要调整的规则&amp;#x2F;数值放 Lua，物理与渲染留在 C#。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;三、关键语法速查&#34;&gt;&lt;a href=&#34;#三、关键语法速查&#34; class=&#34;headerlink&#34; title=&#34;三、关键语法速查&#34;&gt;&lt;/a&gt;三、关键语法速查&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;要点&lt;/th&gt;
+&lt;th&gt;写法&lt;/th&gt;
+&lt;th&gt;说明&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;&lt;tr&gt;
+&lt;td&gt;引入 xLua&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;using XLua;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;和 UnityEngine 一样的引入方式&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;创建虚拟机&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;new LuaEnv()&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;存成&lt;strong&gt;字段&lt;/strong&gt;（OnDestroy 还要用它）&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;执行 Lua&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;luaEnv.DoString(&amp;quot;...&amp;quot;)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;只收一个参数：一个字符串&lt;/strong&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;释放&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;luaEnv.Dispose()&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;放 OnDestroy，与 new 配对&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;多行字符串&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;@&amp;quot;...&amp;quot;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;引号内可直接换行，所有 Lua 装同一对引号里&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Lua 声明变量&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;local x = 10&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;不写类型（动态类型）、不写分号&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Lua 打印&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;print(...)&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;输出到 Unity Console，带 &lt;code&gt;LUA:&lt;/code&gt; 前缀&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;&lt;/table&gt;
+&lt;p&gt;动态类型的精确理解（思考题⑥答辩结论）：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;local x = 10&lt;/code&gt; 后再 &lt;code&gt;x = &amp;#39;hello&amp;#39;&lt;/code&gt; &lt;strong&gt;赋值本身不报错&lt;/strong&gt;——变量像便签，类型跟着值走（C# 里 &lt;code&gt;int x = 10; x = &amp;quot;hello&amp;quot;;&lt;/code&gt; 直接编译不过）。&lt;/li&gt;
+&lt;li&gt;报错发生在&lt;strong&gt;使用那一刻&lt;/strong&gt;：让字符串做 &lt;code&gt;x + 10&lt;/code&gt; 才抛 &lt;code&gt;attempt to perform arithmetic on a string value&lt;/code&gt;。&lt;/li&gt;
+&lt;li&gt;结论：&lt;strong&gt;C# 在编译时拦住类型错误（早、严格）；Lua 把错误推迟到运行时用到的那一刻（晚、隐蔽）&lt;/strong&gt;。灵活的代价是 bug 藏得深。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;四、我踩过的坑&#34;&gt;&lt;a href=&#34;#四、我踩过的坑&#34; class=&#34;headerlink&#34; title=&#34;四、我踩过的坑&#34;&gt;&lt;/a&gt;四、我踩过的坑&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;GitHub Releases 的 Latest 标签是安卓 16KB 变体包&lt;/strong&gt;，真正要下的是纯版本号 &lt;code&gt;v2.1.16&lt;/code&gt;。我质疑过 2021 年的发布日期，学到了判断库”定稿”而非”废弃”的三证据法。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;tgz 发行包只含 Plugins&lt;/strong&gt;，C# 桥代码只在 Source code (zip) 里。导师两次凭旧印象预测错了文件结构，被实物纠正——“依据 &amp;gt; 权威”，&lt;strong&gt;先看实物再动手&lt;/strong&gt;。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Tools 目录误拷进 Assets → CS0433&lt;/strong&gt;（同一类型存在于两个程序集：XLua.Mini vs Assembly-CSharp）。教训：&lt;strong&gt;Tools 是开发流水线工具，永远不进 Assets&lt;/strong&gt;（Assets 只放运行时资源）。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;小写 &lt;code&gt;start()&lt;/code&gt; 和 &lt;code&gt;OnSDestroy()&lt;/code&gt;：没报错，但代码一行都没执行&lt;/strong&gt;。Unity 的 Start&amp;#x2F;Update&amp;#x2F;OnDestroy 是引擎&lt;strong&gt;按名字精确匹配&lt;/strong&gt;来调用的（快递按门牌号投递），名字差一个字母 &amp;#x3D; 查无此户，快递员默默走人。写错的方法在 C# 语法上完全合法，所以编译器和运行时都不吭声。排查口诀：**”没效果又没报错”时，先在方法第一行加 Debug.Log 验证”代码到底被执行了吗”**。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;CS0246（’local’ could not be found）&lt;/strong&gt;：把 &lt;code&gt;local x = 10;&lt;/code&gt; 裸写在 C# 方法体里。C# 编译器把它看成 &lt;code&gt;int x = 10;&lt;/code&gt; 的形状，去找一个叫 &lt;code&gt;local&lt;/code&gt; 的类型，找不到就报错。根源：Lua 代码漏到了密封袋（字符串）外面。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;CS1003（Syntax error, ‘,’ expected）&lt;/strong&gt;：写成 &lt;code&gt;DoString(local x = 10, @&amp;quot;print(x+10)&amp;quot;)&lt;/code&gt;——给只收一个包裹的方法递了两个包裹，其中一个还没打包（没引号）。修正：两行 Lua 全部装进&lt;strong&gt;同一个&lt;/strong&gt; &lt;code&gt;@&amp;quot;...&amp;quot;&lt;/code&gt; 字符串里。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;LuaException 运行时异常&lt;/strong&gt;：&lt;code&gt;[string &amp;quot;chunk&amp;quot;]:4: attempt to perform arithmetic on a string value&lt;/code&gt;。读法：&lt;code&gt;chunk&lt;/code&gt; 的第 4 行、对字符串做算术。报错行号证明了赋值行本身执行成功——错误在”使用”不在”赋值”。&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;五、最终成果&#34;&gt;&lt;a href=&#34;#五、最终成果&#34; class=&#34;headerlink&#34; title=&#34;五、最终成果&#34;&gt;&lt;/a&gt;五、最终成果&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;xLua v2.1.16（lua53 内核）在团结引擎 Tuanjie 1.6.7 上验证通过：&lt;code&gt;Assets/XLua&lt;/code&gt; + &lt;code&gt;Assets/Plugins&lt;/code&gt; 就位，Examples&amp;#x2F;Doc 已删，Console 0 错 0 警。&lt;/li&gt;
+&lt;li&gt;临时脚本 &lt;code&gt;LuaTest.cs&lt;/code&gt;：字段存 LuaEnv → Start 里 new + DoString → OnDestroy 里 Dispose，成功输出 &lt;code&gt;LUA: hello xLua&lt;/code&gt; 和 &lt;code&gt;LUA: 20&lt;/code&gt;（两行 Lua：local 声明 + 算术打印）。&lt;/li&gt;
+&lt;li&gt;完成动态类型实验：亲手制造并读懂了 LuaException。&lt;/li&gt;
+&lt;li&gt;验证完毕后 LuaTest.cs 与挂载物体已删除（死代码原则）。&lt;/li&gt;
+&lt;li&gt;开发计划 Task 15 标记完成。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;代码留档：LuaTest-cs-最终版（删除前归档）&#34;&gt;&lt;a href=&#34;#代码留档：LuaTest-cs-最终版（删除前归档）&#34; class=&#34;headerlink&#34; title=&#34;代码留档：LuaTest.cs 最终版（删除前归档）&#34;&gt;&lt;/a&gt;代码留档：LuaTest.cs 最终版（删除前归档）&lt;/h3&gt;&lt;figure class=&#34;highlight csharp&#34;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;2&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;3&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;4&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;5&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;6&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;7&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;8&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;9&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;10&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;11&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;12&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;13&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;14&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;15&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;16&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;17&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;18&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;19&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;20&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;21&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;22&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;23&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;24&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;25&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;26&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;27&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;28&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;29&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;30&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;31&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;using&lt;/span&gt; XLua;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;using&lt;/span&gt; UnityEngine;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;keyword&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;title&#34;&gt;LuaTest&lt;/span&gt; : &lt;span class=&#34;title&#34;&gt;MonoBehaviour&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;keyword&#34;&gt;private&lt;/span&gt; LuaEnv luaEnv;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;function&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;title&#34;&gt;Start&lt;/span&gt;()&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;        luaEnv = &lt;span class=&#34;keyword&#34;&gt;new&lt;/span&gt; LuaEnv();&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;        &lt;span class=&#34;comment&#34;&gt;//不写类型！Lua 是动态类型&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;        luaEnv.DoString(&lt;span class=&#34;string&#34;&gt;@&amp;quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;string&#34;&gt;            local x = 10&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;string&#34;&gt;            print(x+10)&amp;quot;&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;        &lt;span class=&#34;comment&#34;&gt;/*&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;comment&#34;&gt;        luaEnv.DoString(  ← 括号里只放一个包裹&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;comment&#34;&gt;            @&amp;quot;            ← 大袋子开口&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;comment&#34;&gt;            第一行Lua：local 声明变量并赋值 10&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;comment&#34;&gt;            第二行Lua：print(变量 + 10)&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;comment&#34;&gt;            &amp;quot;             ← 袋子封口&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;comment&#34;&gt;            );            ← 括号关上，分号结束*/&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;        luaEnv.DoString(&lt;span class=&#34;string&#34;&gt;@&amp;quot;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;string&#34;&gt;            local x = 10&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;string&#34;&gt;            print(x+10)&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;string&#34;&gt;            print(&amp;#x27;hello xLua&amp;#x27;)&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;string&#34;&gt;            print(&amp;#x27;hello Lua&amp;#x27;)&amp;quot;&lt;/span&gt;);&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &lt;span class=&#34;function&#34;&gt;&lt;span class=&#34;keyword&#34;&gt;void&lt;/span&gt; &lt;span class=&#34;title&#34;&gt;OnDestroy&lt;/span&gt;()&lt;/span&gt;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &amp;#123;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;        luaEnv.Dispose();&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;    &amp;#125;&lt;/span&gt;&lt;br&gt;&lt;span class=&#34;line&#34;&gt;&amp;#125;&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/figure&gt;
+
+&lt;p&gt;留档备注（重读时提醒自己）：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;两次 &lt;code&gt;DoString&lt;/code&gt; &amp;#x3D; 递给翻译两张&lt;strong&gt;独立的纸条&lt;/strong&gt;：第一张纸条里的 &lt;code&gt;local x&lt;/code&gt; 在第二张纸条里取不到，所以第二张要重新声明——这就是 &lt;code&gt;local&lt;/code&gt; 的作用域边界（第 5 课系统展开）。&lt;/li&gt;
+&lt;li&gt;两张纸条里都叫 &lt;code&gt;x&lt;/code&gt; 却互不冲突，正是因为各自只在自己的纸条内有效。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;new LuaEnv()&lt;/code&gt; 与 &lt;code&gt;Dispose()&lt;/code&gt; 成对出现（配对纪律）；&lt;code&gt;LuaEnv&lt;/code&gt; 存字段而非局部变量，因为 OnDestroy 还要用它。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;六、自测问题（不附答案）&#34;&gt;&lt;a href=&#34;#六、自测问题（不附答案）&#34; class=&#34;headerlink&#34; title=&#34;六、自测问题（不附答案）&#34;&gt;&lt;/a&gt;六、自测问题（不附答案）&lt;/h2&gt;&lt;ol&gt;
+&lt;li&gt;为什么发布后的手游能”不重下客户端就改规则”？C# 为什么做不到？&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;LuaEnv&lt;/code&gt; 为什么要存成字段而不是 Start 里的局部变量？为什么全项目只该有一个？&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;DoString(&amp;quot;print(x)&amp;quot;)&lt;/code&gt; 这行代码里，哪部分归 C# 编译器管，哪部分归 Lua 翻译管？&lt;/li&gt;
+&lt;li&gt;把 &lt;code&gt;Start&lt;/code&gt; 写成 &lt;code&gt;start&lt;/code&gt; 为什么既不编译报错也不运行报错？这种 bug 该怎么第一时间抓出来？&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;local x = 10&lt;/code&gt; 之后执行 &lt;code&gt;x = &amp;#39;hello&amp;#39;&lt;/code&gt; 会报错吗？那什么时候才会报错？这反映了动态类型和静态类型的什么本质区别？&lt;/li&gt;
+&lt;li&gt;为什么”每帧调用 Lua”是反模式？我们项目里哪些逻辑适合放 Lua、哪些必须留在 C#？&lt;/li&gt;
+&lt;li&gt;编译错误、静默无效、运行时异常三者的发生时机各是什么？各举一个本课的真实例子。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;七、下一课预告&#34;&gt;&lt;a href=&#34;#七、下一课预告&#34; class=&#34;headerlink&#34; title=&#34;七、下一课预告&#34;&gt;&lt;/a&gt;七、下一课预告&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;第 5 课：Lua 语言速成&lt;/strong&gt;——正式把 Lua 当第二门语言来学：C# ⇄ Lua 对照表、table（数组+字典合一的唯一容器）、nil、1-based 索引、”只有 false 和 nil 为假（0 是真！）”、函数是值。学完就能看懂并写出我们未来的规则脚本骨架。&lt;/p&gt;
+ ]]></description>
+        </item>
+    </channel>
+</rss>

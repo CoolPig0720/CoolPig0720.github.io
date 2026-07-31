@@ -1,0 +1,813 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Unity 学习笔记（三）：Inspector 序列化与 [Range] | CoolPig的个人网站</title><meta name="author" content="CoolPig"><meta name="copyright" content="CoolPig"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="补齐项目唯一缺失的特性 [Range]，给 3 个有天然区间的字段加上滑条与钳制；更重要的收获是&quot;区间必须有依据&quot;的荒谬检验法，以及一次&quot;不该盲从导师&quot;的教训——依据 &gt; 权威。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Unity 学习笔记（三）：Inspector 序列化与 [Range]">
+<meta property="og:url" content="https://coolpig0720.github.io/2026/07/30/2026-07-30-unity-inspector-range/index.html">
+<meta property="og:site_name" content="CoolPig的个人网站">
+<meta property="og:description" content="补齐项目唯一缺失的特性 [Range]，给 3 个有天然区间的字段加上滑条与钳制；更重要的收获是&quot;区间必须有依据&quot;的荒谬检验法，以及一次&quot;不该盲从导师&quot;的教训——依据 &gt; 权威。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://coolpig0720.github.io/images/avatar.png">
+<meta property="article:published_time" content="2026-07-30T06:00:00.000Z">
+<meta property="article:modified_time" content="2026-07-30T06:00:00.000Z">
+<meta property="article:author" content="CoolPig">
+<meta property="article:tag" content="Unity">
+<meta property="article:tag" content="C#">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://coolpig0720.github.io/images/avatar.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Unity 学习笔记（三）：Inspector 序列化与 [Range]",
+  "url": "https://coolpig0720.github.io/2026/07/30/2026-07-30-unity-inspector-range/",
+  "image": "https://coolpig0720.github.io/images/avatar.png",
+  "datePublished": "2026-07-30T06:00:00.000Z",
+  "dateModified": "2026-07-30T06:00:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "CoolPig",
+      "url": "https://CoolPig0720.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/images/favicon.ico"><link rel="canonical" href="https://coolpig0720.github.io/2026/07/30/2026-07-30-unity-inspector-range/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.4"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'medium_zoom',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.13.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: false,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Unity 学习笔记（三）：Inspector 序列化与 [Range]',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head><body><div class="bg-animation" id="web_bg" style="background-color: #f5f7fa;"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/images/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">11</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/cv/"><i class="fa-fw fas fa-file-alt"></i><span> 关于我</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="not-top-img" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/images/profile.png" alt="Logo"><span class="site-name">CoolPig的个人网站</span></a><a class="nav-page-title" href="/"><span class="site-name">Unity 学习笔记（三）：Inspector 序列化与 [Range]</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 文章</span></a></div><div class="menus_item"><a class="site-page" href="/cv/"><i class="fa-fw fas fa-file-alt"></i><span> 关于我</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav></header><main class="layout" id="content-inner"><div id="post"><div id="post-info"><h1 class="post-title">Unity 学习笔记（三）：Inspector 序列化与 [Range]</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-07-30T06:00:00.000Z" title="发表于 2026-07-30 14:00:00">2026-07-30</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-07-30T06:00:00.000Z" title="更新于 2026-07-30 14:00:00">2026-07-30</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">学习笔记</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">2.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><article class="container post-content" id="article-container"><blockquote>
+<p>课程对应：3D 台球 Demo 阶段 1.2 &#x2F; Task 13，完成日期 2026-07-31</p>
+<p>成果：补齐项目唯一缺失的特性 <code>[Range]</code>，给 3 个有天然区间的字段加上滑条与钳制；更重要的收获是”<strong>区间必须有依据</strong>“的判断方法，以及一次”不该盲从导师”的教训。</p>
+</blockquote>
+<h2 id="一、核心理论"><a href="#一、核心理论" class="headerlink" title="一、核心理论"></a>一、核心理论</h2><h3 id="1-1-序列化（Serialization）：Inspector-里的值存在哪？"><a href="#1-1-序列化（Serialization）：Inspector-里的值存在哪？" class="headerlink" title="1.1 序列化（Serialization）：Inspector 里的值存在哪？"></a>1.1 序列化（Serialization）：Inspector 里的值存在哪？</h3><p>每天在 Inspector 里拖引用、调数值，这些值存在<strong>场景文件（.scene）和预制体文件</strong>里。Unity 把脚本对象的字段值”写进文件保存、读出文件恢复”的机制叫<strong>序列化</strong>。</p>
+<p><strong>类比</strong>：序列化就像给对象<strong>拍证件照存档</strong>——关闭 Unity 时把每个字段的值拍照存进场景文件，下次打开照着照片恢复。<strong>Inspector 就是这套存档系统的编辑界面。</strong></p>
+<p>哪些字段会被拍进照片：</p>
+<table>
+<thead>
+<tr>
+<th>写法</th>
+<th>序列化</th>
+<th>Inspector 可见</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>public float speed;</code></td>
+<td>✓ 默认</td>
+<td>✓</td>
+</tr>
+<tr>
+<td><code>private float speed;</code></td>
+<td>✗</td>
+<td>✗</td>
+</tr>
+<tr>
+<td><code>[SerializeField] private float speed;</code></td>
+<td>✓</td>
+<td>✓</td>
+</tr>
+</tbody></table>
+<h3 id="1-2-特性（Attribute）：贴在代码上的”标签”"><a href="#1-2-特性（Attribute）：贴在代码上的”标签”" class="headerlink" title="1.2 特性（Attribute）：贴在代码上的”标签”"></a>1.2 特性（Attribute）：贴在代码上的”标签”</h3><blockquote>
+<p>特性 &#x3D; 贴在类&#x2F;字段&#x2F;方法上的<strong>标签</strong>。它自己不执行任何逻辑，而是等着<strong>别人</strong>（编译器、Unity 引擎、Inspector 绘制系统）来读标签、改变对待方式。</p>
+</blockquote>
+<p><strong>类比</strong>：快递箱上的”易碎品”贴纸。贴纸本身不保护箱子，是<strong>快递员看到贴纸后</strong>改变了搬运方式。</p>
+<p>冷知识：每个特性背后都是一个真实的类（<code>[Range]</code> → <code>RangeAttribute</code>），方括号是”实例化标签并贴上去”的简写语法。括号里的内容是传给标签的参数。</p>
+<p>多个特性可分行叠写（本项目风格），也可挤一行用逗号分隔：<code>[Header(&quot;引用&quot;), Tooltip(&quot;...&quot;)]</code>。<strong>保持全项目一致 &gt; 个人偏好</strong>。</p>
+<h3 id="1-3-特性四件套详解"><a href="#1-3-特性四件套详解" class="headerlink" title="1.3 特性四件套详解"></a>1.3 特性四件套详解</h3><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>类别</th>
+<th>作用</th>
+<th>贴在哪</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>[SerializeField]</code></td>
+<td><strong>功能型</strong></td>
+<td>让 private 字段被序列化 + 面板可见</td>
+<td>每个需要的字段各贴一次</td>
+</tr>
+<tr>
+<td><code>[Header(&quot;x&quot;)]</code></td>
+<td>视觉型</td>
+<td>往下开一个加粗分组</td>
+<td>每组的<strong>第一个</strong>字段上方</td>
+</tr>
+<tr>
+<td><code>[Tooltip(&quot;x&quot;)]</code></td>
+<td>视觉型</td>
+<td>悬停说明，给<strong>调参的人</strong>看</td>
+<td>需要解释的字段上</td>
+</tr>
+<tr>
+<td><code>[Range(a,b)]</code></td>
+<td>视觉型</td>
+<td>输入框变滑条 + 钳制手动输入</td>
+<td>有天然区间的<strong>数值</strong>字段上</td>
+</tr>
+</tbody></table>
+<h4 id="SerializeField-：唯一真正”干活”的"><a href="#SerializeField-：唯一真正”干活”的" class="headerlink" title="[SerializeField]：唯一真正”干活”的"></a><code>[SerializeField]</code>：唯一真正”干活”的</h4><p>它解决的矛盾——不用它只有两个坏选择：</p>
+<ul>
+<li><code>public</code>：能在面板调，但<strong>任何脚本都能乱改</strong>，破坏封装；</li>
+<li><code>private</code>：封装好了，但<strong>面板看不见，没法调参</strong>。</li>
+</ul>
+<p><code>[SerializeField] private</code> 两头兼顾：<strong>对程序员关门，对策划开窗。</strong></p>
+<blockquote>
+<p>镜像特性：<code>[HideInInspector]</code> —— public 字段照常序列化，但面板里藏起来。</p>
+</blockquote>
+<h4 id="Header-：它不属于那个字段"><a href="#Header-：它不属于那个字段" class="headerlink" title="[Header]：它不属于那个字段"></a><code>[Header]</code>：它不属于那个字段</h4><p><code>[Header]</code> 贴在字段上，但语义是”<strong>从这里往下开一个新区</strong>“，所以只写在每组第一个字段上方。字段一多（如 CueController 有几十个），没分组的面板就是一片数字沼泽。</p>
+<h4 id="Tooltip-vs-XML-注释：分工"><a href="#Tooltip-vs-XML-注释：分工" class="headerlink" title="[Tooltip] vs /// &lt;summary&gt; XML 注释：分工"></a><code>[Tooltip]</code> vs <code>/// &lt;summary&gt;</code> XML 注释：分工</h4><table>
+<thead>
+<tr>
+<th></th>
+<th>给谁看</th>
+<th>在哪看</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/// &lt;summary&gt;</code></td>
+<td><strong>读代码的人</strong>（程序员）</td>
+<td>代码里 &#x2F; 悬停变量名的智能提示</td>
+</tr>
+<tr>
+<td><code>[Tooltip]</code></td>
+<td><strong>调参的人</strong>（策划、面板前的自己）</td>
+<td>Unity Inspector 面板</td>
+</tr>
+</tbody></table>
+<p>判断标准：这条信息是”<strong>动手配置的人</strong>需要知道的”→ Tooltip；是”<strong>改代码的人</strong>需要知道的”→ XML 注释。重要字段两个都写。</p>
+<p><strong>反面案例</strong>：GameManager 的 <code>tableSurface</code> 若只写代码注释，面板前拖引用的人永远看不到”必须和 CueBallPlacer 用同一个台面”，随手拖错就导致出界判定全错。</p>
+<h3 id="1-4-Range-min-max-的两个价值"><a href="#1-4-Range-min-max-的两个价值" class="headerlink" title="1.4 [Range(min, max)] 的两个价值"></a>1.4 <code>[Range(min, max)]</code> 的两个价值</h3><ol>
+<li><strong>防手滑</strong>：手动输入也会被钳到区间内——不会出现”想输 0.15 多敲个 0 变 1.5”的事故；</li>
+<li><strong>传达设计意图</strong>：滑条两端在告诉所有人”这个参数的合理世界只有这么大”。<strong>Tooltip 是建议，Range 是围栏。</strong></li>
+</ol>
+<p><strong>破除误解：加了 Range 不是只能拖滑条！</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">无 Range：  Off Table Drop   [    0.15    ]</span><br><span class="line">有 Range：  Off Table Drop   ▬▬▬●▬▬▬▬  [ 0.15 ]   ← 右边输入框照样能打字</span><br></pre></td></tr></table></figure>
+
+<p>滑条是<strong>多送的</strong>快速试值工具，没有抢走手输能力。唯一的行为改变是超界值被钳制。</p>
+<p><strong>附带好处</strong>：滑块位置本身是信息——看到滑块在偏左 20% 的位置，一眼就知道”当前值在合理区间的靠前段，右边还有大量调参空间”。光看数字 <code>0.02</code> 得不到这个信息。</p>
+<p>**区别于”标签拖拽”**（按住字段名左右拖动改值）：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>标签拖拽</th>
+<th>Range 滑条</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>范围</td>
+<td><strong>无边界</strong>，能拖到几万</td>
+<td>限定在设计区间内</td>
+</tr>
+<tr>
+<td>传达信息</td>
+<td>无</td>
+<td>当前值在区间中的位置</td>
+</tr>
+<tr>
+<td>手滑保护</td>
+<td>无</td>
+<td>有</td>
+</tr>
+</tbody></table>
+<h3 id="1-5-特性的能力边界（思考题⑩）"><a href="#1-5-特性的能力边界（思考题⑩）" class="headerlink" title="1.5 特性的能力边界（思考题⑩）"></a>1.5 特性的能力边界（思考题⑩）</h3><p>代码里写 <code>pocketSinkDuration = 99f;</code> <strong>不会</strong>被 Range 拦住。</p>
+<blockquote>
+<p><strong>Range 是给面板前的”手”设的围栏，不是给运行中的”代码”设的围栏。</strong></p>
+</blockquote>
+<p>因为特性是给 <strong>Inspector 绘制系统</strong>看的标签，而运行时的一行赋值根本不经过 Inspector。<strong>特性只影响编辑器表现，不影响运行时逻辑</strong>——这是无数初学者以为”加了 Range 就万事大吉”的经典盲区。</p>
+<p>真要在运行时强制约束，用 <code>Mathf.Clamp(值, min, max)</code>（本项目 <code>Mathf.Clamp01(currentPower)</code> 就是它的 0~1 版本）。</p>
+<h2 id="二、本课核心技能：怎么定区间"><a href="#二、本课核心技能：怎么定区间" class="headerlink" title="二、本课核心技能：怎么定区间"></a>二、本课核心技能：怎么定区间</h2><h3 id="2-1-该加与不该加（思考题⑪）"><a href="#2-1-该加与不该加（思考题⑪）" class="headerlink" title="2.1 该加与不该加（思考题⑪）"></a>2.1 该加与不该加（思考题⑪）</h3><blockquote>
+<p><strong>只给”有天然合理区间”的字段加 Range。</strong> 自问：① 有没有”超出某范围必然错误&#x2F;荒谬”的边界？② min&#x2F;max 我能不能<strong>说出依据</strong>？</p>
+</blockquote>
+<p>不该加的：</p>
+<ul>
+<li><strong>非数值字段</strong>（如 <code>cushionTag</code> 字符串）；</li>
+<li><strong>没有对错边界的值</strong>——取决于场景摆放&#x2F;美术摆位的数值（相机预设位姿、依赖台面尺寸的量），它们的”合理值”由摆位决定，硬加一个拍脑袋的 max 反而是<strong>谎言</strong>，后来人会误以为”超过就不合理”。</li>
+</ul>
+<p><strong>说不出依据的区间，不如不加。</strong></p>
+<h3 id="2-2-区间-≠-围着当前值画圈（本课最大的坑）"><a href="#2-2-区间-≠-围着当前值画圈（本课最大的坑）" class="headerlink" title="2.2 区间 ≠ 围着当前值画圈（本课最大的坑）"></a>2.2 区间 ≠ 围着当前值画圈（本课最大的坑）</h3><p>第一版清单我给 <code>offTableDrop</code>（当前 0.15）定了 [0.1, 0.2]、<code>offTableHorizontalMargin</code>（当前 0.02）定了 [0.01, 0.03]——<strong>都是围着当前值画的小圈</strong>。</p>
+<p>反效果：以后想试 0.3 看看效果，滑条不让输，还得回代码改 Range。<strong>Range 从”保护”变成了”绊脚石”。</strong></p>
+<blockquote>
+<p><strong>正确含义：min&#x2F;max 不是”我现在觉得好用的范围”，而是”超出此界必然荒谬”的边界。区间内要留足调参探索空间，当前值通常应落在区间靠前段。</strong></p>
+</blockquote>
+<h3 id="2-3-“荒谬检验法”：依据从哪来"><a href="#2-3-“荒谬检验法”：依据从哪来" class="headerlink" title="2.3 “荒谬检验法”：依据从哪来"></a>2.3 “荒谬检验法”：依据从哪来</h3><p>对每个端点问：<strong>这个值取到多少会变得荒谬？荒谬在哪？</strong></p>
+<p>依据的三个来源：</p>
+<ol>
+<li><strong>物理量锚点</strong>：球半径 0.028m、直径 0.057m —— 阈值小于一个球的尺度必然是误判；</li>
+<li><strong>字段注释</strong>：<code>offTableHorizontalMargin</code> 的注释明写”0&#x3D;正好台面边缘” → min&#x3D;0 的依据现成的；<code>sweepCaptureScale</code> 注释写”<strong>&gt;1</strong> 补偿偏心入袋” → min&#x3D;1 的依据现成的；</li>
+<li><strong>功能失效点</strong>：捕获系数太大 → 会把台面上正常滚动的球误吸进袋 → max 的依据。</li>
+</ol>
+<blockquote>
+<p><strong>区间的依据从字段语义、注释和物理量里读出来，不是拍脑袋。</strong></p>
+</blockquote>
+<h2 id="三、我踩过的坑"><a href="#三、我踩过的坑" class="headerlink" title="三、我踩过的坑"></a>三、我踩过的坑</h2><h3 id="坑1：以为-Range-会牺牲手输精度-→-拒绝使用"><a href="#坑1：以为-Range-会牺牲手输精度-→-拒绝使用" class="headerlink" title="坑1：以为 Range 会牺牲手输精度 → 拒绝使用"></a>坑1：以为 Range 会牺牲手输精度 → 拒绝使用</h3><p>以为加了 Range 只能拖滑条，精度不如手输，所以不想用。</p>
+<blockquote>
+<p><strong>纠正</strong>：Range 是”滑条 + 输入框”并存，手输能力完全保留。<br><strong>教训</strong>：对一个功能的抗拒，先确认自己对它的理解是否准确——<strong>基于误解做的技术决策，是最隐蔽的浪费</strong>。</p>
+</blockquote>
+<h3 id="坑2：把”调好的值域”当成”合理区间”"><a href="#坑2：把”调好的值域”当成”合理区间”" class="headerlink" title="坑2：把”调好的值域”当成”合理区间”"></a>坑2：把”调好的值域”当成”合理区间”</h3><p>见 2.2。区间太紧 &#x3D; 未来的自己被绊住。</p>
+<h3 id="坑3（最重要）：放弃自己有依据的推理，去迁就导师一句没依据的话"><a href="#坑3（最重要）：放弃自己有依据的推理，去迁就导师一句没依据的话" class="headerlink" title="坑3（最重要）：放弃自己有依据的推理，去迁就导师一句没依据的话"></a>坑3（最重要）：放弃自己有依据的推理，去迁就导师一句没依据的话</h3><p>第二版我按球半径推出 <code>offTableHorizontalMargin</code> max ≈ 0.03（”0.03 已大于半径 0.028，球超出一个半径就会掉了”）——<strong>这个物理推理是正确的</strong>。</p>
+<p>导师说”真正的 max 比 0.03 大得多”（<strong>导师没算量级，这句是错的</strong>），我就改成了 <strong>0.3</strong>（&#x3D; 30cm，超过台宽四分之一，球飘出台外 30cm 还不判出界 → 检测等于永不生效，比 0.03 更荒谬）。</p>
+<p>而我当时的原话是：”我一开始是这么想的，<strong>但是你说还不够，那我改成 0.3</strong>“。</p>
+<blockquote>
+<p><strong>教训：依据 &gt; 权威。</strong> 导师的话也必须接受”荒谬检验法”的检验。正确反应是<strong>反问</strong>：”我按球半径算的，0.03 已超过一个半径，你说还不够——依据是什么？”——一问对方就得承认算错。<br><strong>附带认知</strong>：这也是”每个区间都必须写依据”的深层价值——<strong>依据是可被审查的，数字不是</strong>。只交数字，错误就会被埋进代码，谁也发现不了。</p>
+</blockquote>
+<p>最终定稿 max &#x3D; 0.1（≈3.5 个球半径）：比调参舒适区宽数倍，又不到”永不判出界”的荒谬区。</p>
+<h2 id="四、最终成果"><a href="#四、最终成果" class="headerlink" title="四、最终成果"></a>四、最终成果</h2><table>
+<thead>
+<tr>
+<th>字段</th>
+<th>区间</th>
+<th>依据</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Ball.offTableDrop</code>（当前 0.15）</td>
+<td>[0.05, 0.5]</td>
+<td>min：小于一个球直径（0.057m）的下坠必然是误判；max：留足探索空间，再大则永远判不出界</td>
+</tr>
+<tr>
+<td><code>Ball.offTableHorizontalMargin</code>（当前 0.02）</td>
+<td>[0, 0.1]</td>
+<td>min&#x3D;0：注释明定”0&#x3D;正好台面边缘”，负值意味判定线跑进台面内部；max≈3.5 个球半径，超此距离球必然已完全离台</td>
+</tr>
+<tr>
+<td><code>PocketDetector.sweepCaptureScale</code>（当前 1.25）</td>
+<td>[1, 2]</td>
+<td>min&#x3D;1：注释要求 &gt;1，等大于触发器是下界；max&#x3D;2：捕获半径两倍于袋口，再大会误吸台面上正常滚动的球</td>
+</tr>
+</tbody></table>
+<p>未加 Range 的字段（有意为之）：<code>cushionTag</code>（字符串）、<code>pocketSinkDuration</code> &#x2F; <code>pocketSinkDepth</code>（本轮未纳入，纯视觉动画参数）。</p>
+<p><strong>项目规矩确立</strong>：特性顺序统一为 <code>[Tooltip]</code> → <code>[Range]</code> → <code>[SerializeField]</code>，三处一致。</p>
+<p><strong>待办（可选）</strong>：把三条依据补进 Tooltip——面板上调参的人正需要这个信息。</p>
+<h2 id="五、自测问题（不附答案）"><a href="#五、自测问题（不附答案）" class="headerlink" title="五、自测问题（不附答案）"></a>五、自测问题（不附答案）</h2><ol>
+<li>序列化是什么？<code>[SerializeField] private</code> 这个组合同时满足了哪两个互相矛盾的需求？</li>
+<li>特性（Attribute）自己会执行逻辑吗？它是靠什么机制起作用的？</li>
+<li><code>[Tooltip]</code> 和 <code>/// &lt;summary&gt;</code> 分别给谁看、在哪看？举一个”只写 XML 注释会出事”的例子。</li>
+<li>代码里给带 <code>[Range(0, 1)]</code> 的字段赋值 99，会被拦住吗？为什么？真要拦住该用什么？</li>
+<li>加了 <code>[Range]</code> 之后还能手动输入精确值吗？滑块的位置本身提供了什么信息？</li>
+<li>判断一个字段该不该加 Range 的两个自问问题是什么？举一个本项目里”不该加”的字段并说明理由。</li>
+<li>为什么”围着当前值画的小圈”是错的区间？会带来什么后果？</li>
+<li>“荒谬检验法”怎么用？定区间的依据有哪三个来源？</li>
+<li>当导师&#x2F;同事否定你有依据的判断时，正确的反应是什么？为什么”必须写依据”能防住这类错误？</li>
+</ol>
+<h2 id="六、阶段-1-2-全部完成"><a href="#六、阶段-1-2-全部完成" class="headerlink" title="六、阶段 1.2 全部完成"></a>六、阶段 1.2 全部完成</h2><table>
+<thead>
+<tr>
+<th>Task</th>
+<th>内容</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>10</td>
+<td>协程优化回合切换</td>
+<td>✅（本次课程前已完成）</td>
+</tr>
+<tr>
+<td>11</td>
+<td>事件系统重构 GameEvents.cs</td>
+<td>✅ 第1课</td>
+</tr>
+<tr>
+<td>12</td>
+<td>对象池 ObjectPool.cs</td>
+<td>✅ 第2课（工具保留 + 缓存优化替代接入）</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Inspector 序列化优化 [Range]</td>
+<td>✅ 第3课</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Ball.cs 职责拆分</td>
+<td>✅（本次课程前已完成）</td>
+</tr>
+</tbody></table>
+<p><strong>下一站：阶段 1.3 xLua 集成</strong>（Task 15~18）——xLua 安装、LuaManager、规则判定迁移到 Lua、热重载验证。第1课的 <code>GameEvents</code> 会在那时迎来它的战略价值：Lua 只需对接这一个总机。</p>
+</article><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Unity/">Unity</a><a class="post-meta__tags" href="/tags/C/">C#</a></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/07/30/2026-07-30-unity-xlua-hotupdate/" title="Unity 学习笔记（四）：xLua 环境搭建与热更新原理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Unity 学习笔记（四）：xLua 环境搭建与热更新原理</div></div><div class="info-2"><div class="info-item-1"> 课程对应：3D 台球 Demo 阶段 1.3 &#x2F; Task 15，完成日期 2026-07-30 本课目标：把 xLua 装进团结引擎并跑通 hello world，理解”为什么要引入第二门语言”。验证结果：团结引擎 Tuanjie 1.6.7 兼容 xLua v2.1.16 ✅  一、核心理论1.1 为什么要引入脚本语言（Lua） C# 的问题：改一行代码 → 重新编译 → 重启播放；发布后更致命——C# 被编译成 Mono&#x2F;IL2CPP 产物打进客户端，想改规则只能让玩家重新下载整个包。 Lua 的本质：文本。不参与编译，运行时才被读取、解释执行。文本 &#x3D; 随时可以换。  1.2 热更新（Hot Update） 类比：电影放映机换胶片。放映机（C# 引擎层：物理&#x2F;渲染&#x2F;输入）不动，换胶片（Lua 规则脚本）就能放新片。 手游”不用重下客户端就修了 bug &#x2F; 换了活动规则”，多半就是这套机制。  1.3 热重载（Hot Reload） 比热更新更极端：电影正在放映时换胶片——游戏运行中改规则、立即生效，不停止播放。...</div></div></div></a><a class="pagination-related" href="/2026/07/30/2026-07-30-unity-objectpool/" title="Unity 学习笔记（二）：泛型对象池与工具匹配思维"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Unity 学习笔记（二）：泛型对象池与工具匹配思维</div></div><div class="info-2"><div class="info-item-1"> 课程对应：3D 台球 Demo 阶段 1.2 &#x2F; Task 12，完成日期 2026-07-30 成果：新建通用泛型工具 Assets/Scripts/ObjectPool.cs（Get&#x2F;Return&#x2F;预热&#x2F;自动扩容）；经”工具匹配分析”决定不接入台球复位流程，改为 GameManager.RestartGame 缓存名单优化，消灭每次重开局的 FindObjectsOfType 全场景搜索。  一、核心理论1.1 问题起点：Instantiate &#x2F; Destroy 有多贵Unity 创建&#x2F;销毁物体的标准做法是 Instantiate(prefab) 和 Destroy(obj)。偶尔用没问题，高频使用会出大事：  创建贵：Instantiate 要分配内存、克隆组件、初始化物理，是重操作； 销毁更阴险：Destroy 之后那块内存变成”垃圾”，等 GC（Garbage Collector，垃圾回收器） 清理。  GC 是 C# 的自动内存管家，但它有个致命脾气：  GC 打扫时，整个游戏暂停。  类比：GC 是收垃...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/07/30/2026-07-30-unity-xlua-hotupdate/" title="Unity 学习笔记（四）：xLua 环境搭建与热更新原理"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-07-30</div><div class="info-item-2">Unity 学习笔记（四）：xLua 环境搭建与热更新原理</div></div><div class="info-2"><div class="info-item-1"> 课程对应：3D 台球 Demo 阶段 1.3 &#x2F; Task 15，完成日期 2026-07-30 本课目标：把 xLua 装进团结引擎并跑通 hello world，理解”为什么要引入第二门语言”。验证结果：团结引擎 Tuanjie 1.6.7 兼容 xLua v2.1.16 ✅  一、核心理论1.1 为什么要引入脚本语言（Lua） C# 的问题：改一行代码 → 重新编译 → 重启播放；发布后更致命——C# 被编译成 Mono&#x2F;IL2CPP 产物打进客户端，想改规则只能让玩家重新下载整个包。 Lua 的本质：文本。不参与编译，运行时才被读取、解释执行。文本 &#x3D; 随时可以换。  1.2 热更新（Hot Update） 类比：电影放映机换胶片。放映机（C# 引擎层：物理&#x2F;渲染&#x2F;输入）不动，换胶片（Lua 规则脚本）就能放新片。 手游”不用重下客户端就修了 bug &#x2F; 换了活动规则”，多半就是这套机制。  1.3 热重载（Hot Reload） 比热更新更极端：电影正在放映时换胶片——游戏运行中改规则、立即生效，不停止播放。...</div></div></div></a><a class="pagination-related" href="/2026/07/30/2026-07-30-unity-objectpool/" title="Unity 学习笔记（二）：泛型对象池与工具匹配思维"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-07-30</div><div class="info-item-2">Unity 学习笔记（二）：泛型对象池与工具匹配思维</div></div><div class="info-2"><div class="info-item-1"> 课程对应：3D 台球 Demo 阶段 1.2 &#x2F; Task 12，完成日期 2026-07-30 成果：新建通用泛型工具 Assets/Scripts/ObjectPool.cs（Get&#x2F;Return&#x2F;预热&#x2F;自动扩容）；经”工具匹配分析”决定不接入台球复位流程，改为 GameManager.RestartGame 缓存名单优化，消灭每次重开局的 FindObjectsOfType 全场景搜索。  一、核心理论1.1 问题起点：Instantiate &#x2F; Destroy 有多贵Unity 创建&#x2F;销毁物体的标准做法是 Instantiate(prefab) 和 Destroy(obj)。偶尔用没问题，高频使用会出大事：  创建贵：Instantiate 要分配内存、克隆组件、初始化物理，是重操作； 销毁更阴险：Destroy 之后那块内存变成”垃圾”，等 GC（Garbage Collector，垃圾回收器） 清理。  GC 是 C# 的自动内存管家，但它有个致命脾气：  GC 打扫时，整个游戏暂停。  类比：GC 是收垃...</div></div></div></a><a class="pagination-related" href="/2026/07/30/2026-07-30-unity-gameevents/" title="Unity 学习笔记（一）：事件系统重构——打造 GameEvents 事件中心"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-07-30</div><div class="info-item-2">Unity 学习笔记（一）：事件系统重构——打造 GameEvents 事件中心</div></div><div class="info-2"><div class="info-item-1"> 课程对应：3D 台球 Demo 阶段 1.2 &#x2F; Task 11，完成日期 2026-07-29 成果：新建 Assets/Scripts/GameEvents.cs，把原先分散在 4 个脚本里的 11 个 static 事件，集中为 10 个事件（含 1 次死代码裁员），全项目 5 个脚本完成解耦，实机验证行为不变。  一、核心理论1.1 为什么需要事件？——从”耦合”这个问题说起场景：蓄力时右侧力度条要跟着涨。 最直白的写法是球杆直接调用 UI： 1球杆脚本：蓄力变化了 → uiManager.更新力度条(当前力度)  问题在于球杆必须”认识”UIManager（要持有它的引用）。这就像把两台电器焊死在一起：  删掉 UIManager，球杆脚本立刻编译报错； 音效系统也想在蓄力时播声音？球杆还得再认识一个 AudioManager，越焊越多。  这种”你中有我”的关系叫耦合（Coupling）。耦合越重，代码越难改。 1.2 解决方案：发布-订阅模式换个思路：球杆不打电话给任何人，只对空气大喊“我的力度变成 0.7 了”。谁关心谁自己竖起耳朵听。  球杆 &#x...</div></div></div></a><a class="pagination-related" href="/2026/05/11/2026-05-11-interview-huanlehuyu/" title="客户端性能测试面试记录（欢乐互娱）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-05-11</div><div class="info-item-2">客户端性能测试面试记录（欢乐互娱）</div></div><div class="info-2"><div class="info-item-1">什么是静态合批？什么是动态合批？什么是实例化？概念定义 静态合批：在项目构建阶段，对标记为 Static 的静态物体的网格进行合并，生成一个合并后的大网格与材质包。运行时仅提交 1 次 DrawCall，全程不再修改，CPU 开销极低。  动态合批：在运行时实时对符合条件的动态物体进行网格合并，每帧都要执行合批计算，CPU 有额外开销，无需提前标记 Static。  实例化（GPU Instancing）：同一个 Mesh、同一个 Material，只上传一次模型数据，GPU 重复绘制多份。适用于草、树、子弹、重复小怪、同类特效等。   适用场景与限制对比   特性 静态合批 动态合批 实例化    执行时机 构建阶段 运行时每帧 运行时   CPU 开销 极低 较高 低   顶点限制 无上限 低于 900 无硬性限制   材质要求 可不同 必须完全一致 必须完全一致   Transform 修改 禁止（会失效） 允许 允许   适用对象 地形、建筑、固定装饰 特效、UI、小型动态物件 大量重复物体   额外代价 包体与内存占用增加 CPU 每帧计算 需要相同 Mesh + Ma...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/images/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">CoolPig</div><div class="author-info-description">路虽远行则将至，事虽难做则必成。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">12</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">11</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">3</div></a></div><div class="card-info-social-icons"><a class="social-icon" href="/Github" target="_blank" title="'#24292e'\r"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:coolpig0720@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的个人网站！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%A0%B8%E5%BF%83%E7%90%86%E8%AE%BA"><span class="toc-text">一、核心理论</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%9C%AC%E8%AF%BE%E6%A0%B8%E5%BF%83%E6%8A%80%E8%83%BD%EF%BC%9A%E6%80%8E%E4%B9%88%E5%AE%9A%E5%8C%BA%E9%97%B4"><span class="toc-text">二、本课核心技能：怎么定区间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E6%88%91%E8%B8%A9%E8%BF%87%E7%9A%84%E5%9D%91"><span class="toc-text">三、我踩过的坑</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%9C%80%E7%BB%88%E6%88%90%E6%9E%9C"><span class="toc-text">四、最终成果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E8%87%AA%E6%B5%8B%E9%97%AE%E9%A2%98%EF%BC%88%E4%B8%8D%E9%99%84%E7%AD%94%E6%A1%88%EF%BC%89"><span class="toc-text">五、自测问题（不附答案）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E9%98%B6%E6%AE%B5-1-2-%E5%85%A8%E9%83%A8%E5%AE%8C%E6%88%90"><span class="toc-text">六、阶段 1.2 全部完成</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/30/2026-07-30-unity-xlua-hotupdate/" title="Unity 学习笔记（四）：xLua 环境搭建与热更新原理">Unity 学习笔记（四）：xLua 环境搭建与热更新原理</a><time datetime="2026-07-30T07:00:00.000Z" title="发表于 2026-07-30 15:00:00">2026-07-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/30/2026-07-30-unity-inspector-range/" title="Unity 学习笔记（三）：Inspector 序列化与 [Range]">Unity 学习笔记（三）：Inspector 序列化与 [Range]</a><time datetime="2026-07-30T06:00:00.000Z" title="发表于 2026-07-30 14:00:00">2026-07-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/30/2026-07-30-unity-objectpool/" title="Unity 学习笔记（二）：泛型对象池与工具匹配思维">Unity 学习笔记（二）：泛型对象池与工具匹配思维</a><time datetime="2026-07-30T05:00:00.000Z" title="发表于 2026-07-30 13:00:00">2026-07-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/30/2026-07-30-unity-gameevents/" title="Unity 学习笔记（一）：事件系统重构——打造 GameEvents 事件中心">Unity 学习笔记（一）：事件系统重构——打造 GameEvents 事件中心</a><time datetime="2026-07-30T04:00:00.000Z" title="发表于 2026-07-30 12:00:00">2026-07-30</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/07/30/2026-07-30-hlsl-sdf-shapes/" title="HLSL 学习笔记（五）：距离场与基础形状（SDF 思想）">HLSL 学习笔记（五）：距离场与基础形状（SDF 思想）</a><time datetime="2026-07-30T03:00:00.000Z" title="发表于 2026-07-30 11:00:00">2026-07-30</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By CoolPig</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 7.3.0</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.4</a></span></div><div class="footer_custom_text">记录游戏开发与图形学习之路 🎮</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.4"></script><script src="/js/main.js?v=5.5.4"></script><script src="/js/tw_cn.js?v=5.5.4"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom@1.1.0/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const loadMathjax = () => {
+    if (!window.MathJax) {
+      window.MathJax = {
+        loader: {
+          load: [
+            // Four font extension packages (optional)
+            //- '[tex]/bbm',
+            //- '[tex]/bboldx',
+            //- '[tex]/dsfont',
+            '[tex]/mhchem'
+          ],
+          paths: {
+            'mathjax-newcm': '[mathjax]/../@mathjax/mathjax-newcm-font',
+
+            //- // Four font extension packages (optional)
+            //- 'mathjax-bbm-extension': '[mathjax]/../@mathjax/mathjax-bbm-font-extension',
+            //- 'mathjax-bboldx-extension': '[mathjax]/../@mathjax/mathjax-bboldx-font-extension',
+            //- 'mathjax-dsfont-extension': '[mathjax]/../@mathjax/mathjax-dsfont-font-extension',
+            'mathjax-mhchem-extension': '[mathjax]/../@mathjax/mathjax-mhchem-font-extension'
+          }
+        },
+        output: {
+          font: 'mathjax-newcm',
+        },
+        tex: {
+          inlineMath: [['$', '$'], ['\\(', '\\)']],
+          tags: 'none',
+          packages: {
+            '[+]': [
+              'mhchem'
+            ]
+          }
+        },
+        chtml: {
+          scale: 1.1
+        },
+        options: {
+          enableMenu: true,
+          menuOptions: {
+            settings: {
+              enrich: false  // Turn off Braille and voice narration text automatic generation
+            }
+          },
+          renderActions: {
+            findScript: [10, doc => {
+              for (const node of document.querySelectorAll('script[type^="math/tex"]')) {
+                const display = !!node.type.match(/; *mode=display/)
+                const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display)
+                const text = document.createTextNode('')
+                node.parentNode.replaceChild(text, node)
+                math.start = {node: text, delim: '', n: 0}
+                math.end = {node: text, delim: '', n: 0}
+                doc.math.push(math)
+              }
+            }, '']
+          }
+        }
+      }
+
+      const script = document.createElement('script')
+      script.src = 'https://cdn.jsdelivr.net/npm/mathjax@4.1.0/tex-mml-chtml.min.js'
+      script.id = 'MathJax-script'
+      script.async = true
+      document.head.appendChild(script)
+    } else {
+      MathJax.startup.document.state(0)
+      MathJax.texReset()
+      MathJax.typesetPromise()
+    }
+  }
+
+  btf.addGlobalFn('encrypt', loadMathjax, 'mathjax')
+  window.pjax ? loadMathjax() : window.addEventListener('load', loadMathjax)
+})()</script><script>(() => {
+  const parseViewBox = viewBox => {
+    if (!viewBox) return null
+    const parts = viewBox.trim().split(/[\s,]+/).map(n => Number(n))
+    if (parts.length !== 4 || parts.some(n => Number.isNaN(n))) return null
+    return parts
+  }
+
+  const getSvgViewBox = svg => {
+    const attr = parseViewBox(svg.getAttribute('viewBox'))
+    if (attr) return attr
+
+    // Fallback: use bbox to build a viewBox
+    try {
+      const bbox = svg.getBBox()
+      if (bbox && bbox.width && bbox.height) return [bbox.x, bbox.y, bbox.width, bbox.height]
+    } catch (e) {
+      // getBBox may fail on some edge cases; ignore
+    }
+
+    const w = Number(svg.getAttribute('width')) || 0
+    const h = Number(svg.getAttribute('height')) || 0
+    if (w > 0 && h > 0) return [0, 0, w, h]
+    return [0, 0, 100, 100]
+  }
+
+  const setSvgViewBox = (svg, vb) => {
+    svg.setAttribute('viewBox', `${vb[0]} ${vb[1]} ${vb[2]} ${vb[3]}`)
+  }
+
+  const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
+
+  const openSvgInNewTab = ({ source, initViewBox }) => {
+    const getClonedSvg = () => {
+      if (typeof source === 'string') {
+        const template = document.createElement('template')
+        template.innerHTML = source.trim()
+        const svg = template.content.querySelector('svg')
+        return svg ? svg.cloneNode(true) : null
+      }
+      if (source && typeof source.cloneNode === 'function') {
+        return source.cloneNode(true)
+      }
+      return null
+    }
+
+    const clone = getClonedSvg()
+    if (!clone) return
+    if (initViewBox && initViewBox.length === 4) {
+      clone.setAttribute('viewBox', initViewBox.join(' '))
+    }
+    if (!clone.getAttribute('xmlns')) clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg')
+    if (!clone.getAttribute('xmlns:xlink') && clone.outerHTML.includes('xlink:')) {
+      clone.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink')
+    }
+    // inject background to match current theme
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    const bg = getComputedStyle(document.body).backgroundColor || (isDark ? '#1e1e1e' : '#ffffff')
+    if (!clone.style.background) clone.style.background = bg
+
+    const serializer = new XMLSerializer()
+    const svgSource = serializer.serializeToString(clone)
+    const htmlSource = `<!doctype html><html><head><meta charset="utf-8" />
+      <style>
+        html, body { width: 100%; height: 100%; margin: 0; display: flex; align-items: center; justify-content: center; background: ${bg}; }
+        svg { max-width: 100%; max-height: 100%; height: auto; width: auto; }
+      </style>
+      </head><body>${svgSource}</body></html>`
+    const blob = new Blob([htmlSource], { type: 'text/html;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    window.open(url, '_blank', 'noopener')
+    setTimeout(() => URL.revokeObjectURL(url), 30000)
+  }
+
+  const attachMermaidViewerButton = wrap => {
+    let btn = wrap.querySelector('.mermaid-open-btn')
+    if (!btn) {
+      btn = document.createElement('button')
+      btn.type = 'button'
+      btn.className = 'mermaid-open-btn'
+      wrap.appendChild(btn)
+    }
+
+    btn.innerHTML = '<i class="fa fa-search fa-fw" aria-hidden="true"></i>'
+
+    if (!btn.__mermaidViewerBound) {
+      btn.addEventListener('click', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        const svg = wrap.__mermaidOriginalSvg || wrap.querySelector('svg')
+        if (!svg) return
+        const initViewBox = wrap.__mermaidInitViewBox
+        if (typeof svg === 'string') {
+          openSvgInNewTab({ source: svg, initViewBox })
+          return
+        }
+        openSvgInNewTab({ source: svg, initViewBox })
+      })
+      btn.__mermaidViewerBound = true
+    }
+  }
+
+  // Zoom around a point (px, py) in the SVG viewport (in viewBox coordinates)
+  const zoomAtPoint = (vb, factor, px, py) => {
+    const w = vb[2] * factor
+    const h = vb[3] * factor
+    const nx = px - (px - vb[0]) * factor
+    const ny = py - (py - vb[1]) * factor
+    return [nx, ny, w, h]
+  }
+
+  const initMermaidGestures = wrap => {
+    const svg = wrap.querySelector('svg')
+    if (!svg) return
+
+    // Ensure viewBox exists so gestures always work
+    const initVb = getSvgViewBox(svg)
+    wrap.__mermaidInitViewBox = initVb
+    wrap.__mermaidCurViewBox = initVb.slice()
+    setSvgViewBox(svg, initVb)
+
+    // Avoid binding multiple times on themeChange/pjax
+    if (wrap.__mermaidGestureBound) return
+    wrap.__mermaidGestureBound = true
+
+    // Helper: map client (viewport) coordinate -> viewBox coordinate
+    const clientToViewBox = (clientX, clientY) => {
+      const rect = svg.getBoundingClientRect()
+      const vb = wrap.__mermaidCurViewBox || getSvgViewBox(svg)
+      const x = vb[0] + (clientX - rect.left) * (vb[2] / rect.width)
+      const y = vb[1] + (clientY - rect.top) * (vb[3] / rect.height)
+      return { x, y, rect, vb }
+    }
+
+    const state = {
+      pointers: new Map(),
+      startVb: null,
+      startDist: 0,
+      startCenter: null
+    }
+
+    const clampVb = vb => {
+      const init = wrap.__mermaidInitViewBox || vb
+      const minW = init[2] * 0.1
+      const maxW = init[2] * 10
+      const minH = init[3] * 0.1
+      const maxH = init[3] * 10
+      vb[2] = clamp(vb[2], minW, maxW)
+      vb[3] = clamp(vb[3], minH, maxH)
+      return vb
+    }
+
+    const setCurVb = vb => {
+      vb = clampVb(vb)
+      wrap.__mermaidCurViewBox = vb
+      setSvgViewBox(svg, vb)
+    }
+
+    const onPointerDown = e => {
+      // Allow only primary button for mouse
+      if (e.pointerType === 'mouse' && e.button !== 0) return
+      svg.setPointerCapture(e.pointerId)
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      if (state.pointers.size === 1) {
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      } else if (state.pointers.size === 2) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        state.startDist = Math.hypot(dx, dy)
+        state.startVb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        state.startCenter = { x: (pts[0].x + pts[1].x) / 2, y: (pts[0].y + pts[1].y) / 2 }
+      }
+    }
+
+    const onPointerMove = e => {
+      if (!state.pointers.has(e.pointerId)) return
+      state.pointers.set(e.pointerId, { x: e.clientX, y: e.clientY })
+
+      // Pan with 1 pointer
+      if (state.pointers.size === 1 && state.startVb) {
+        const p = [...state.pointers.values()][0]
+        const prev = { x: e.clientX - e.movementX, y: e.clientY - e.movementY }
+        // movementX/Y unreliable on touch, compute from stored last position
+        const last = wrap.__mermaidLastSinglePointer || p
+        const dxClient = p.x - last.x
+        const dyClient = p.y - last.y
+        wrap.__mermaidLastSinglePointer = p
+
+        const { rect } = clientToViewBox(p.x, p.y)
+        const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+        const dx = dxClient * (vb[2] / rect.width)
+        const dy = dyClient * (vb[3] / rect.height)
+        setCurVb([vb[0] - dx, vb[1] - dy, vb[2], vb[3]])
+        return
+      }
+
+      // Pinch zoom with 2 pointers
+      if (state.pointers.size === 2 && state.startVb && state.startDist > 0) {
+        const pts = [...state.pointers.values()]
+        const dx = pts[0].x - pts[1].x
+        const dy = pts[0].y - pts[1].y
+        const dist = Math.hypot(dx, dy)
+        if (!dist) return
+        const factor = state.startDist / dist // dist bigger => zoom in (viewBox smaller)
+
+        const cx = (pts[0].x + pts[1].x) / 2
+        const cy = (pts[0].y + pts[1].y) / 2
+        const centerClient = { x: cx, y: cy }
+
+        const pxy = clientToViewBox(centerClient.x, centerClient.y)
+        const cpx = pxy.x
+        const cpy = pxy.y
+
+        const vb = zoomAtPoint(state.startVb, factor, cpx, cpy)
+        setCurVb(vb)
+      }
+    }
+
+    const onPointerUpOrCancel = e => {
+      state.pointers.delete(e.pointerId)
+      if (state.pointers.size === 0) {
+        state.startVb = null
+        state.startDist = 0
+        state.startCenter = null
+        wrap.__mermaidLastSinglePointer = null
+      } else if (state.pointers.size === 1) {
+        // reset single pointer baseline to avoid jump
+        wrap.__mermaidLastSinglePointer = [...state.pointers.values()][0]
+      }
+    }
+
+    // Wheel zoom (mouse/trackpad)
+    const onWheel = e => {
+      // ctrlKey on mac trackpad pinch; we treat both as zoom
+      e.preventDefault()
+      const delta = e.deltaY
+      const zoomFactor = delta > 0 ? 1.1 : 0.9
+      const { x, y } = clientToViewBox(e.clientX, e.clientY)
+      const vb = (wrap.__mermaidCurViewBox || getSvgViewBox(svg)).slice()
+      setCurVb(zoomAtPoint(vb, zoomFactor, x, y))
+    }
+
+    const onDblClick = () => {
+      const init = wrap.__mermaidInitViewBox
+      if (!init) return
+      wrap.__mermaidCurViewBox = init.slice()
+      setSvgViewBox(svg, init)
+    }
+
+    svg.addEventListener('pointerdown', onPointerDown)
+    svg.addEventListener('pointermove', onPointerMove)
+    svg.addEventListener('pointerup', onPointerUpOrCancel)
+    svg.addEventListener('pointercancel', onPointerUpOrCancel)
+    svg.addEventListener('wheel', onWheel, { passive: false })
+    svg.addEventListener('dblclick', onDblClick)
+  }
+
+  const runMermaid = ele => {
+    window.loadMermaid = true
+    const theme = document.documentElement.getAttribute('data-theme') === 'dark' ? '' : ''
+
+    ele.forEach((item, index) => {
+      const mermaidSrc = item.firstElementChild
+
+      // Clear old render (themeChange/pjax will rerun)
+      const oldSvg = item.querySelector('svg')
+      if (oldSvg) oldSvg.remove()
+      item.__mermaidGestureBound = false
+
+      const config = mermaidSrc.dataset.config ? JSON.parse(mermaidSrc.dataset.config) : {}
+      if (!config.theme) {
+        config.theme = theme
+      }
+      const mermaidThemeConfig = `%%{init: ${JSON.stringify(config)}}%%\n`
+      const mermaidID = `mermaid-${index}`
+      const mermaidDefinition = mermaidThemeConfig + mermaidSrc.textContent
+
+      const renderFn = mermaid.render(mermaidID, mermaidDefinition)
+      const renderMermaid = svg => {
+        mermaidSrc.insertAdjacentHTML('afterend', svg)
+        if (true) initMermaidGestures(item)
+        item.__mermaidOriginalSvg = svg
+        if (true) attachMermaidViewerButton(item)
+      }
+
+
+      // mermaid v9 and v10 compatibility
+      typeof renderFn === 'string' ? renderMermaid(renderFn) : renderFn.then(({ svg }) => renderMermaid(svg))
+    })
+  }
+
+  const codeToMermaid = () => {
+    const codeMermaidEle = document.querySelectorAll('pre > code.mermaid')
+    if (codeMermaidEle.length === 0) return
+
+    codeMermaidEle.forEach(ele => {
+      const preEle = document.createElement('pre')
+      preEle.className = 'mermaid-src'
+      preEle.hidden = true
+      preEle.textContent = ele.textContent
+      const newEle = document.createElement('div')
+      newEle.className = 'mermaid-wrap'
+      newEle.appendChild(preEle)
+      ele.parentNode.replaceWith(newEle)
+    })
+  }
+
+  const loadMermaid = () => {
+    if (false) codeToMermaid()
+    const $mermaid = document.querySelectorAll('#article-container .mermaid-wrap')
+    if ($mermaid.length === 0) return
+
+    const runMermaidFn = () => runMermaid($mermaid)
+    btf.addGlobalFn('themeChange', runMermaidFn, 'mermaid')
+    window.loadMermaid ? runMermaidFn() : btf.getScript('https://cdn.jsdelivr.net/npm/mermaid@11.12.2/dist/mermaid.min.js').then(runMermaidFn)
+  }
+
+  btf.addGlobalFn('encrypt', loadMermaid, 'mermaid')
+  window.pjax ? loadMermaid() : document.addEventListener('DOMContentLoaded', loadMermaid)
+})()</script></div><script src="/js/custom.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章..." type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.4"></script></div></div></body></html>
